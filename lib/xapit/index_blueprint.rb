@@ -2,10 +2,12 @@ module Xapit
   class IndexBlueprint
     attr_reader :text_attributes
     attr_reader :field_attributes
+    attr_reader :facet_attributes
     
     def initialize
       @text_attributes = []
       @field_attributes = []
+      @facet_attributes = []
     end
     
     def text(*attributes)
@@ -16,12 +18,21 @@ module Xapit
       @field_attributes += attributes
     end
     
+    def facet(*attributes)
+      @facet_attributes += attributes
+      field(*attributes)
+    end
+    
     def stripped_words(content)
       content.to_s.downcase.scan(/[a-z0-9]+/)
     end
     
     def terms(member)
-      field_terms(member) + text_terms(member)
+      base_terms(member) + field_terms(member) + text_terms(member)
+    end
+    
+    def base_terms(member)
+      ["C#{member.class}", "Q#{member.class}-#{member.id}"]
     end
     
     def text_terms(member)
@@ -33,6 +44,12 @@ module Xapit
     def field_terms(member)
       field_attributes.map do |name|
         "X#{name}-#{member.send(name).to_s.downcase}"
+      end
+    end
+    
+    def values(member)
+      facet_attributes.map do |name|
+        member.send(name).to_s
       end
     end
   end
