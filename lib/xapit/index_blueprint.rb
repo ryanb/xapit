@@ -11,7 +11,7 @@ module Xapit
     end
     
     def stripped_words(content)
-      content.downcase.scan(/[a-z]+/)
+      content.to_s.downcase.scan(/[a-z0-9]+/)
     end
     
     def terms(member)

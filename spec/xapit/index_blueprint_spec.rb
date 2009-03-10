@@ -21,4 +21,11 @@ describe Xapit::IndexBlueprint do
     @index.text(:description)
     @index.terms(member).should == %w[this is a test]
   end
+  
+  it "should convert attribute to string when converting text to terms" do
+    member = Object.new
+    stub(member).num { 123 }
+    @index.text(:num)
+    @index.terms(member).should == %w[123]
+  end
 end
