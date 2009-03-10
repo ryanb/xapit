@@ -1,0 +1,132 @@
+= Xapit
+
+Xapit (pronounced "zap it") is a high level interface for working with an Xapian database.
+
+Note: This project is very early in development. Not all features in this documentation have been implemented. Use at your own risk.
+
+
+== Install
+
+This will be available both as a Rails plugin and a gem to use in any other environment. It assumes that you have Xapian and the Xapian Bindings for Ruby already installed.
+
+More instructions coming soon.
+
+
+== Setup
+
+Simply call "xapit" in the model and pass a block to define the indexed attributes.
+  
+  class Article < ActiveRecord::Base
+    belongs_to :author
+    has_many :ratings
+    
+    xapit do |index|
+      index.text :name, :content # 1
+      index.field :category_id # 2
+      index.facet :author_name, "Author" # 3
+      index.facet :average_rating, "Rating" do |facet| # 4
+        facet.add "Not yet rated", nil
+        facet.add "1-3 stars", 1..3
+        facet.add "4 stars", 4
+        facet.add "5 stars", 5
+      end
+    end
+  
+    def author_name # 5
+      author.name
+    end
+    
+    def average_rating # 6
+      ratings.average(:value)
+    end
+  end
+
+1. Defines which attributes to be indexed for full text search.
+
+2. Defines which fields you want the option to search by independently. See query options further down.
+
+3. Creates a facet for filtering articles by author name. Available options are determined automatically based on values in database.
+
+4. Creates a facet with custom options.
+
+5. This method is defined for the author_name attribute mentioned in #3.
+
+6. This method returns the average rating value and is used dynamically when indexing the articles in section #4.
+
+
+== Index
+
+To index these models into the database, run the xapit:index rake task.
+
+  rake xapit:index
+
+
+== Search
+
+You can then perform a search on the model.
+  
+  # perform a simple full text search
+  @articles = Article.search("phone")
+  
+  # add pagination if you're using will_paginate
+  @articles = Article.search("phone", :per_page => 20, :page => params[:page])
+  
+  # search based on indexed fields
+  @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
+  
+  # manually sort based on any number of fields, sort defaults to most relevant
+  @articles = Article.search("phone", :order => [:category_id, :id])
+
+
+== Results
+
+Simply iterate through the returned set to display the results.
+
+  <% for article in @articles %>
+    <%= article.name %>
+    <%= article.xapit_relevance %>
+  <% end %>
+
+The "xapit_relevance" holds a percentage (float between 0 and 100) determining how relevant the given document is to the user's search query.
+
+
+== Facets
+
+Facets allow you to further filter the result set based on certain attributes.
+
+  <% for facet in @articles.facets %>
+    <%= facet.name %>
+    <% for option in facet.options %>
+      <%= link_to option.name, articles_path(:facet => option) %>
+      (<%= option.count %>)
+    <% end %>
+  <% end %>
+
+The to_param method is defined on option to return an identifier, that is handled behind the scenes when you pass option to a route in Rails. Use this in future searches.
+
+  Article.search("phone", :facets => [params[:facet]])
+
+
+== Outside of Rails
+
+Xapit can be used outside of Rails too. You'll just need to include the membership module:
+
+  class Product # not Active Record
+    include Xapit::Membership
+  
+    xapit # ...
+  end
+
+This class is expected to respond to "each" (Product.each) which is used to iterate through the records when indexing. The instances should also respond to "id".
+
+More instructions coming soon.
+
+
+== Development
+
+This project can be found on github at the following URL.
+
+http://github.com/ryanb/xapit/
+
+If you would like to contribute to this project, please fork the 
+repository and send me a pull request.
