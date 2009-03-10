@@ -57,4 +57,16 @@ describe Xapit::IndexBlueprint do
     @index.facet(:foo)
     @index.field_terms(member).should == %w[Xfoo-abc]
   end
+  
+  it "should add terms and values to xapian document" do
+    member = Object.new
+    stub(member).id { 123 }
+    stub(@index).values { %w[value list] }
+    stub(@index).terms { %w[term list] }
+    doc = @index.document_for(member)
+    doc.should be_kind_of(Xapian::Document)
+    doc.data.should == "Object-123"
+    doc.values.map(&:value).sort.should == %w[value list].sort
+    doc.terms.map(&:term).sort.should == %w[term list].sort
+  end
 end

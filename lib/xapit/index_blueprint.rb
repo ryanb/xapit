@@ -23,6 +23,18 @@ module Xapit
       field(*attributes)
     end
     
+    def document_for(member)
+      document = Xapian::Document.new
+      document.data = "#{member.class}-#{member.id}"
+      terms(member).each do |term|
+        document.add_term(term)
+      end
+      values(member).each_with_index do |value, index|
+        document.add_value(index, value)
+      end
+      document
+    end
+    
     def stripped_words(content)
       content.to_s.downcase.scan(/[a-z0-9]+/)
     end
