@@ -28,4 +28,11 @@ describe Xapit::IndexBlueprint do
     @index.text(:num)
     @index.terms(member).should == %w[123]
   end
+  
+  it "should map field to term with proper prefix" do
+    member = Object.new
+    stub(member).category { "Water" }
+    @index.field(:category)
+    @index.terms(member).should == %w[Xcategory-water]
+  end
 end
