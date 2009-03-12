@@ -26,7 +26,7 @@ module Xapit
         @matchset
       else
         enquire = Xapian::Enquire.new(database)
-        enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *@query.split])
+        enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *query_words])
         @matchset = enquire.mset(0, 20)
       end
     end
@@ -35,6 +35,10 @@ module Xapit
       matchset.matches.map do |match|
         @member_class.find(match.document.data.split('-').last)
       end
+    end
+    
+    def query_words
+      @query.split.map { |w| w.downcase }
     end
     
     def database
