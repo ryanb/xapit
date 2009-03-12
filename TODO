@@ -1,0 +1,33 @@
+Indexing
+- add indexing for a specific class
+- make index_all method to index all classes
+- wrap indexing in a rake task
+- support custom facets
+
+Finding
+- simple query string find
+- multi-word query string find
+- simple conditions option
+- order option
+- and/or word separation
+- negative word in query
+- range in conditions
+- facets option to accept array of unique ids
+- pagination options
+
+Found Collection
+- lazy loading
+- paginatable
+- build queries on top of (like scopes)
+- add xapit_relevance to found results
+
+Facets
+- apply unique id to each facet option
+- ensure unique id is maintained between indexing and adjusting database
+- add "facets" method to collection
+
+Other
+- add database config file
+- remove dependency on active_support
+- turn into Rails plugin
+- turn into Ruby Gem with clear instructions on requirements

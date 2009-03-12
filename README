@@ -31,7 +31,7 @@ Simply call "xapit" in the model and pass a block to define the indexed attribut
         facet.add "5 stars", 5
       end
     end
-  
+    
     def author_name # 5
       author.name
     end
