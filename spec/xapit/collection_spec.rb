@@ -36,6 +36,10 @@ describe Xapit::Collection do
         Xapit::Collection.new(XapitMember, "", :database => @db).size.should == 2
       end
       
+      it "should not be empty for blank query" do
+        Xapit::Collection.new(XapitMember, "", :database => @db).empty?.should be_false
+      end
+      
       it "should filter by conditions, case insensitive" do
         Xapit::Collection.new(XapitMember, "", :database => @db, :conditions => { :name => "HELLO world"}).should == [@hello]
       end

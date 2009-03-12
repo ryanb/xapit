@@ -19,6 +19,10 @@ module Xapit
       matchset.matches_estimated
     end
     
+    def empty?
+      @results ? @results.empty? : size.zero?
+    end
+    
     private
     
     def matchset
