@@ -44,7 +44,7 @@ module Xapit
     def condition_terms
       if @options[:conditions]
         @options[:conditions].map do |name, value|
-          "X#{name}-#{value}"
+          "X#{name}-#{value.downcase}"
         end
       else
         []

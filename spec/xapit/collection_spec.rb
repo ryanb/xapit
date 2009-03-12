@@ -36,8 +36,8 @@ describe Xapit::Collection do
         Xapit::Collection.new(XapitMember, "", :database => @db).size.should == 2
       end
       
-      it "should filter by conditions" do
-        Xapit::Collection.new(XapitMember, "", :database => @db, :conditions => { :name => "hello world"}).should == [@hello]
+      it "should filter by conditions, case insensitive" do
+        Xapit::Collection.new(XapitMember, "", :database => @db, :conditions => { :name => "HELLO world"}).should == [@hello]
       end
     end
   end
