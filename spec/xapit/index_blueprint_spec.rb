@@ -69,4 +69,13 @@ describe Xapit::IndexBlueprint do
     doc.values.map(&:value).sort.should == %w[value list].sort
     doc.terms.map(&:term).sort.should == %w[term list].sort
   end
+  
+  it "should index member document into database" do
+    db = Xapian::WritableDatabase.new(File.dirname(__FILE__) + '/../tmp/xapiandb', Xapian::DB_CREATE_OR_OVERWRITE)
+    member = Object.new
+    stub(member).id { 123 }
+    stub(Object).each.yields(member)
+    @index.index_class(Object, db)
+    db.doccount.should == 1
+  end
 end

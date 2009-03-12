@@ -1,4 +1,5 @@
 require 'xapian'
+require 'fileutils'
 
 module Xapit
 end

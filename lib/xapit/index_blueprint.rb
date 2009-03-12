@@ -64,5 +64,11 @@ module Xapit
         member.send(name).to_s
       end
     end
+    
+    def index_class(klass, db)
+      klass.each do |member|
+        db.add_document(document_for(member))
+      end
+    end
   end
 end
