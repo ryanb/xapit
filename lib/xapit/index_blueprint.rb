@@ -10,8 +10,9 @@ module Xapit
       end
     end
     
-    def initialize(member_class)
+    def initialize(member_class, *args)
       @member_class = member_class
+      @args = args
       @text_attributes = []
       @field_attributes = []
       @facet_attributes = []
@@ -75,7 +76,7 @@ module Xapit
     end
     
     def index_into_database(db)
-      @member_class.each do |member|
+      @member_class.each(*@args) do |member|
         db.add_document(document_for(member))
       end
     end

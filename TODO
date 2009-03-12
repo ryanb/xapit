@@ -1,10 +1,10 @@
 Indexing
 x add indexing for a specific class
 x make index_all method to index all classes
+x pass xapit options to find method to limit what is indexed or change the batch size
 - wrap indexing in a rake task
 - support custom facets
-- pass xapit options to find method to limit what is indexed or change the batch size
-- index spelling of terms
++ index spelling of terms
 
 Finding
 - simple query string find

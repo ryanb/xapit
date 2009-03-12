@@ -84,4 +84,10 @@ describe Xapit::IndexBlueprint do
     mock(@index).index_into_database(db)
     Xapit::IndexBlueprint.index_all(db)
   end
+  
+  it "should pass in extra arguments to each method" do
+    index = Xapit::IndexBlueprint.new(Object, :foo, :bar => :blah)
+    mock(Object).each(:foo, :bar => :blah)
+    index.index_into_database(nil)
+  end
 end
