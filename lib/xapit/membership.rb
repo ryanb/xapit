@@ -5,7 +5,7 @@ module Xapit
     end
     
     def search(*args)
-      Collection.new(*args)
+      Collection.new(self, *args)
     end
     
     module ClassMethods

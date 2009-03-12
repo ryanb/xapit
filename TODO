@@ -7,7 +7,7 @@ x pass xapit options to find method to limit what is indexed or change the batch
 + index spelling of terms
 
 Finding
-- simple query string find
+x simple query string find
 - multi-word query string find
 - simple conditions option
 - order option

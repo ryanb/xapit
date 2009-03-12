@@ -1,9 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class XapitMember
-  include Xapit::Membership
-end
-
 describe XapitMember do
   it "should have xapit method" do
     XapitMember.should respond_to(:xapit)
@@ -22,6 +18,6 @@ describe XapitMember do
   end
   
   it "should return collection from search" do
-    XapitMember.new.search("foo").should be_kind_of(Xapit::Collection)
+    XapitMember.new.search("foo").class.should == Xapit::Collection
   end
 end

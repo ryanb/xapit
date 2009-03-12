@@ -71,16 +71,20 @@ describe Xapit::IndexBlueprint do
   end
   
   it "should index member document into database" do
-    db = Xapian::WritableDatabase.new(File.dirname(__FILE__) + '/../tmp/xapiandb', Xapian::DB_CREATE_OR_OVERWRITE)
+    path = File.dirname(__FILE__) + '/../tmp/xapiandb'
+    FileUtils.rm_rf(path) if File.exist? path
+    db = Xapian::WritableDatabase.new(path, Xapian::DB_CREATE_OR_OVERWRITE)
     member = Object.new
     stub(member).id { 123 }
     stub(Object).each.yields(member)
     @index.index_into_database(db)
     db.doccount.should == 1
+    db.flush
   end
   
   it "should remember all blueprints and index each of them" do
     db = Object.new
+    stub(db).add_document
     mock(@index).index_into_database(db)
     Xapit::IndexBlueprint.index_all(db)
   end
