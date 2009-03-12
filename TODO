@@ -10,10 +10,10 @@ Finding
 x simple query string find
 x multi-word query string find
 x simple conditions option
+x pagination options
 - order option
 - range in conditions
 - facets option to accept array of unique ids
-- pagination options
 + and/or word separation
 + negative word in query
 + parenthesis to group phrases
@@ -30,7 +30,7 @@ Facets
 - add "facets" method to collection
 
 Other
-- add database config file
+x add database config file
 - remove dependency on active_support
 - turn into Rails plugin
 - turn into Ruby Gem with clear instructions on requirements

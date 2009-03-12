@@ -4,7 +4,7 @@ module Xapit
     attr_reader :field_attributes
     attr_reader :facet_attributes
     
-    def self.index_all(db)
+    def self.index_all(db = nil)
       @@instances.each_value do |blueprint|
         blueprint.index_into_database(db)
       end
@@ -75,7 +75,8 @@ module Xapit
       end
     end
     
-    def index_into_database(db)
+    def index_into_database(db = nil)
+      db ||= Config.writable_database
       @member_class.each(*@args) do |member|
         db.add_document(document_for(member))
       end

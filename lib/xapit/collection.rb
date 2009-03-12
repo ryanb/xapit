@@ -105,8 +105,7 @@ module Xapit
     end
     
     def database
-      # TODO fetch database from global config
-      @options[:database]
+      @options[:database] || Config.database
     end
   end
 end
