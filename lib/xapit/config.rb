@@ -1,8 +1,6 @@
 module Xapit
   class Config
     class << self
-      attr_reader :last_fetched
-      
       def setup(options)
         reset
         @options = options
