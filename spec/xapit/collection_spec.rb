@@ -43,6 +43,14 @@ describe Xapit::Collection do
       it "should filter by conditions, case insensitive" do
         Xapit::Collection.new(XapitMember, "", :database => @db, :conditions => { :name => "HELLO world"}).should == [@hello]
       end
+      
+      it "should know first entry" do
+        Xapit::Collection.new(XapitMember, "", :database => @db).first.should == @hello
+      end
+      
+      it "should know last entry" do
+        Xapit::Collection.new(XapitMember, "", :database => @db).last.should == @foo
+      end
     end
   end
 end
