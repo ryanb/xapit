@@ -20,4 +20,8 @@ describe XapitMember do
       XapitMember.xapit_index_blueprint.should be_kind_of(Xapit::IndexBlueprint)
     end
   end
+  
+  it "should return collection from search" do
+    XapitMember.new.search("foo").should be_kind_of(Xapit::Collection)
+  end
 end

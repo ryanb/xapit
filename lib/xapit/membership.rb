@@ -4,6 +4,10 @@ module Xapit
       base.extend ClassMethods
     end
     
+    def search(*args)
+      Collection.new(*args)
+    end
+    
     module ClassMethods
       def xapit
         @xapit_index_blueprint = IndexBlueprint.new(self)
