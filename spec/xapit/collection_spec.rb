@@ -68,6 +68,13 @@ describe Xapit::Collection do
         collection.previous_page.should == 1
         collection.next_page.should be_nil
       end
+      
+      it "should set xapit_relevance in results" do
+        results = Xapit::Collection.new(XapitMember, "", :database => @db)
+        results.each do |record|
+          record.xapit_relevance.class.should == Fixnum
+        end
+      end
     end
   end
 end

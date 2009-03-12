@@ -84,7 +84,9 @@ module Xapit
     
     def fetch_results(offset = nil, limit = nil)
       matchset(offset, limit).matches.map do |match|
-        @member_class.find(match.document.data.split('-').last)
+        member = @member_class.find(match.document.data.split('-').last)
+        member.xapit_relevance = match.percent
+        member
       end
     end
     

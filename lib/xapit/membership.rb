@@ -2,6 +2,7 @@ module Xapit
   module Membership
     def self.included(base)
       base.extend ClassMethods
+      base.send(:attr_accessor, :xapit_relevance) # is there a better way to do this?
     end
     
     def search(*args)
