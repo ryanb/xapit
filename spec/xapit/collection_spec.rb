@@ -27,6 +27,10 @@ describe Xapit::Collection do
       it "should matching xapit member given a word" do
         Xapit::Collection.new(XapitMember, "foo", :database => @db).should == [@foo]
       end
+      
+      it "should have 2 records for empty string" do
+        Xapit::Collection.new(XapitMember, "", :database => @db).size.should == 2
+      end
     end
   end
 end
