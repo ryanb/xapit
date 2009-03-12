@@ -6,7 +6,7 @@ module Xapit
     
     module ClassMethods
       def xapit
-        @xapit_index_blueprint = IndexBlueprint.new
+        @xapit_index_blueprint = IndexBlueprint.new(self)
         yield(@xapit_index_blueprint)
       end
       

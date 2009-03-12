@@ -4,7 +4,8 @@ module Xapit
     attr_reader :field_attributes
     attr_reader :facet_attributes
     
-    def initialize
+    def initialize(member_class)
+      @member_class = member_class
       @text_attributes = []
       @field_attributes = []
       @facet_attributes = []
@@ -65,8 +66,8 @@ module Xapit
       end
     end
     
-    def index_class(klass, db)
-      klass.each do |member|
+    def index_into_database(db)
+      @member_class.each do |member|
         db.add_document(document_for(member))
       end
     end

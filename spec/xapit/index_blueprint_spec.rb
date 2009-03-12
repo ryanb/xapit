@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Xapit::IndexBlueprint do
   before(:each) do
-    @index = Xapit::IndexBlueprint.new
+    @index = Xapit::IndexBlueprint.new(Object)
   end
   
   it "should remember text attributes" do
@@ -75,7 +75,7 @@ describe Xapit::IndexBlueprint do
     member = Object.new
     stub(member).id { 123 }
     stub(Object).each.yields(member)
-    @index.index_class(Object, db)
+    @index.index_into_database(db)
     db.doccount.should == 1
   end
 end
