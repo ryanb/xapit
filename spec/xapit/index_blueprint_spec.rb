@@ -78,4 +78,10 @@ describe Xapit::IndexBlueprint do
     @index.index_into_database(db)
     db.doccount.should == 1
   end
+  
+  it "should remember all blueprints and index each of them" do
+    db = Object.new
+    mock(@index).index_into_database(db)
+    Xapit::IndexBlueprint.index_all(db)
+  end
 end

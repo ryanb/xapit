@@ -1,6 +1,6 @@
 Indexing
 x add indexing for a specific class
-- make index_all method to index all classes
+x make index_all method to index all classes
 - wrap indexing in a rake task
 - support custom facets
 - pass xapit options to find method to limit what is indexed or change the batch size

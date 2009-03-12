@@ -4,11 +4,19 @@ module Xapit
     attr_reader :field_attributes
     attr_reader :facet_attributes
     
+    def self.index_all(db)
+      @@instances.each_value do |blueprint|
+        blueprint.index_into_database(db)
+      end
+    end
+    
     def initialize(member_class)
       @member_class = member_class
       @text_attributes = []
       @field_attributes = []
       @facet_attributes = []
+      @@instances ||= {}
+      @@instances[member_class] = self # TODO make this thread safe
     end
     
     def text(*attributes)
