@@ -60,6 +60,14 @@ describe Xapit::Collection do
         Xapit::Collection.new(XapitMember, "", :database => @db, :page => 1, :per_page => 1).should == [@hello]
         Xapit::Collection.new(XapitMember, "", :database => @db, :page => 2, :per_page => 1).should == [@foo]
       end
+      
+      it "should have total_entries, total_pages, current_page, per_page, previous_page, next_page" do
+        collection = Xapit::Collection.new(XapitMember, "", :database => @db, :per_page => 1, :page => 2)
+        collection.total_entries.should == 2
+        collection.total_pages.should == 2
+        collection.previous_page.should == 1
+        collection.next_page.should be_nil
+      end
     end
   end
 end

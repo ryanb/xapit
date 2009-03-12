@@ -20,7 +20,7 @@ x simple conditions option
 
 Found Collection
 x lazy loading
-- paginatable
+x paginatable
 - build queries on top of (like scopes)
 - add xapit_relevance to found results
 

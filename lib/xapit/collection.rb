@@ -18,6 +18,7 @@ module Xapit
     def size
       matchset(0, 1).matches_estimated
     end
+    alias_method :total_entries, :size
     
     def empty?
       @results ? @results.empty? : size.zero?
@@ -41,12 +42,32 @@ module Xapit
       @base_query = base_query
     end
     
+    def current_page
+      @options[:page] ? @options[:page].to_i : 1
+    end
+    
+    def per_page
+      @options[:per_page] ? @options[:per_page].to_i : 20
+    end
+    
+    def total_pages
+      (total_entries / per_page.to_f).ceil
+    end
+    
+    def previous_page
+      current_page > 1 ? (current_page - 1) : nil
+    end
+    
+    def next_page
+      current_page < total_pages ? (current_page + 1): nil
+    end
+    
     private
     
     def matchset(offset = nil, limit = nil)
       enquire = Xapian::Enquire.new(database)
       enquire.query = query
-      enquire.mset(offset || default_offset, limit || default_limit)
+      enquire.mset(offset || per_page*(current_page-1), limit || per_page)
     end
     
     def query
@@ -84,18 +105,6 @@ module Xapit
     def database
       # TODO fetch database from global config
       @options[:database]
-    end
-    
-    def default_offset
-      if @options[:page].to_i.zero?
-        0
-      else
-        default_limit*(@options[:page].to_i-1)
-      end
-    end
-    
-    def default_limit
-      @options[:per_page] ? @options[:per_page].to_i : 20
     end
   end
 end
