@@ -26,7 +26,7 @@ module Xapit
         @matchset
       else
         enquire = Xapian::Enquire.new(database)
-        enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *query_words])
+        enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *(query_terms + condition_terms)])
         @matchset = enquire.mset(0, 20)
       end
     end
@@ -37,8 +37,18 @@ module Xapit
       end
     end
     
-    def query_words
-      @query.split.map { |w| w.downcase }
+    def query_terms
+      @query.split.map { |term| term.downcase }
+    end
+    
+    def condition_terms
+      if @options[:conditions]
+        @options[:conditions].map do |name, value|
+          "X#{name}-#{value}"
+        end
+      else
+        []
+      end
     end
     
     def database

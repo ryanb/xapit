@@ -35,6 +35,10 @@ describe Xapit::Collection do
       it "should have 2 records for empty string" do
         Xapit::Collection.new(XapitMember, "", :database => @db).size.should == 2
       end
+      
+      it "should filter by conditions" do
+        Xapit::Collection.new(XapitMember, "", :database => @db, :conditions => { :name => "hello world"}).should == [@hello]
+      end
     end
   end
 end

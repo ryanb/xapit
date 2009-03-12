@@ -8,14 +8,15 @@ x pass xapit options to find method to limit what is indexed or change the batch
 
 Finding
 x simple query string find
-- multi-word query string find
-- simple conditions option
+x multi-word query string find
+x simple conditions option
 - order option
-- and/or word separation
-- negative word in query
 - range in conditions
 - facets option to accept array of unique ids
 - pagination options
++ and/or word separation
++ negative word in query
++ parenthesis to group phrases
 
 Found Collection
 - lazy loading
