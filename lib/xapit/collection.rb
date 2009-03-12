@@ -19,7 +19,7 @@ module Xapit
     
     def fetch_results
       enquire = Xapian::Enquire.new(database)
-      enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name])
+      enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *@query.split])
       matchset = enquire.mset(0, 20)
       matchset.matches.map do |match|
         @member_class.find(match.document.data.split('-').last)
