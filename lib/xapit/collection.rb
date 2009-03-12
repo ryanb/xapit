@@ -5,14 +5,14 @@ module Xapit
       delegate m, :to => :results unless m =~ /^__/ || NON_DELEGATE_METHODS.include?(m.to_s)
     end
     
-    def initialize(member_class, query, options = {})
+    def initialize(member_class, search_text, options = {})
       @member_class = member_class
-      @query = query
+      @search_text = search_text
       @options = options
     end
     
     def results
-      @results ||= fetch_results(0, 20)
+      @results ||= fetch_results
     end
     
     def size
@@ -31,22 +31,44 @@ module Xapit
       fetch_results(size-1, 1).last
     end
     
-    private
-    
-    def matchset(offset, limit)
-      enquire = Xapian::Enquire.new(database)
-      enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name, *(query_terms + condition_terms)])
-      enquire.mset(offset, limit)
+    def search(keywords, options = {})
+      collection = Collection.new(@member_class, keywords, options.reverse_merge(:database => @options[:database]))
+      collection.base_query = query
+      collection
     end
     
-    def fetch_results(offset, limit)
+    def base_query=(base_query)
+      @base_query = base_query
+    end
+    
+    private
+    
+    def matchset(offset = nil, limit = nil)
+      enquire = Xapian::Enquire.new(database)
+      enquire.query = query
+      enquire.mset(offset || default_offset, limit || default_limit)
+    end
+    
+    def query
+      if (search_terms + condition_terms).empty?
+        base_query
+      else
+        Xapian::Query.new(Xapian::Query::OP_AND, base_query, Xapian::Query.new(Xapian::Query::OP_AND, search_terms + condition_terms))
+      end
+    end
+    
+    def base_query
+      @base_query || Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name])
+    end
+    
+    def fetch_results(offset = nil, limit = nil)
       matchset(offset, limit).matches.map do |match|
         @member_class.find(match.document.data.split('-').last)
       end
     end
     
-    def query_terms
-      @query.split.map { |term| term.downcase }
+    def search_terms
+      @search_text.split.map { |term| term.downcase }
     end
     
     def condition_terms
@@ -62,6 +84,18 @@ module Xapit
     def database
       # TODO fetch database from global config
       @options[:database]
+    end
+    
+    def default_offset
+      if @options[:page].to_i.zero?
+        0
+      else
+        default_limit*(@options[:page].to_i-1)
+      end
+    end
+    
+    def default_limit
+      @options[:per_page] ? @options[:per_page].to_i : 20
     end
   end
 end

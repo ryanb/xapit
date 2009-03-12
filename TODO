@@ -19,7 +19,7 @@ x simple conditions option
 + parenthesis to group phrases
 
 Found Collection
-- lazy loading
+x lazy loading
 - paginatable
 - build queries on top of (like scopes)
 - add xapit_relevance to found results

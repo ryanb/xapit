@@ -51,6 +51,15 @@ describe Xapit::Collection do
       it "should know last entry" do
         Xapit::Collection.new(XapitMember, "", :database => @db).last.should == @foo
       end
+      
+      it "should support nested search" do
+        Xapit::Collection.new(XapitMember, "world", :database => @db).search("foo") == [@foo]
+      end
+      
+      it "should support page and per_page options" do
+        Xapit::Collection.new(XapitMember, "", :database => @db, :page => 1, :per_page => 1).should == [@hello]
+        Xapit::Collection.new(XapitMember, "", :database => @db, :page => 2, :per_page => 1).should == [@foo]
+      end
     end
   end
 end
