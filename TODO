@@ -5,15 +5,16 @@ Indexing
 Finding
 - order option
 - range in conditions
-- facets option to accept array of unique ids
+x facets option to accept array of unique ids
 + and/or word separation
 + negative word in query
 + parenthesis to group phrases
 
 Facets
-- apply unique id to each facet option
-- ensure unique id is maintained between indexing and adjusting database
-- add "facets" method to collection
+x apply unique id to each facet option
+x ensure unique id is maintained between indexing and adjusting database
+x add "facets" method to collection
+- handle unique id collision gracefully
 
 Other
 - turn into Ruby Gem with clear instructions on requirements

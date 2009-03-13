@@ -5,7 +5,9 @@ module Xapit
     attr_reader :facets
     
     def self.index_all(db = nil)
-      @@instances.each_value do |blueprint|
+      load_models
+      @@instances.each do |member_class, blueprint|
+        yield(member_class) if block_given?
         blueprint.index_into_database(db)
       end
     end
@@ -87,6 +89,37 @@ module Xapit
       db ||= Config.writable_database
       @member_class.each(*@args) do |member|
         db.add_document(document_for(member))
+      end
+    end
+    
+    private
+    
+    
+    
+    # Make sure all models are loaded - without reloading any that
+    # ActiveRecord::Base is already aware of (otherwise we start to hit some
+    # messy dependencies issues).
+    # 
+    # Taken from thinking-sphinx
+    def self.load_models
+      if defined? Rails
+        base = "#{Rails.root}/app/models/"
+        Dir["#{base}app/models/**/*.rb"].each do |file|
+          model_name = file.gsub(/^#{base}([\w_\/\\]+)\.rb/, '\1')
+      
+          next if model_name.nil?
+          next if ::ActiveRecord::Base.send(:subclasses).detect { |model|
+            model.name == model_name
+          }
+      
+          begin
+            model_name.camelize.constantize
+          rescue LoadError
+            model_name.gsub!(/.*[\/\\]/, '').nil? ? next : retry
+          rescue NameError
+            next
+          end
+        end
       end
     end
   end
