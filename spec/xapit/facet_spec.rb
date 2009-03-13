@@ -18,26 +18,31 @@ describe Xapit::Facet do
         @visible2 = XapitMember.new(:visible => true)
         @invisible = XapitMember.new(:visible => false)
         Xapit::IndexBlueprint.index_all
-        @facet = XapitMember.search("").facets.first
       end
       
-      it "should have the name of 'Visible'" do
-        @facet.name.should == 'Visible'
-      end
+      describe "facet from empty search" do
+        before(:each) do
+          @facet = XapitMember.search("").facets.first
+        end
       
-      it "should have true and false options" do
-        @facet.options.map(&:name).sort.should == %w[false true]
-      end
+        it "should have the name of 'Visible'" do
+          @facet.name.should == 'Visible'
+        end
       
-      it "should have record count" do
-        @facet.options.detect { |o| o.name == 'true' }.count.should == 2
-        @facet.options.detect { |o| o.name == 'false' }.count.should == 1
-      end
+        it "should have true and false options" do
+          @facet.options.map(&:name).sort.should == %w[false true]
+        end
       
-      it "should have identifier" do
-        blueprint = Xapit::FacetBlueprint.new(0, :visible)
-        @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifier_for(@visible1)
-        @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifier_for(@invisible)
+        it "should have record count" do
+          @facet.options.detect { |o| o.name == 'true' }.count.should == 2
+          @facet.options.detect { |o| o.name == 'false' }.count.should == 1
+        end
+      
+        it "should have identifier" do
+          blueprint = Xapit::FacetBlueprint.new(0, :visible)
+          @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifier_for(@visible1)
+          @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifier_for(@invisible)
+        end
       end
     end
   end

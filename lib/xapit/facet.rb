@@ -1,14 +1,15 @@
 module Xapit
   class Facet
-    def initialize(blueprint, database, query)
+    def initialize(blueprint, database, query, existing_facet_identifiers)
       @blueprint = blueprint
       @database = database
       @query = query
+      @existing_facet_identifiers = existing_facet_identifiers
     end
     
     def options
       matches.map do |match|
-        FacetOption.new(@blueprint, match)
+        FacetOption.new(@blueprint, match, @existing_facet_identifiers)
       end
     end
     

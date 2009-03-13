@@ -1,8 +1,9 @@
 module Xapit
   class FacetOption
-    def initialize(blueprint, match)
+    def initialize(blueprint, match, existing_facet_identifiers)
       @blueprint = blueprint
       @match = match
+      @existing_facet_identifiers = existing_facet_identifiers
     end
     
     def name
@@ -17,6 +18,10 @@ module Xapit
     
     def identifier
       @blueprint.identifier_for(record)
+    end
+    
+    def to_param
+      (@existing_facet_identifiers + [identifier]).join('-')
     end
     
     private

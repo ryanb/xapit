@@ -64,7 +64,7 @@ module Xapit
     
     def facets
       @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
-        Facet.new(facet_blueprint, database, query)
+        Facet.new(facet_blueprint, database, query, facet_identifiers)
       end
     end
     
