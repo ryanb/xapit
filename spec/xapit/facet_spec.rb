@@ -7,9 +7,8 @@ describe Xapit::Facet do
       XapitMember.xapit do |index|
         index.facet :visible
       end
-      path = File.dirname(__FILE__) + '/../tmp/xapiandb'
-      FileUtils.rm_rf(path) if File.exist? path
-      Xapit::Config.setup(:database_path => path)
+      Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
+      Xapit::Config.remove_database
     end
     
     describe "indexed" do

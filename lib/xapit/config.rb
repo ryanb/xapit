@@ -28,6 +28,12 @@ module Xapit
         FileUtils.mkdir_p(File.dirname(path)) unless File.exist?(File.dirname(path))
         @writable_database ||= Xapian::WritableDatabase.new(path, Xapian::DB_CREATE_OR_OPEN)
       end
+      
+      def remove_database # this can be a bit dangers, maybe do some checking here first?
+        FileUtils.rm_rf(path) if File.exist? path
+        @database = nil
+        @writable_database = nil
+      end
     end
   end
 end
