@@ -20,44 +20,24 @@ Note: this will soon also be available as a Ruby gem, but not yet.
 == Setup
 
 Simply call "xapit" in the model and pass a block to define the indexed attributes.
-  
+
   class Article < ActiveRecord::Base
-    belongs_to :author
-    has_many :ratings
-    
     xapit do |index|
-      index.text :name, :content # 1
-      index.field :category_id # 2
-      index.facet :author_name, "Author" # 3
-      index.facet :average_rating, "Rating" do |facet| # 4
-        facet.add "Not yet rated", nil
-        facet.add "1-3 stars", 1..3
-        facet.add "4 stars", 4
-        facet.add "5 stars", 5
-      end
-    end
-    
-    def author_name # 5
-      author.name
-    end
-    
-    def average_rating # 6
-      ratings.average(:value)
+      index.text :name, :content
+      index.field :category_id
+      index.facet :author_name, "Author"
     end
   end
 
-1. Defines which attributes to be indexed for full text search.
+First we index "name" and "content" attributes for full text searching. The "category_id" field is indexed for :conditions searching. The "author_name" is indexed as a facet with "Author" being the display name of the facet. See the facets section below for details.
 
-2. Defines which fields you want the option to search by independently. See query options further down.
+Because the indexing happens in Ruby these attributes do no have to be database columns. They can be simple Ruby methods. For example, the "author_name" attribute mentioned above can be defined like this.
 
-3. Creates a facet for filtering articles by author name. Available options are determined automatically based on values in database.
+  def author_name
+    author.name
+  end
 
-4. Creates a facet with custom options.
-
-5. This method is defined for the author_name attribute mentioned in #3.
-
-6. This method returns the average rating value and is used dynamically when indexing the articles in section #4.
-
+This way you can create a completely custom facet by simply defining your own method
 
 You can also pass any find options to the xapit method to determine what gets indexed and improve performance with eager loading or a different batch size.
 
