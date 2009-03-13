@@ -8,7 +8,7 @@ module Xapit
     
     def options
       matches.map do |match|
-        FacetOption.new(match, @blueprint)
+        FacetOption.new(@blueprint, match)
       end
     end
     

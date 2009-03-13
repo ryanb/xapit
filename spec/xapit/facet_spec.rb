@@ -28,6 +28,11 @@ describe Xapit::Facet do
       it "should have true and false options" do
         @facet.options.map(&:name).sort.should == %w[false true]
       end
+      
+      it "should have record count" do
+        @facet.options.detect { |o| o.name == 'true' }.count.should == 2
+        @facet.options.detect { |o| o.name == 'false' }.count.should == 1
+      end
     end
   end
 end
