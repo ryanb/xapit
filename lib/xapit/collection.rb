@@ -106,12 +106,16 @@ module Xapit
     
     def facet_terms
       if @options[:facets]
-        @options[:facets].map do |name|
+        facets.map do |name|
           "F#{name}"
         end
       else
         []
       end
+    end
+    
+    def facets
+      @options[:facets].kind_of?(String) ? @options[:facets].split('-') : @options[:facets]
     end
     
     def database

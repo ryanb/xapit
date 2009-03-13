@@ -87,6 +87,14 @@ describe Xapit::Collection do
         facet_option.name = "hello world"
         Xapit::Collection.new(XapitMember, "", :facets => [facet_option.identifier]).should == [@hello]
       end
+      
+      it "should split facets string on dash" do
+        # this will need to be a bit more complex later...
+        facet_option = Xapit::FacetOption.new
+        facet_option.name = "hello world"
+        id = facet_option.identifier
+        Xapit::Collection.new(XapitMember, "", :facets => "#{id}-#{id}").should == [@hello]
+      end
     end
   end
 end
