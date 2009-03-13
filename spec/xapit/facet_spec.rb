@@ -33,6 +33,12 @@ describe Xapit::Facet do
         @facet.options.detect { |o| o.name == 'true' }.count.should == 2
         @facet.options.detect { |o| o.name == 'false' }.count.should == 1
       end
+      
+      it "should have identifier" do
+        blueprint = Xapit::FacetBlueprint.new(0, :visible)
+        @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifier_for(@visible1)
+        @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifier_for(@invisible)
+      end
     end
   end
 end
