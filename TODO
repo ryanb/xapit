@@ -1,5 +1,4 @@
 Indexing
-- support custom facets
 + index spelling of terms
 
 Finding
@@ -10,7 +9,7 @@ Finding
 + parenthesis to group phrases
 
 Facets
-x don't list facets which have only one option
+- sort facet options
 - add collection.applied_facet_options to list ones that have been added
 - make to_param on applied facet option remove itself from the list
 + handle unique id collision gracefully

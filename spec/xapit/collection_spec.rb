@@ -21,7 +21,7 @@ describe Xapit::Collection do
       end
       
       it "should find all xapit members in database given empty string" do
-        Xapit::Collection.new(XapitMember, "").should == [@hello, @foo]
+        Xapit::Collection.new(XapitMember, nil).should == [@hello, @foo]
       end
       
       it "should matching xapit member given a word" do

@@ -7,7 +7,7 @@ module Xapit
     
     def initialize(member_class, search_text, options = {})
       @member_class = member_class
-      @search_text = search_text
+      @search_text = search_text.to_s
       @options = options
     end
     
