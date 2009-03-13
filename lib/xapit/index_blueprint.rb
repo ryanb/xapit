@@ -104,7 +104,7 @@ module Xapit
     def self.load_models
       if defined? Rails
         base = "#{Rails.root}/app/models/"
-        Dir["#{base}app/models/**/*.rb"].each do |file|
+        Dir["#{base}**/*.rb"].each do |file|
           model_name = file.gsub(/^#{base}([\w_\/\\]+)\.rb/, '\1')
       
           next if model_name.nil?
