@@ -1,5 +1,4 @@
 Indexing
-x wrap indexing in a rake task
 - support custom facets
 + index spelling of terms
 
@@ -17,10 +16,6 @@ Facets
 - add "facets" method to collection
 
 Other
-- remove dependency on active_support
-- turn into Rails plugin
 - turn into Ruby Gem with clear instructions on requirements
-- inline rdoc documentation
-x installation script to create xapit initializer
-x init.rb file to include xapit in ActiveRecord models
-- ensure other (private) rake tasks aren't included by Rails
++ inline rdoc documentation
++ remove dependency on active_support
