@@ -62,6 +62,12 @@ module Xapit
       current_page < total_pages ? (current_page + 1): nil
     end
     
+    def facets
+      @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
+        Facet.new(facet_blueprint, database, query)
+      end
+    end
+    
     private
     
     def matchset(offset = nil, limit = nil)
@@ -106,15 +112,15 @@ module Xapit
     
     def facet_terms
       if @options[:facets]
-        facets.map do |name|
-          "F#{name}"
+        facet_identifiers.map do |identifier|
+          "F#{identifier}"
         end
       else
         []
       end
     end
     
-    def facets
+    def facet_identifiers
       @options[:facets].kind_of?(String) ? @options[:facets].split('-') : @options[:facets]
     end
     

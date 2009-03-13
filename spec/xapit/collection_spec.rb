@@ -82,13 +82,19 @@ describe Xapit::Collection do
       end
       
       it "should find matching facet" do
-        id = Xapit::FacetBlueprint.new(:name).identifier_for(@hello)
+        id = Xapit::FacetBlueprint.new(0, :name).identifier_for(@hello)
         Xapit::Collection.new(XapitMember, "", :facets => [id, id]).should == [@hello]
       end
       
       it "should split facets string on dash" do
-        id = Xapit::FacetBlueprint.new(:name).identifier_for(@hello)
+        id = Xapit::FacetBlueprint.new(0, :name).identifier_for(@hello)
         Xapit::Collection.new(XapitMember, "", :facets => "#{id}-#{id}").should == [@hello]
+      end
+      
+      it "should have one facet with two options with blank keywords" do
+        facets = Xapit::Collection.new(XapitMember, "").facets
+        facets.size.should == 1
+        facets.first.options.size.should == 2
       end
     end
   end

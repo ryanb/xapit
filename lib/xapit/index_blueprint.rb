@@ -28,8 +28,8 @@ module Xapit
       @field_attributes += attributes
     end
     
-    def facet(*attributes, &block)
-      @facets << FacetBlueprint.new(*attributes, &block)
+    def facet(*args, &block)
+      @facets << FacetBlueprint.new(@facets.size, *args, &block)
     end
     
     def document_for(member)

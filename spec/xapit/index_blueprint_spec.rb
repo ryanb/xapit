@@ -45,7 +45,7 @@ describe Xapit::IndexBlueprint do
   it "should add terms and values for facets" do
     member = Object.new
     stub(member).foo { "ABC" }
-    id = Xapit::FacetBlueprint.new(:foo).identifier_for(member)
+    id = Xapit::FacetBlueprint.new(0, :foo).identifier_for(member)
     @index.facet(:foo)
     @index.facet_terms(member).should == ["F#{id}"]
     @index.values(member).should == { 0 => "F#{id}" }
