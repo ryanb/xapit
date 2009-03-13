@@ -121,7 +121,7 @@ module Xapit
     end
     
     def facet_identifiers
-      @options[:facets].kind_of?(String) ? @options[:facets].split('-') : @options[:facets]
+      @options[:facets].kind_of?(String) ? @options[:facets].split('-') : (@options[:facets] || [])
     end
     
     def database

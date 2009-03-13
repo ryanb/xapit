@@ -42,6 +42,11 @@ describe Xapit::Facet do
           @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifier_for(@visible1)
           @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifier_for(@invisible)
         end
+      
+        it "should return identifier on to_param" do
+          blueprint = Xapit::FacetBlueprint.new(0, :visible)
+          @facet.options.detect { |o| o.name == 'true' }.to_param.should == blueprint.identifier_for(@visible1)
+        end
       end
     end
   end
