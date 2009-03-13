@@ -2,7 +2,7 @@ module Xapit
   class IndexBlueprint
     attr_reader :text_attributes
     attr_reader :field_attributes
-    attr_reader :facet_attributes
+    attr_reader :facets
     
     def self.index_all(db = nil)
       @@instances.each_value do |blueprint|
@@ -15,7 +15,7 @@ module Xapit
       @args = args
       @text_attributes = []
       @field_attributes = []
-      @facet_attributes = []
+      @facets = []
       @@instances ||= {}
       @@instances[member_class] = self # TODO make this thread safe
     end
@@ -28,8 +28,8 @@ module Xapit
       @field_attributes += attributes
     end
     
-    def facet(*attributes)
-      @facet_attributes += attributes
+    def facet(*attributes, &block)
+      @facets << FacetBlueprint.new(*attributes, &block)
     end
     
     def document_for(member)
@@ -38,7 +38,7 @@ module Xapit
       terms(member).each do |term|
         document.add_term(term)
       end
-      values(member).each_with_index do |value, index|
+      values(member).each do |index, value|
         document.add_value(index, value)
       end
       document
@@ -69,16 +69,17 @@ module Xapit
     end
     
     def facet_terms(member)
-      facet_attributes.map do |name|
-        option = FacetOption.new
-        option.name = member.send(name).to_s
-        "F#{option.identifier}"
+      facets.map do |facet|
+        "F#{facet.identifier_for(member)}"
       end
     end
     
     def values(member)
-      facet_attributes.map do |name|
-        member.send(name).to_s
+      index = 0
+      facet_terms(member).inject(Hash.new) do |hash, term|
+        hash[index] = term
+        index += 1
+        hash
       end
     end
     

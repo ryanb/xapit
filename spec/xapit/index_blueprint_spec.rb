@@ -42,28 +42,20 @@ describe Xapit::IndexBlueprint do
     @index.base_terms(member).should == %w[CObject QObject-123]
   end
   
-  it "should have a value for each facet" do
-    member = Object.new
-    stub(member).foo { "ABC" }
-    stub(member).bar { 123 }
-    @index.facet :foo
-    @index.facet :bar
-    @index.values(member).should == %w[ABC 123]
-  end
-  
-  it "should add a facet term for facets" do
+  it "should add terms and values for facets" do
     member = Object.new
     stub(member).foo { "ABC" }
     facet_option = Xapit::FacetOption.new
     facet_option.name = "ABC"
     @index.facet(:foo)
     @index.facet_terms(member).should == ["F#{facet_option.identifier}"]
+    @index.values(member).should == { 0 => "F#{facet_option.identifier}" }
   end
   
   it "should add terms and values to xapian document" do
     member = Object.new
     stub(member).id { 123 }
-    stub(@index).values { %w[value list] }
+    stub(@index).values.returns(0 => 'value', 1 => 'list')
     stub(@index).terms { %w[term list] }
     doc = @index.document_for(member)
     doc.should be_kind_of(Xapian::Document)
