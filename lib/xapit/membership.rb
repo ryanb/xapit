@@ -5,11 +5,11 @@ module Xapit
       base.send(:attr_accessor, :xapit_relevance) # is there a better way to do this?
     end
     
-    def search(*args)
-      Collection.new(self, *args)
-    end
-    
     module ClassMethods
+      def search(*args)
+        Collection.new(self, *args)
+      end
+      
       def xapit
         @xapit_index_blueprint = IndexBlueprint.new(self)
         yield(@xapit_index_blueprint)

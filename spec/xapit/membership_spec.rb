@@ -18,7 +18,7 @@ describe XapitMember do
   end
   
   it "should return collection from search" do
-    XapitMember.new.search("foo").class.should == Xapit::Collection
+    XapitMember.search("foo").class.should == Xapit::Collection
   end
   
   it "should store xapit_relevance" do
