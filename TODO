@@ -22,4 +22,4 @@ Other
 - turn into Ruby Gem with clear instructions on requirements
 - inline rdoc documentation
 - installation script to create xapit initializer
-- init.rb file to include xapit in ActiveRecord models
+x init.rb file to include xapit in ActiveRecord models
