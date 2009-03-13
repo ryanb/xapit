@@ -1,4 +1,4 @@
-namespace :xapit
+namespace :xapit do
   desc "Index all xapit models."
   task :index => :environment do
     Xapit::IndexBlueprint.index_all
