@@ -63,12 +63,18 @@ module Xapit
     end
     
     def facets
-      @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
-        Facet.new(facet_blueprint, database, query, facet_identifiers)
+      all_facets.select do |facet|
+        facet.options.size > 1
       end
     end
     
     private
+    
+    def all_facets
+      @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
+        Facet.new(facet_blueprint, database, query, facet_identifiers)
+      end
+    end
     
     def matchset(offset = nil, limit = nil)
       enquire = Xapian::Enquire.new(database)
