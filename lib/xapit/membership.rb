@@ -10,8 +10,8 @@ module Xapit
         Collection.new(self, *args)
       end
       
-      def xapit
-        @xapit_index_blueprint = IndexBlueprint.new(self)
+      def xapit(*args)
+        @xapit_index_blueprint = IndexBlueprint.new(self, *args)
         yield(@xapit_index_blueprint)
       end
       
