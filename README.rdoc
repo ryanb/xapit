@@ -1,15 +1,20 @@
 = Xapit
 
-Xapit (pronounced "zap it") is a high level interface for working with an Xapian database.
+Xapit (pronounced "zap it") is a high level interface for working with a Xapian database.
 
 Note: This project is very early in development. Not all features in this documentation have been implemented. Use at your own risk.
 
 
 == Install
 
-This will be available both as a Rails plugin and a gem to use in any other environment. It assumes that you have Xapian and the Xapian Bindings for Ruby already installed.
+If you haven't already, first install Xapian and the Xapian Bindings for Ruby.
+http://wiki.github.com/Overbryd/acts_as_xapian/installation
 
-More instructions coming soon.
+To install as a Rails plugin, run this command.
+
+  script/plugin install git://github.com/ryanb/xapit.git
+
+Note: this will soon also be available as a Ruby gem, but not yet.
 
 
 == Setup
@@ -54,9 +59,14 @@ Simply call "xapit" in the model and pass a block to define the indexed attribut
 6. This method returns the average rating value and is used dynamically when indexing the articles in section #4.
 
 
+You can also pass any find options to the xapit method to determine what gets indexed and improve performance with eager loading or a different batch size.
+
+  xapit(:batch_size => 100, :include => :author, :conditions => { :visible => true })
+
+
 == Index
 
-To index these models into the database, run the xapit:index rake task.
+To perform the indexing, run the xapit:index rake task.
 
   rake xapit:index
 
@@ -69,12 +79,12 @@ You can then perform a search on the model.
   @articles = Article.search("phone")
   
   # add pagination if you're using will_paginate
-  @articles = Article.search("phone", :per_page => 20, :page => params[:page])
+  @articles = Article.search("phone", :per_page => 10, :page => params[:page])
   
   # search based on indexed fields
   @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
   
-  # manually sort based on any number of fields, sort defaults to most relevant
+  # manually sort based on any number of indexed fields, sort defaults to most relevant
   @articles = Article.search("phone", :order => [:category_id, :id])
 
 
@@ -87,7 +97,7 @@ Simply iterate through the returned set to display the results.
     <%= article.xapit_relevance %>
   <% end %>
 
-The "xapit_relevance" holds a percentage (float between 0 and 100) determining how relevant the given document is to the user's search query.
+The "xapit_relevance" holds a percentage (between 0 and 100) determining how relevant the given document is to the user's search query.
 
 
 == Facets
@@ -97,14 +107,14 @@ Facets allow you to further filter the result set based on certain attributes.
   <% for facet in @articles.facets %>
     <%= facet.name %>
     <% for option in facet.options %>
-      <%= link_to option.name, articles_path(:facet => option) %>
+      <%= link_to option.name, :overwrite_params => { :facets => option }) %>
       (<%= option.count %>)
     <% end %>
   <% end %>
 
-The to_param method is defined on option to return an identifier, that is handled behind the scenes when you pass option to a route in Rails. Use this in future searches.
+The to_param method is defined on option to return an identifier which will be passed through the URL. Use this in the search.
 
-  Article.search("phone", :facets => [params[:facet]])
+  Article.search("phone", :facets => params[:facets])
 
 
 == Outside of Rails
@@ -117,7 +127,7 @@ Xapit can be used outside of Rails too. You'll just need to include the membersh
     xapit # ...
   end
 
-This class is expected to respond to "each" (Product.each) which is used to iterate through the records when indexing. The instances should also respond to "id".
+This class is expected to respond to "each" (Product.each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
 
 More instructions coming soon.
 
@@ -126,7 +136,7 @@ More instructions coming soon.
 
 This project can be found on github at the following URL.
 
-http://github.com/ryanb/xapit/
+http://github.com/ryanb/xapit
 
 If you would like to contribute to this project, please fork the 
 repository and send me a pull request.
