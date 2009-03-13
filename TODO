@@ -1,16 +1,9 @@
 Indexing
-x add indexing for a specific class
-x make index_all method to index all classes
-x pass xapit options to find method to limit what is indexed or change the batch size
-- wrap indexing in a rake task
+x wrap indexing in a rake task
 - support custom facets
 + index spelling of terms
 
 Finding
-x simple query string find
-x multi-word query string find
-x simple conditions option
-x pagination options
 - order option
 - range in conditions
 - facets option to accept array of unique ids
@@ -18,19 +11,15 @@ x pagination options
 + negative word in query
 + parenthesis to group phrases
 
-Found Collection
-x lazy loading
-x paginatable
-x build queries on top of (like scopes)
-x add xapit_relevance to found results
-
 Facets
 - apply unique id to each facet option
 - ensure unique id is maintained between indexing and adjusting database
 - add "facets" method to collection
 
 Other
-x add database config file
 - remove dependency on active_support
 - turn into Rails plugin
 - turn into Ruby Gem with clear instructions on requirements
+- inline rdoc documentation
+- installation script to create xapit initializer
+- init.rb file to include xapit in ActiveRecord models
