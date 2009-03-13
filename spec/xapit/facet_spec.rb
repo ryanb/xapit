@@ -24,6 +24,10 @@ describe Xapit::Facet do
       it "should have the name of 'Visible'" do
         @facet.name.should == 'Visible'
       end
+      
+      it "should have true and false options" do
+        @facet.options.map(&:name).sort.should == %w[false true]
+      end
     end
   end
 end

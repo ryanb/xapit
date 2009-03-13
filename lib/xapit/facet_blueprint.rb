@@ -1,6 +1,7 @@
 module Xapit
   class FacetBlueprint
     attr_reader :position
+    attr_reader :attribute
     
     def initialize(position, attribute, custom_name = nil)
       @position = position
