@@ -47,6 +47,11 @@ describe Xapit::Facet do
           blueprint = Xapit::FacetBlueprint.new(0, :visible)
           @facet.options.detect { |o| o.name == 'true' }.to_param.should == blueprint.identifier_for(@visible1)
         end
+      
+        it "should sort options in alphabetical order" do
+          @facet.options.first.name.should == 'false'
+          @facet.options.last.name.should == 'true'
+        end
       end
       
       it "should not list facets if only one option is found" do

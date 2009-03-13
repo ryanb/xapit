@@ -10,7 +10,7 @@ module Xapit
     def options
       matches.map do |match|
         FacetOption.new(@blueprint, match, @existing_facet_identifiers)
-      end
+      end.sort_by(&:name)
     end
     
     def name
