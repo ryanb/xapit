@@ -82,17 +82,12 @@ describe Xapit::Collection do
       end
       
       it "should find matching facet" do
-        # this will need to be a bit more complex later...
-        facet_option = Xapit::FacetOption.new
-        facet_option.name = "hello world"
-        Xapit::Collection.new(XapitMember, "", :facets => [facet_option.identifier]).should == [@hello]
+        id = Xapit::FacetBlueprint.new(:name).identifier_for(@hello)
+        Xapit::Collection.new(XapitMember, "", :facets => [id, id]).should == [@hello]
       end
       
       it "should split facets string on dash" do
-        # this will need to be a bit more complex later...
-        facet_option = Xapit::FacetOption.new
-        facet_option.name = "hello world"
-        id = facet_option.identifier
+        id = Xapit::FacetBlueprint.new(:name).identifier_for(@hello)
         Xapit::Collection.new(XapitMember, "", :facets => "#{id}-#{id}").should == [@hello]
       end
     end
