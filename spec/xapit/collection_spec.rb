@@ -7,6 +7,7 @@ describe Xapit::Collection do
       XapitMember.xapit do |index|
         index.text :name
         index.field :name
+        index.facet :name
       end
       path = File.dirname(__FILE__) + '/../tmp/xapiandb'
       FileUtils.rm_rf(path) if File.exist? path
@@ -74,6 +75,17 @@ describe Xapit::Collection do
         results.each do |record|
           record.xapit_relevance.class.should == Fixnum
         end
+      end
+      
+      it "should find nothing when searching unknown facet" do
+        Xapit::Collection.new(XapitMember, "", :facets => ["unknownfacet"]).should be_empty
+      end
+      
+      it "should find matching facet" do
+        # this will need to be a bit more complex later...
+        facet_option = Xapit::FacetOption.new
+        facet_option.name = "hello world"
+        Xapit::Collection.new(XapitMember, "", :facets => [facet_option.identifier]).should == [@hello]
       end
     end
   end

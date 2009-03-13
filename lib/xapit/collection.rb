@@ -71,10 +71,10 @@ module Xapit
     end
     
     def query
-      if (search_terms + condition_terms).empty?
+      if (search_terms + condition_terms + facet_terms).empty?
         base_query
       else
-        Xapian::Query.new(Xapian::Query::OP_AND, base_query, Xapian::Query.new(Xapian::Query::OP_AND, search_terms + condition_terms))
+        Xapian::Query.new(Xapian::Query::OP_AND, base_query, Xapian::Query.new(Xapian::Query::OP_AND, search_terms + condition_terms + facet_terms))
       end
     end
     
@@ -98,6 +98,16 @@ module Xapit
       if @options[:conditions]
         @options[:conditions].map do |name, value|
           "X#{name}-#{value.downcase}"
+        end
+      else
+        []
+      end
+    end
+    
+    def facet_terms
+      if @options[:facets]
+        @options[:facets].map do |name|
+          "F#{name}"
         end
       else
         []

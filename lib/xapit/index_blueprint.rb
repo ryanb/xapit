@@ -30,7 +30,6 @@ module Xapit
     
     def facet(*attributes)
       @facet_attributes += attributes
-      field(*attributes)
     end
     
     def document_for(member)
@@ -50,7 +49,7 @@ module Xapit
     end
     
     def terms(member)
-      base_terms(member) + field_terms(member) + text_terms(member)
+      base_terms(member) + field_terms(member) + text_terms(member) + facet_terms(member)
     end
     
     def base_terms(member)
@@ -66,6 +65,14 @@ module Xapit
     def field_terms(member)
       field_attributes.map do |name|
         "X#{name}-#{member.send(name).to_s.downcase}"
+      end
+    end
+    
+    def facet_terms(member)
+      facet_attributes.map do |name|
+        option = FacetOption.new
+        option.name = member.send(name).to_s
+        "F#{option.identifier}"
       end
     end
     

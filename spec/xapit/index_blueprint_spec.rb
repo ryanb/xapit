@@ -51,11 +51,13 @@ describe Xapit::IndexBlueprint do
     @index.values(member).should == %w[ABC 123]
   end
   
-  it "should add a field term for facets" do
+  it "should add a facet term for facets" do
     member = Object.new
     stub(member).foo { "ABC" }
+    facet_option = Xapit::FacetOption.new
+    facet_option.name = "ABC"
     @index.facet(:foo)
-    @index.field_terms(member).should == %w[Xfoo-abc]
+    @index.facet_terms(member).should == ["F#{facet_option.identifier}"]
   end
   
   it "should add terms and values to xapian document" do
