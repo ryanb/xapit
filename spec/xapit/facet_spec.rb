@@ -1,0 +1,29 @@
+require File.dirname(__FILE__) + '/../spec_helper'
+
+describe Xapit::Facet do
+  describe "with database" do
+    before(:each) do
+      XapitMember.delete_all
+      XapitMember.xapit do |index|
+        index.facet :visible
+      end
+      path = File.dirname(__FILE__) + '/../tmp/xapiandb'
+      FileUtils.rm_rf(path) if File.exist? path
+      Xapit::Config.setup(:database_path => path)
+    end
+    
+    describe "indexed" do
+      before(:each) do
+        @visible1 = XapitMember.new(:visible => true)
+        @visible2 = XapitMember.new(:visible => true)
+        @invisible = XapitMember.new(:visible => false)
+        Xapit::IndexBlueprint.index_all
+        @facet = XapitMember.search("").facets.first
+      end
+      
+      it "should have the name of 'Visible'" do
+        @facet.name.should == 'Visible'
+      end
+    end
+  end
+end

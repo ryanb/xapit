@@ -12,6 +12,10 @@ module Xapit
       end
     end
     
+    def name
+      @blueprint.name
+    end
+    
     private
     
     def matches

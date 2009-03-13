@@ -8,4 +8,12 @@ describe Xapit::FacetBlueprint do
     facet1.identifier_for("foo").should_not == facet1.identifier_for("bar")
     facet1.identifier_for("foo").should_not == facet2.identifier_for("foo")
   end
+  
+  it "should humanize attribute for name if one isn't given" do
+    Xapit::FacetBlueprint.new(0, :visible).name.should == "Visible"
+  end
+  
+  it "should use custom name if given" do
+    Xapit::FacetBlueprint.new(0, :visible, "custom").name.should == "custom"
+  end
 end
