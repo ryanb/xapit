@@ -21,5 +21,6 @@ Other
 - turn into Rails plugin
 - turn into Ruby Gem with clear instructions on requirements
 - inline rdoc documentation
-- installation script to create xapit initializer
+x installation script to create xapit initializer
 x init.rb file to include xapit in ActiveRecord models
+- ensure other (private) rake tasks aren't included by Rails
