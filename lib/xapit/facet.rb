@@ -13,6 +13,19 @@ module Xapit
       end.sort_by(&:name)
     end
     
+    def matching_identifiers
+      result = {}
+      matches.each do |match|
+        class_name, id = match.document.data.split('-')
+        record = class_name.constantize.find(id)
+        @blueprint.identifiers_for(record).each do |identifier|
+          result[identifier] ||= 0
+          result[identifier] += (match.collapse_count + 1)
+        end
+      end
+      result
+    end
+    
     def name
       @blueprint.name
     end
