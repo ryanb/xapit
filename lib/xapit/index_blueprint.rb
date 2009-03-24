@@ -72,14 +72,14 @@ module Xapit
     
     def facet_terms(member)
       facets.map do |facet|
-        "F#{facet.identifier_for(member)}"
-      end
+        facet.identifiers_for(member).map { |id| "F#{id}" }
+      end.flatten
     end
     
     def values(member)
       index = 0
-      facet_terms(member).inject(Hash.new) do |hash, term|
-        hash[index] = term
+      facets.inject(Hash.new) do |hash, facet|
+        hash[index] = facet.identifiers_for(member).join("-")
         index += 1
         hash
       end

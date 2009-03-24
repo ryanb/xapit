@@ -44,11 +44,11 @@ describe Xapit::IndexBlueprint do
   
   it "should add terms and values for facets" do
     member = Object.new
-    stub(member).foo { "ABC" }
-    id = Xapit::FacetBlueprint.new(0, :foo).identifier_for(member)
+    stub(member).foo { ["ABC", "DEF"] }
+    ids = Xapit::FacetBlueprint.new(0, :foo).identifiers_for(member)
     @index.facet(:foo)
-    @index.facet_terms(member).should == ["F#{id}"]
-    @index.values(member).should == { 0 => "F#{id}" }
+    @index.facet_terms(member).should == ids.map { |id| "F#{id}" }
+    @index.values(member).should == { 0 => "#{ids.join('-')}" }
   end
   
   it "should add terms and values to xapian document" do

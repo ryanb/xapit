@@ -4,9 +4,14 @@ describe Xapit::FacetBlueprint do
   it "should generate unique identifier based on attribute and value" do
     facet1 = Xapit::FacetBlueprint.new(0, :to_s)
     facet2 = Xapit::FacetBlueprint.new(0, :length)
-    facet1.identifier_for("foo").length.should == 7
-    facet1.identifier_for("foo").should_not == facet1.identifier_for("bar")
-    facet1.identifier_for("foo").should_not == facet2.identifier_for("foo")
+    facet1.identifiers_for("foo").first.length.should == 7
+    facet1.identifiers_for("foo").should_not == facet1.identifiers_for("bar")
+    facet1.identifiers_for("foo").should_not == facet2.identifiers_for("foo")
+  end
+  
+  it "should generate unique identifiers for each value returned" do
+    facet = Xapit::FacetBlueprint.new(0, :to_a)
+    facet.identifiers_for(["foo", "bar"]).size.should == 2
   end
   
   it "should humanize attribute for name if one isn't given" do

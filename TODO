@@ -12,6 +12,7 @@ Facets
 - sort facet options
 - add collection.applied_facet_options to list ones that have been added
 - make to_param on applied facet option remove itself from the list
+- allow one record to apply to multiple facet values
 + handle unique id collision gracefully
 
 Other

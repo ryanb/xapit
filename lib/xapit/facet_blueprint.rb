@@ -9,13 +9,25 @@ module Xapit
       @custom_name = custom_name
     end
     
-    def identifier_for(member)
-      value = member.send(@attribute).to_s
-      Digest::SHA1.hexdigest(@attribute.to_s + value)[0..6]
+    def identifiers_for(member)
+      values_for(member).map do |value|
+        Digest::SHA1.hexdigest(@attribute.to_s + value.to_s)[0..6]
+      end
     end
     
     def name
       @custom_name || @attribute.to_s.humanize
+    end
+    
+    private
+    
+    def values_for(member)
+      value = member.send(@attribute)
+      if value.kind_of? Array
+        value
+      else
+        [value]
+      end
     end
   end
 end

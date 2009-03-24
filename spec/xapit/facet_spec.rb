@@ -39,13 +39,13 @@ describe Xapit::Facet do
       
         it "should have identifier" do
           blueprint = Xapit::FacetBlueprint.new(0, :visible)
-          @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifier_for(@visible1)
-          @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifier_for(@invisible)
+          @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifiers_for(@visible1).first
+          @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifiers_for(@invisible).first
         end
       
         it "should return identifier on to_param" do
           blueprint = Xapit::FacetBlueprint.new(0, :visible)
-          @facet.options.detect { |o| o.name == 'true' }.to_param.should == blueprint.identifier_for(@visible1)
+          @facet.options.detect { |o| o.name == 'true' }.to_param.should == blueprint.identifiers_for(@visible1).first
         end
       
         it "should sort options in alphabetical order" do
@@ -56,7 +56,7 @@ describe Xapit::Facet do
       
       it "should not list facets if only one option is found" do
         blueprint = Xapit::FacetBlueprint.new(0, :visible)
-        facets = XapitMember.search("", :facets => blueprint.identifier_for(@visible1)).facets
+        facets = XapitMember.search("", :facets => blueprint.identifiers_for(@visible1)).facets
         facets.should be_empty
       end
     end

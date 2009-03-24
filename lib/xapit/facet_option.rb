@@ -17,7 +17,7 @@ module Xapit
     end
     
     def identifier
-      @blueprint.identifier_for(record)
+      @blueprint.identifiers_for(record).first
     end
     
     def to_param
