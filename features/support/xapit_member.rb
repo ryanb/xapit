@@ -1,13 +1,3 @@
-require 'rubygems'
-require 'spec'
-require 'active_support'
-require 'fileutils'
-require File.dirname(__FILE__) + '/../lib/xapit'
-
-Spec::Runner.configure do |config|
-  config.mock_with :rr
-end
-
 class XapitMember
   include Xapit::Membership
   
