@@ -3,7 +3,7 @@ module Xapit
     attr_accessor :facet, :name, :existing_facet_identifiers, :count
     
     def self.find(id)
-      enquire = Xapian::Enquire.new(Xapit::Config.database)
+      enquire = Xapian::Enquire.new(Config.database)
       enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["Q#{name}-#{id}"])
       match = enquire.mset(0, 1).matches.first
       if match.nil?

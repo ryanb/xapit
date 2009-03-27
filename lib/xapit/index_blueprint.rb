@@ -4,11 +4,11 @@ module Xapit
     attr_reader :field_attributes
     attr_reader :facets
     
-    def self.index_all(db = nil)
+    def self.index_all
       load_models
       @@instances.each do |member_class, blueprint|
         yield(member_class) if block_given?
-        blueprint.index_into_database(db)
+        blueprint.index_all
       end
     end
     
@@ -86,10 +86,9 @@ module Xapit
       end
     end
     
-    def index_into_database(db = nil)
-      db ||= Config.writable_database
+    def index_all
       @member_class.each(*@args) do |member|
-        db.add_document(document_for(member))
+        Config.writable_database.add_document(document_for(member))
       end
     end
     

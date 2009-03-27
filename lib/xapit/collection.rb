@@ -33,7 +33,7 @@ module Xapit
     end
     
     def search(keywords, options = {})
-      collection = Collection.new(@member_class, keywords, options.reverse_merge(:database => @options[:database]))
+      collection = Collection.new(@member_class, keywords, options)
       collection.base_query = query
       collection
     end
@@ -78,12 +78,12 @@ module Xapit
     
     def all_facets
       @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
-        Facet.new(facet_blueprint, database, query, facet_identifiers)
+        Facet.new(facet_blueprint, query, facet_identifiers)
       end
     end
     
     def matchset(offset = nil, limit = nil)
-      enquire = Xapian::Enquire.new(database)
+      enquire = Xapian::Enquire.new(Config.database)
       enquire.query = query
       enquire.mset(offset || per_page*(current_page-1), limit || per_page)
     end
@@ -134,10 +134,6 @@ module Xapit
     
     def facet_identifiers
       @options[:facets].kind_of?(String) ? @options[:facets].split('-') : (@options[:facets] || [])
-    end
-    
-    def database
-      @options[:database] || Config.database
     end
   end
 end
