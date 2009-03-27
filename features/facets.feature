@@ -26,3 +26,16 @@ Scenario: List Matching Facets
     | facet | option | count |
     | Age   | 17     | 1     |
     | Age   | 23     | 1     |
+
+
+Scenario: List Applied Facets
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query facets "0c93ee1-078661c"
+  Then I should have the following applied facets
+    | facet | option |
+    | Age   | 17     |
+    | Name  | Jane   |

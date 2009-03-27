@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Xapit::IndexBlueprint do
   before(:each) do
-    @index = Xapit::IndexBlueprint.new(Object)
+    @index = Xapit::IndexBlueprint.new(XapitMember)
   end
   
   it "should remember text attributes" do
@@ -42,13 +42,15 @@ describe Xapit::IndexBlueprint do
     @index.base_terms(member).should == %w[CObject QObject-123]
   end
   
-  it "should add terms and values for facets" do
-    member = Object.new
-    stub(member).foo { ["ABC", "DEF"] }
-    ids = Xapit::FacetBlueprint.new(0, :foo).identifiers_for(member)
+  it "should add terms, values and options for facets" do
+    stub(XapitMember).xapit_index_blueprint { @index }
+    member = XapitMember.new(:foo => ["ABC", "DEF"])
+    ids = Xapit::FacetBlueprint.new(XapitMember, 0, :foo).identifiers_for(member)
     @index.facet(:foo)
     @index.facet_terms(member).should == ids.map { |id| "F#{id}" }
-    @index.values(member).should == { 0 => "#{ids.join('-')}" }
+    @index.values(member).should == { 0 => ids.join('-') }
+    @index.save_facet_options_for(member)
+    ids.map { |id| Xapit::FacetOption.find(id).name }.should == ["ABC", "DEF"]
   end
   
   it "should add terms and values to xapian document" do
@@ -71,7 +73,7 @@ describe Xapit::IndexBlueprint do
     stub(member).id { 123 }
     stub(Object).each.yields(member)
     @index.index_into_database(db)
-    db.doccount.should == 1
+    db.doccount.should >= 4
     db.flush
   end
   

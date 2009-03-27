@@ -66,3 +66,14 @@ Then /^I should have the following facets$/ do |facets_table|
   end
   result.should == facets_table.hashes # this is somewhat fragile because it depends on order of hash result
 end
+
+Then /^I should have the following applied facets$/ do |facets_table|
+  result = []
+  @records.applied_facet_options.each do |option|
+    result << {
+      "facet" => option.facet.name,
+      "option" => option.name
+    }
+  end
+  result.should == facets_table.hashes # this is somewhat fragile because it depends on order of hash result
+end

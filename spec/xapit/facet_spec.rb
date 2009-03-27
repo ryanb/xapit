@@ -38,19 +38,19 @@ describe Xapit::Facet do
         end
       
         it "should have identifier for options" do
-          blueprint = Xapit::FacetBlueprint.new(0, :visible)
+          blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
           @facet.options.detect { |o| o.name == 'true' }.identifier.should == blueprint.identifiers_for(@visible1).first
           @facet.options.detect { |o| o.name == 'false' }.identifier.should == blueprint.identifiers_for(@invisible).first
         end
         
         it "should have matching identifiers" do
-          blueprint = Xapit::FacetBlueprint.new(0, :visible)
+          blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
           hash = { blueprint.identifiers_for(@visible1).first => 2, blueprint.identifiers_for(@invisible).first => 1 }
           @facet.matching_identifiers.should == hash
         end
       
         it "should return identifier on to_param" do
-          blueprint = Xapit::FacetBlueprint.new(0, :visible)
+          blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
           @facet.options.detect { |o| o.name == 'true' }.to_param.should == blueprint.identifiers_for(@visible1).first
         end
       
@@ -61,7 +61,7 @@ describe Xapit::Facet do
       end
       
       it "should not list facets if only one option is found" do
-        blueprint = Xapit::FacetBlueprint.new(0, :visible)
+        blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
         facets = XapitMember.search("", :facets => blueprint.identifiers_for(@visible1)).facets
         facets.should be_empty
       end

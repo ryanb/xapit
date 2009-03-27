@@ -81,12 +81,12 @@ describe Xapit::Collection do
       end
       
       it "should find matching facet" do
-        ids = Xapit::FacetBlueprint.new(0, :name).identifiers_for(@hello)
+        ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
         Xapit::Collection.new(XapitMember, "", :facets => ids*2).should == [@hello]
       end
       
       it "should split facets string on dash" do
-        ids = Xapit::FacetBlueprint.new(0, :name).identifiers_for(@hello)
+        ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
         Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-")).should == [@hello]
       end
       
@@ -94,6 +94,16 @@ describe Xapit::Collection do
         facets = Xapit::Collection.new(XapitMember, "").facets
         facets.size.should == 1
         facets.first.options.size.should == 2
+      end
+      
+      it "should have no applied facets when there are no given facets" do
+        Xapit::Collection.new(XapitMember, "").applied_facet_options.should be_empty
+      end
+      
+      it "should list applied facets" do
+        ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
+        results = Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-"))
+        results.applied_facet_options.map(&:name).should == ["hello world", "hello world"]
       end
     end
   end

@@ -31,7 +31,7 @@ module Xapit
     end
     
     def facet(*args, &block)
-      @facets << FacetBlueprint.new(@facets.size, *args, &block)
+      @facets << FacetBlueprint.new(@member_class, @facets.size, *args, &block)
     end
     
     def document_for(member)
@@ -43,6 +43,7 @@ module Xapit
       values(member).each do |index, value|
         document.add_value(index, value)
       end
+      save_facet_options_for(member)
       document
     end
     
@@ -92,9 +93,13 @@ module Xapit
       end
     end
     
+    def save_facet_options_for(member)
+      facets.each do |facet|
+        facet.save_facet_options_for(member)
+      end
+    end
+    
     private
-    
-    
     
     # Make sure all models are loaded - without reloading any that
     # ActiveRecord::Base is already aware of (otherwise we start to hit some

@@ -68,6 +68,12 @@ module Xapit
       end
     end
     
+    def applied_facet_options
+      facet_identifiers.map do |identifier|
+        FacetOption.find(identifier)
+      end
+    end
+    
     private
     
     def all_facets
