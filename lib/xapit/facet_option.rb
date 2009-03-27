@@ -30,7 +30,11 @@ module Xapit
     end
     
     def to_param
-      (existing_facet_identifiers + [identifier]).join('-')
+      if existing_facet_identifiers.include? identifier
+        (existing_facet_identifiers - [identifier]).join('-')
+      else
+        (existing_facet_identifiers + [identifier]).join('-')
+      end
     end
   end
 end

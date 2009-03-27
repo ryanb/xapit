@@ -8,6 +8,13 @@ describe Xapit::FacetOption do
     option.to_param.should == "abc-123-foo"
   end
   
+  it "should remove current identifier from previous identifiers if it exists" do
+    option = Xapit::FacetOption.new(nil, nil, nil)
+    option.existing_facet_identifiers = ["abc", "123", "foo"]
+    stub(option).identifier { "foo" }
+    option.to_param.should == "abc-123"
+  end
+  
   describe "with database" do
     before(:each) do
       XapitMember.xapit do |index|
