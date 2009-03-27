@@ -17,7 +17,7 @@ describe Xapit::Collection do
       before(:each) do
         @hello = XapitMember.new(:name => "hello world")
         @foo = XapitMember.new(:name => "foo bar")
-        Xapit::IndexBlueprint.index_all
+        Xapit.index_all
       end
       
       it "should find all xapit members in database given empty string" do

@@ -22,7 +22,7 @@ Given /^the following indexed records$/ do |records_table|
 end
 
 When /^I index the database$/ do
-  Xapit::IndexBlueprint.index_all
+  Xapit.index_all
 end
 
 When /^I query for "([^\"]*)"$/ do |query|

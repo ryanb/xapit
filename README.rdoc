@@ -50,6 +50,10 @@ To perform the indexing, run the xapit:index rake task.
 
   rake xapit:index
 
+It can also be triggered through Ruby code using this command.
+
+  Xapit.index_all
+
 
 == Search
 
@@ -96,6 +100,13 @@ The to_param method is defined on option to return an identifier which will be p
 
   Article.search("phone", :facets => params[:facets])
 
+You can also list the applied facets along with a remove link.
+
+  <% for option in @articles.applied_facet_options %>
+    <%=h option.name %>
+    <%= link_to "remove", :overwrite_params => { :facets => option }) %>
+  <% end %>
+
 
 == Outside of Rails
 
@@ -108,8 +119,6 @@ Xapit can be used outside of Rails too. You'll just need to include the membersh
   end
 
 This class is expected to respond to "each" (Product.each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
-
-More instructions coming soon.
 
 
 == Development

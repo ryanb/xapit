@@ -15,7 +15,7 @@ module XapitHelpers
       end
       XapitMember.new(attributes.symbolize_keys)
     end
-    Xapit::IndexBlueprint.index_all if perform_index
+    Xapit.index_all if perform_index
   end
 end
 

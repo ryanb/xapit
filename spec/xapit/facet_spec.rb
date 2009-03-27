@@ -16,7 +16,7 @@ describe Xapit::Facet do
         @visible1 = XapitMember.new(:visible => true)
         @visible2 = XapitMember.new(:visible => true)
         @invisible = XapitMember.new(:visible => false)
-        Xapit::IndexBlueprint.index_all
+        Xapit.index_all
       end
       
       describe "facet from empty search" do

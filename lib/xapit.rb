@@ -3,6 +3,9 @@ require 'rubygems'
 require 'xapian'
 
 module Xapit
+  def self.index_all(*args, &block)
+    IndexBlueprint.index_all(*args, &block)
+  end
 end
 
 require File.dirname(__FILE__) + '/xapit/membership'
