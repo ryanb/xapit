@@ -1,6 +1,6 @@
 module Xapit
   class FacetOption
-    attr_accessor :facet, :name
+    attr_accessor :facet, :name, :existing_facet_identifiers, :count
     
     def self.find(id)
       enquire = Xapian::Enquire.new(Xapit::Config.database)
@@ -9,42 +9,17 @@ module Xapit
       if match.nil?
         raise "Unable to find facet option for #{id}."
       else
-        make(*match.document.data.split('|||'))
+        new(*match.document.data.split('|||'))
       end
     end
     
-    # change this to "new" later on
-    def self.make(class_name, facet_attribute, name)
-      option = new(nil, nil, nil)
-      option.facet = class_name.constantize.xapit_facet_blueprint(facet_attribute)
-      option.name = name
-      option
-    end
-    
-    def initialize(blueprint, match, existing_facet_identifiers)
-      @blueprint = blueprint
-      @match = match
-      @existing_facet_identifiers = existing_facet_identifiers
-    end
-    
-    def name
-      @name || begin
-        class_name, id = @match.document.data.split('-')
-        record.send(@blueprint.attribute).to_s
-      end
-    end
-    
-    def count
-      # add one because Xapian counts the collapsed record as one
-      @match.collapse_count + 1
+    def initialize(class_name, facet_attribute, name)
+      @facet = class_name.constantize.xapit_facet_blueprint(facet_attribute) if class_name && facet_attribute
+      @name = name
     end
     
     def identifier
-      if @name
-        Digest::SHA1.hexdigest(facet.attribute.to_s + name)[0..6]
-      else
-        @blueprint.identifiers_for(record).first
-      end
+      Digest::SHA1.hexdigest(facet.attribute.to_s + name)[0..6]
     end
     
     def save
@@ -55,15 +30,7 @@ module Xapit
     end
     
     def to_param
-      (@existing_facet_identifiers + [identifier]).join('-')
-    end
-    
-    private
-    
-    def record
-      # TODO cache record fetching?
-      class_name, id = @match.document.data.split('-')
-      class_name.constantize.find(id)
+      (existing_facet_identifiers + [identifier]).join('-')
     end
   end
 end

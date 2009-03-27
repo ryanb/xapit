@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Xapit::FacetOption do
   it "should combine previous identifiers with current one on to_param" do
-    option = Xapit::FacetOption.new(nil, nil, ["abc", "123"])
+    option = Xapit::FacetOption.new(nil, nil, nil)
+    option.existing_facet_identifiers = ["abc", "123"]
     stub(option).identifier { "foo" }
     option.to_param.should == "abc-123-foo"
   end
@@ -17,7 +18,7 @@ describe Xapit::FacetOption do
     end
     
     it "should have identifier hashing name and value" do
-      option = Xapit::FacetOption.make("XapitMember", "age", "17")
+      option = Xapit::FacetOption.new("XapitMember", "age", "17")
       option.identifier.should == "0c93ee1"
     end
     

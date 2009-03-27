@@ -8,8 +8,11 @@ module Xapit
     end
     
     def options
-      matches.map do |match|
-        FacetOption.new(@blueprint, match, @existing_facet_identifiers)
+      matching_identifiers.map do |identifier, count|
+        option = FacetOption.find(identifier)
+        option.count = count
+        option.existing_facet_identifiers = @existing_facet_identifiers
+        option
       end.sort_by(&:name)
     end
     

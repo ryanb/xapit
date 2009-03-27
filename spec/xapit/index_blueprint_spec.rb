@@ -73,7 +73,7 @@ describe Xapit::IndexBlueprint do
     stub(member).id { 123 }
     stub(Object).each.yields(member)
     @index.index_into_database(db)
-    db.doccount.should >= 4
+    db.doccount.should >= 1
     db.flush
   end
   

@@ -23,7 +23,7 @@ module Xapit
     
     def save_facet_options_for(member)
       values_for(member).map do |value|
-        option = FacetOption.make(member.class.name, @attribute.to_s, value.to_s)
+        option = FacetOption.new(member.class.name, @attribute.to_s, value.to_s)
         option.save
       end
     end

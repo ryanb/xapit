@@ -20,7 +20,7 @@ module Xapit
       end
       
       def xapit_facet_blueprint(attribute)
-        result = @xapit_index_blueprint.facets.detect { |f| f.attribute.to_s == attribute.to_s }
+        result = xapit_index_blueprint.facets.detect { |f| f.attribute.to_s == attribute.to_s }
         raise "Unable to find facet blueprint for #{attribute} on #{name}" if result.nil?
         result
       end
