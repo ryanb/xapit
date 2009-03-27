@@ -70,7 +70,9 @@ module Xapit
     
     def applied_facet_options
       facet_identifiers.map do |identifier|
-        FacetOption.find(identifier)
+        option = FacetOption.find(identifier)
+        option.existing_facet_identifiers = facet_identifiers
+        option
       end
     end
     

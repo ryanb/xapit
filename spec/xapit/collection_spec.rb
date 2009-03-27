@@ -105,6 +105,12 @@ describe Xapit::Collection do
         results = Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-"))
         results.applied_facet_options.map(&:name).should == ["hello world", "hello world"]
       end
+      
+      it "should pass existing facet identifiers to applied options" do
+        ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
+        results = Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-"))
+        results.applied_facet_options.first.existing_facet_identifiers.should == (ids*2)
+      end
     end
   end
 end
