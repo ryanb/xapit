@@ -2,7 +2,7 @@ module Xapit
   class Facet
     def initialize(blueprint, query, existing_facet_identifiers)
       @blueprint = blueprint
-      @query = query
+      @query = query.dup
       @existing_facet_identifiers = existing_facet_identifiers
     end
     
@@ -35,10 +35,7 @@ module Xapit
     private
     
     def matches
-      enquire = Xapian::Enquire.new(Config.database)
-      enquire.query = @query
-      enquire.collapse_key = @blueprint.position
-      enquire.mset(0, 1000).matches
+      @query.matches(0, 1000, :collapse_key => @blueprint.position)
     end
   end
 end

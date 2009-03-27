@@ -16,7 +16,7 @@ module Xapit
     end
     
     def size
-      matchset(0, 1).matches_estimated
+      query.count
     end
     alias_method :total_entries, :size
     
@@ -85,21 +85,19 @@ module Xapit
     end
     
     def matchset(offset = nil, limit = nil)
-      enquire = Xapian::Enquire.new(Config.database)
-      enquire.query = query
-      enquire.mset(offset || per_page*(current_page-1), limit || per_page)
+      query.matchset(offset || per_page*(current_page-1), limit || per_page)
     end
     
     def query
       if (search_terms + condition_terms + facet_terms).empty?
         base_query
       else
-        Xapian::Query.new(Xapian::Query::OP_AND, base_query, Xapian::Query.new(Xapian::Query::OP_AND, search_terms + condition_terms + facet_terms))
+        @query ||= base_query.and_query(search_terms + condition_terms + facet_terms)
       end
     end
     
     def base_query
-      @base_query || Xapian::Query.new(Xapian::Query::OP_AND, ["C" + @member_class.name])
+      @base_query || Query.new("C" + @member_class.name)
     end
     
     def fetch_results(offset = nil, limit = nil)

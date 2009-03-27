@@ -3,9 +3,7 @@ module Xapit
     attr_accessor :facet, :name, :existing_facet_identifiers, :count
     
     def self.find(id)
-      enquire = Xapian::Enquire.new(Config.database)
-      enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["Q#{name}-#{id}"])
-      match = enquire.mset(0, 1).matches.first
+      match = Query.new("Q#{name}-#{id}").matches(0, 1).first
       if match.nil?
         raise "Unable to find facet option for #{id}."
       else
@@ -14,9 +12,7 @@ module Xapit
     end
     
     def self.exist?(id)
-      enquire = Xapian::Enquire.new(Config.database)
-      enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, ["Q#{name}-#{id}"])
-      enquire.mset(0, 1).matches_estimated >= 1
+      Query.new("Q#{name}-#{id}").count >= 1
     end
     
     def initialize(class_name, facet_attribute, name)

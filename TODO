@@ -13,7 +13,7 @@ Facets
 x add collection.applied_facet_options to list ones that have been added
 x make to_param on applied facet option remove itself from the list
 x allow one record to apply to multiple facet values
-- don't save facet option document if it already has been saved
+x don't save facet option document if it already has been saved
 + handle unique id collision gracefully
 
 Other
