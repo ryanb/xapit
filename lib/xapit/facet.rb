@@ -1,5 +1,7 @@
 module Xapit
   class Facet
+    attr_accessor :existing_facet_identifiers
+    
     def initialize(blueprint, query, existing_facet_identifiers)
       @blueprint = blueprint
       @query = query.dup
@@ -21,8 +23,10 @@ module Xapit
         class_name, id = match.document.data.split('-')
         record = class_name.constantize.find(id)
         @blueprint.identifiers_for(record).each do |identifier|
-          result[identifier] ||= 0
-          result[identifier] += (match.collapse_count + 1)
+          unless existing_facet_identifiers.include? identifier
+            result[identifier] ||= 0
+            result[identifier] += (match.collapse_count + 1)
+          end
         end
       end
       result

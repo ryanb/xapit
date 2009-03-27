@@ -48,6 +48,12 @@ describe Xapit::Facet do
           hash = { blueprint.identifiers_for(@visible1).first => 2, blueprint.identifiers_for(@invisible).first => 1 }
           @facet.matching_identifiers.should == hash
         end
+        
+        it "should not include matching identifiers that are current" do
+          blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
+          @facet.existing_facet_identifiers = blueprint.identifiers_for(@visible1)
+          @facet.matching_identifiers.should == { blueprint.identifiers_for(@invisible).first => 1 }
+        end
       
         it "should return identifier on to_param" do
           blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
