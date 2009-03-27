@@ -27,7 +27,6 @@ Scenario: List Matching Facets
     | Age   | 17     | 1     |
     | Age   | 23     | 1     |
 
-
 Scenario: List Applied Facets
   Given the following indexed records
     | name | age |
@@ -39,3 +38,14 @@ Scenario: List Applied Facets
     | facet | option |
     | Age   | 17     |
     | Name  | Jane   |
+
+Scenario: List Multiple Facets Applied to One Record
+  Given the following indexed records
+    | name       |
+    | John, Jack |
+    | John       |
+  When I query for ""
+  Then I should have the following facets
+    | facet | option | count |
+    | Name  | Jack   | 1     |
+    | Name  | John   | 2     |

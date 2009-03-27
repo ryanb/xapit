@@ -10,6 +10,9 @@ module XapitHelpers
       end
     end
     records.each do |attributes|
+      attributes.each do |key, value|
+        attributes[key] = value.split(', ') if value.include? ', '
+      end
       XapitMember.new(attributes.symbolize_keys)
     end
     Xapit::IndexBlueprint.index_all if perform_index
