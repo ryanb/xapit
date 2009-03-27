@@ -40,11 +40,23 @@ describe Xapit::FacetOption do
     end
     
     it "should save facet to database" do
+      Xapit::Config.writable_database # make sure there's a database setup in case we try to read from it
       option = Xapit::FacetOption.new(nil, nil, nil)
       option.facet = XapitMember.xapit_facet_blueprint("age")
       option.name = "23"
       option.save
       Xapit::FacetOption.find(option.identifier).should_not be_nil
+    end
+    
+    it "should not save facet if it already exists" do
+      doc = Xapian::Document.new
+      doc.data = "XapitMember|||age|||17"
+      doc.add_term("QXapit::FacetOption-abc123")
+      Xapit::Config.writable_database.add_document(doc)
+      stub(Xapit::Config.writable_database).add_document { raise "should not add doc" }
+      option = Xapit::FacetOption.new(XapitMember, nil, nil)
+      stub(option).identifier { "abc123" }
+      option.save
     end
   end
 end
