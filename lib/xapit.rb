@@ -2,7 +2,10 @@ require 'digest/sha1'
 require 'rubygems'
 require 'xapian'
 
+# Looking for more documentation? A good place to start is Xapit::Membership
 module Xapit
+  
+  # Index all membership classes with xapit defined. Delegates to Xapit::IndexBlueprint.
   def self.index_all(*args, &block)
     IndexBlueprint.index_all(*args, &block)
   end

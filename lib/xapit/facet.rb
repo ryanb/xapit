@@ -1,4 +1,15 @@
 module Xapit
+  # Facets allow users to further filter the result set based on certain attributes.
+  # You should fetch facets by calling "facets" on a Xapit::Collection search result.
+  # 
+  # <% for facet in @articles.facets %>
+  #   <%= facet.name %>
+  #   <% for option in facet.options %>
+  #     <%= link_to option.name, :overwrite_params => { :facets => option }) %>
+  #     (<%= option.count %>)
+  #   <% end %>
+  # <% end %>
+  #
   class Facet
     attr_accessor :existing_facet_identifiers
     
@@ -8,6 +19,7 @@ module Xapit
       @existing_facet_identifiers = existing_facet_identifiers
     end
     
+    # Xapit::FacetOption objects for this facet. This only lists the ones which match the current query.
     def options
       matching_identifiers.map do |identifier, count|
         option = FacetOption.find(identifier)
@@ -32,6 +44,7 @@ module Xapit
       result
     end
     
+    # The name of the facet. See Xapit::FacetBlueprint for details.
     def name
       @blueprint.name
     end

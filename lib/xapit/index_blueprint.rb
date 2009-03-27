@@ -1,9 +1,12 @@
 module Xapit
+  # This is the object used in the block of the xapit method in Xapit::Membership. It keeps track of the
+  # index settings for a given class. It also provides some indexing functionality.
   class IndexBlueprint
     attr_reader :text_attributes
     attr_reader :field_attributes
     attr_reader :facets
     
+    # Indexes all classes known to have an index blueprint defined.
     def self.index_all
       load_models
       @@instances.each do |member_class, blueprint|
@@ -22,14 +25,25 @@ module Xapit
       @@instances[member_class] = self # TODO make this thread safe
     end
     
+    # Adds a text attribute. Each word in the text will be indexed as a separate term allowing full text searching.
+    # Text terms are what is searched by the primary string in a search query.
+    #
+    #   Article.search("kite")
+    #
     def text(*attributes)
       @text_attributes += attributes
     end
     
+    # Adds a field attribute. Field terms are not split by word so it is not designed for full text search.
+    # Instead you can filter through a field using the :conditions hash in a search query.
+    #
+    #   Article.search("", :conditions => { :priority => 5 })
+    #
     def field(*attributes)
       @field_attributes += attributes
     end
     
+    # Adds a facet attribute. See Xapit::FacetBlueprint and Xapit::Facet for details.
     def facet(*args, &block)
       @facets << FacetBlueprint.new(@member_class, @facets.size, *args, &block)
     end
@@ -86,6 +100,7 @@ module Xapit
       end
     end
     
+    # Indexes all records of this blueprint class. It does this using the ".each" method on the member class.
     def index_all
       @member_class.each(*@args) do |member|
         Config.writable_database.add_document(document_for(member))

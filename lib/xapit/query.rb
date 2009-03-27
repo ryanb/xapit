@@ -1,4 +1,6 @@
 module Xapit
+  # This class is only used internally to make it more convenient for querying the xapian database.
+  # You may be looking for Xapit::Collection instead.
   class Query # TODO make this class unmutable?
     def initialize(*words)
       @query = Xapian::Query.new(Xapian::Query::OP_AND, words.flatten)

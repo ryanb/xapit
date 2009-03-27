@@ -1,4 +1,11 @@
 module Xapit
+  # A facet blueprint keeps track of the settings for indexing a given facet. You can specify a custom
+  # name for a given facet by providing a second argument when defining.
+  #
+  #   xapit do |index|
+  #     index.facet :category_name, "Category"
+  #   end
+  #
   class FacetBlueprint
     attr_reader :member_class
     attr_reader :position
@@ -17,6 +24,8 @@ module Xapit
       end
     end
     
+    # The name of the facet. This will return the custom name if given while setting up the index,
+    # or default to humanizing the attribute name.
     def name
       @custom_name || @attribute.to_s.humanize
     end

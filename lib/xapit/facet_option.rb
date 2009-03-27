@@ -1,7 +1,9 @@
 module Xapit
+  # A facet option is a specific value or choice for a facet. See Xapit::Facet for details on how to use it.
   class FacetOption
     attr_accessor :facet, :name, :existing_facet_identifiers, :count
     
+    # Fetch a facet option given an id.
     def self.find(id)
       match = Query.new("Q#{name}-#{id}").matches(0, 1).first
       if match.nil?
@@ -11,6 +13,7 @@ module Xapit
       end
     end
     
+    # See if the given facet option exists with this id.
     def self.exist?(id)
       Query.new("Q#{name}-#{id}").count >= 1
     end
@@ -24,6 +27,7 @@ module Xapit
       Digest::SHA1.hexdigest(facet.attribute.to_s + name)[0..6]
     end
     
+    # Saves the given facet option to the database if it hasn't been already.
     def save
       unless self.class.exist?(identifier)
         doc = Xapian::Document.new
@@ -33,6 +37,9 @@ module Xapit
       end
     end
     
+    # Converts the facet to be used in a URL. It adds to the existing ones for convenience.
+    # If this facet option is currently selected, then this will return all selected facets except
+    # this one. This conveniently allows you to use this as both an "add this facet" and "remove this facet" link.
     def to_param
       if existing_facet_identifiers.include? identifier
         (existing_facet_identifiers - [identifier]).join('-')
