@@ -6,6 +6,13 @@ module Xapit
   #     index.facet :category_name, "Category"
   #   end
   #
+  # Multiple facet values are supported for a single record. All you need to do is return an array of
+  # values instead of a single string.
+  # 
+  #   def category_names
+  #     categories.map(&:name) # => ["Toys", "Clothing"]
+  #   end
+  # 
   class FacetBlueprint
     attr_reader :member_class
     attr_reader :position

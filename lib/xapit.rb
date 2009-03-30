@@ -10,12 +10,13 @@ module Xapit
     IndexBlueprint.index_all(*args, &block)
   end
   
-  # Used to perform a search on all indexed models.
-  #   
+  # Used to perform a search on all indexed models. The returned collection can
+  # contain instances of different classes which were indexed.
+  # 
   #   # perform a simple full text search
   #   @records = Xapit.search("phone")
-  #
-  # See Xaipt::Membership for details on search options.
+  # 
+  # See Xapit::Membership for details on search options.
   def self.search(*args)
     Collection.new(nil, *args)
   end

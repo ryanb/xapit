@@ -37,9 +37,13 @@ Because the indexing happens in Ruby these attributes do no have to be database 
     author.name
   end
 
-This way you can create a completely custom facet by simply defining your own method
+This way you can create a completely custom facet by simply defining your own method. Multiple facet options per record are supported if you return an array.
 
-You can also pass any find options to the xapit method to determine what gets indexed and improve performance with eager loading or a different batch size.
+  def author_names
+    authors.map(&:name) # => ["John", "Bob"]
+  end
+
+Finally, you can pass any find options to the xapit method to determine what gets indexed or improve performance with eager loading or a different batch size.
 
   xapit(:batch_size => 100, :include => :author, :conditions => { :visible => true })
 
@@ -75,6 +79,7 @@ You can also search all indexed models through Xapit.search.
 
   # search all indexed models
   @records = Xapit.search("phone")
+
 
 == Results
 

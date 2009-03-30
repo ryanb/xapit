@@ -1,15 +1,18 @@
 Indexing
-+ index spelling of terms
+- index spelling of terms
 
 Finding
 - order option
 - range in conditions
-+ and/or word separation
-+ negative word in query
+- and/or word separation
+- negative word in query
 + parenthesis to group phrases
++ support "age:17" condition matching in query
++ add classes option to Xapit.search to limit which classes are included
++ support @collection.facets on Xapit.search (multiple classes)
 
 Facets
-? sort facet options
++ sort facet options
 + handle unique id collision gracefully
 
 Other

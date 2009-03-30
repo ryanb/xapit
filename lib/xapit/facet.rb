@@ -10,6 +10,7 @@ module Xapit
   #   <% end %>
   # <% end %>
   #
+  # See Xapit::FacetBlueprint for details on how to index a facet.
   class Facet
     attr_accessor :existing_facet_identifiers
     
