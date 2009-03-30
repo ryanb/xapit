@@ -128,12 +128,17 @@ module Xapit
     end
     
     def base_query
-      @base_query || Query.new("C" + @member_class.name)
+      @base_query || Query.new(initial_query_string)
+    end
+    
+    def initial_query_string
+      @member_class ? "C" + @member_class.name : ""
     end
     
     def fetch_results(offset = nil, limit = nil)
       matchset(offset, limit).matches.map do |match|
-        member = @member_class.find(match.document.data.split('-').last)
+        class_name, id = match.document.data.split('-')
+        member = class_name.constantize.find(id)
         member.xapit_relevance = match.percent
         member
       end

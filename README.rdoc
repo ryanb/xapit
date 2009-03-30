@@ -71,6 +71,10 @@ You can then perform a search on the model.
   # manually sort based on any number of indexed fields, sort defaults to most relevant
   @articles = Article.search("phone", :order => [:category_id, :id])
 
+You can also search all indexed models through Xapit.search.
+
+  # search all indexed models
+  @records = Xapit.search("phone")
 
 == Results
 

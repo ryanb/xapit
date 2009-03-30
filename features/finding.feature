@@ -54,3 +54,8 @@ Scenario: Query for Two Facets
     | Jack | 17  |
   When I query facets "0c93ee1-078661c"
   Then I should find records named "Jane"
+
+Scenario: Query for All Records Class Agnostic
+  Given indexed records named "John, Jane"
+  When I query for "John" on Xapit
+  Then I should find 1 record

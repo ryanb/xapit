@@ -9,6 +9,16 @@ module Xapit
   def self.index_all(*args, &block)
     IndexBlueprint.index_all(*args, &block)
   end
+  
+  # Used to perform a search on all indexed models.
+  #   
+  #   # perform a simple full text search
+  #   @records = Xapit.search("phone")
+  #
+  # See Xaipt::Membership for details on search options.
+  def self.search(*args)
+    Collection.new(nil, *args)
+  end
 end
 
 require File.dirname(__FILE__) + '/xapit/membership'

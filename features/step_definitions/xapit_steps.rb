@@ -29,6 +29,10 @@ When /^I query for "([^\"]*)"$/ do |query|
   @records = XapitMember.search(query)
 end
 
+When /^I query for "([^\"]*)" on Xapit$/ do |query|
+  @records = Xapit.search(query)
+end
+
 Then /^I should find records? named "([^\"]*)"$/ do |joined_names|
   @records.map(&:name).join(", ").should == joined_names
 end
