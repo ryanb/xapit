@@ -118,7 +118,7 @@ Xapit can be used outside of Rails too. You'll just need to include the membersh
     xapit # ...
   end
 
-This class is expected to respond to "each" (Product.each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
+This class is expected to respond to "find_each" (Product.find_each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
 
 
 == Development

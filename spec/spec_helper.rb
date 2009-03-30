@@ -13,7 +13,7 @@ class XapitMember
   
   attr_reader :id
   
-  def self.each(&block)
+  def self.find_each(&block)
     @@records.each(&block) if @@records
   end
   

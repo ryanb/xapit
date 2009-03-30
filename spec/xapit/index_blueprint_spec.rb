@@ -84,7 +84,7 @@ describe Xapit::IndexBlueprint do
   
   it "should pass in extra arguments to each method" do
     index = Xapit::IndexBlueprint.new(Object, :foo, :bar => :blah)
-    mock(Object).each(:foo, :bar => :blah)
+    mock(Object).find_each(:foo, :bar => :blah)
     index.index_all
   end
 end

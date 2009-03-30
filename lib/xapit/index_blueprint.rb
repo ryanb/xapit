@@ -100,9 +100,9 @@ module Xapit
       end
     end
     
-    # Indexes all records of this blueprint class. It does this using the ".each" method on the member class.
+    # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
     def index_all
-      @member_class.each(*@args) do |member|
+      @member_class.find_each(*@args) do |member|
         Config.writable_database.add_document(document_for(member))
       end
     end
