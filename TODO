@@ -1,10 +1,11 @@
 Indexing
 - index spelling of terms
+- pass block to customize indexing
 
 Finding
 - order option
 - range in conditions
-- and/or word separation
+x and/or word separation
 - negative word in query
 + parenthesis to group phrases
 + support "age:17" condition matching in query

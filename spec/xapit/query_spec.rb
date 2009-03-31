@@ -30,6 +30,11 @@ describe Xapit::Query do
     Xapit::Query.new(["foo", "bar"]).parsed.should == [:and, "foo", "bar"]
   end
   
+  it "should parse simple 'not' query" do
+    Xapit::Query.new("foo not bar").parsed.should == [:and, "foo", [:not, "bar"]]
+    Xapit::Query.new("foo  NOT  bar blah").parsed.should == [:and, "foo", [:not, "bar"], "blah"]
+  end
+  
   it "should convert simple query to xapian query" do
     Xapit::Query.new("foo bar").xapian_query.description.should == Xapian::Query.new(Xapian::Query::OP_AND, "foo", "bar").description
     Xapit::Query.new("foo OR bar").xapian_query.description.should == Xapian::Query.new(Xapian::Query::OP_OR, "foo", "bar").description
@@ -53,6 +58,14 @@ describe Xapit::Query do
   
   it "should convert single word query to xapian query" do
     Xapit::Query.new("foo").xapian_query.description.should == Xapian::Query.new(Xapian::Query::OP_AND, ["foo"]).description
+  end
+  
+  it "should convert negative query to xapian query" do
+    query = Xapian::Query.new(Xapian::Query::OP_AND_NOT,
+      Xapian::Query.new(Xapian::Query::OP_AND, ["foo"]),
+      Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])
+    )
+    Xapit::Query.new("foo not bar").xapian_query.description.should == query.description
   end
   
   it "should add query to parsed one" do

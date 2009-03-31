@@ -64,3 +64,8 @@ Scenario: Query Matching Or Query
   Given indexed records named "John, Jane, Jacob"
   When I query for "Jane or John"
   Then I should find records named "John, Jane"
+
+Scenario: Query Matching Not Query
+  Given indexed records named "John Smith, John Johnson"
+  When I query for "John not Smith"
+  Then I should find records named "John Johnson"

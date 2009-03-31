@@ -12,11 +12,16 @@ module Xapit
     def xapian_query(instructions = nil)
       instructions ||= @parsed.dup
       instructions = [:add, instructions] if instructions.kind_of? String
-      operator = (instructions.shift == :and ? Xapian::Query::OP_AND : Xapian::Query::OP_OR)
+      operator = (instructions.shift == :or ? Xapian::Query::OP_OR : Xapian::Query::OP_AND)
       words = instructions.select { |i| i.kind_of? String }
       query = Xapian::Query.new(operator, words)
       instructions.select { |i| i.kind_of? Array }.each do |sub_instructions|
-        query = Xapian::Query.new(operator, query, xapian_query(sub_instructions))
+        if sub_instructions.first == :not
+          sub_operator = Xapian::Query::OP_AND_NOT
+        else
+          sub_operator = operator
+        end
+        query = Xapian::Query.new(sub_operator, query, xapian_query(sub_instructions))
       end
       query
     end
@@ -56,7 +61,15 @@ module Xapit
         if text =~ /\sor\s/i
           [:or, *text.split(/\s+or\s+/i).map { |t| parse(t) }]
         elsif text =~ /\s+/
-          [:and, *text.split(' ')]
+          words = text.scan(/(?:\bnot\s+)?[^\s]+/i)
+          words.map! do |word|
+            if word =~ /^not\s/i
+              [:not, word.sub(/^not\s+/i, '')]
+            else
+              word
+            end
+          end
+          [:and, *words]
         else
           text
         end
