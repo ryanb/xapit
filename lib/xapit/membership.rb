@@ -53,6 +53,12 @@ module Xapit
       # 
       #   xapit(:batch_size => 100, :include => :author, :conditions => { :visible => true })
       #
+      # If you pass in a block you can customize how the text words will be devided (instead of by simply white space).
+      # 
+      #   xapit do |index|
+      #     index.text(:keywords) { |words| words.split(', ') }
+      #   end
+      # 
       def xapit(*args)
         @xapit_index_blueprint = IndexBlueprint.new(self, *args)
         yield(@xapit_index_blueprint)

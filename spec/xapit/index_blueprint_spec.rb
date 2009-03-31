@@ -8,11 +8,7 @@ describe Xapit::IndexBlueprint do
   it "should remember text attributes" do
     @index.text(:foo)
     @index.text(:bar, :blah)
-    @index.text_attributes.should == [:foo, :bar, :blah]
-  end
-  
-  it "should fetch words from string, ignoring punctuation" do
-    @index.stripped_words("Foo! bar.").should == %w[foo bar]
+    @index.text_attributes.keys.should include(:foo, :bar, :blah)
   end
   
   it "should return terms for text attributes" do

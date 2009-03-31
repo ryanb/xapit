@@ -11,3 +11,10 @@ Scenario: Fetch all records which are indexed
   When I index the database
   And I query for ""
   Then I should find records named "John, Jane, Joe"
+
+Scenario: Split indexed text fields differently
+  Given an empty database at "tmp/xapiandb"
+  And records named "JohnXSmith, JaneXSmith, JoeXBlack"
+  When I index the database splitting name by "X"
+  And I query for "Smith"
+  Then I should find records named "JohnXSmith, JaneXSmith"

@@ -25,6 +25,13 @@ When /^I index the database$/ do
   Xapit.index_all
 end
 
+When /^I index the database splitting name by "([^\"]*)"$/ do |divider|
+  XapitMember.xapit do |index|
+    index.text(:name) { |name| name.split(divider) }
+  end
+  Xapit.index_all
+end
+
 When /^I query for "([^\"]*)"$/ do |query|
   @records = XapitMember.search(query)
 end

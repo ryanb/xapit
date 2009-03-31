@@ -18,7 +18,7 @@ module Xapit
     def initialize(member_class, *args)
       @member_class = member_class
       @args = args
-      @text_attributes = []
+      @text_attributes = {}
       @field_attributes = []
       @facets = []
       @@instances ||= {}
@@ -30,8 +30,10 @@ module Xapit
     #
     #   Article.search("kite")
     #
-    def text(*attributes)
-      @text_attributes += attributes
+    def text(*attributes, &block)
+      attributes.each do |attribute|
+        @text_attributes[attribute] = block
+      end
     end
     
     # Adds a field attribute. Field terms are not split by word so it is not designed for full text search.
@@ -61,10 +63,6 @@ module Xapit
       document
     end
     
-    def stripped_words(content)
-      content.to_s.downcase.scan(/[a-z0-9]+/)
-    end
-    
     def terms(member)
       base_terms(member) + field_terms(member) + text_terms(member) + facet_terms(member)
     end
@@ -74,8 +72,13 @@ module Xapit
     end
     
     def text_terms(member)
-      text_attributes.map do |name|
-        stripped_words(member.send(name))
+      text_attributes.map do |name, proc|
+        content = member.send(name).to_s.downcase
+        if proc
+          proc.call(content)
+        else
+          content.scan(/[a-z0-9]+/)
+        end
       end.flatten
     end
     
