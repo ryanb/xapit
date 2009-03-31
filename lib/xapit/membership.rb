@@ -22,6 +22,9 @@ module Xapit
       #   # manually sort based on any number of indexed fields, sort defaults to most relevant
       #   @articles = Article.search("phone", :order => [:category_id, :id])
       #
+      #   # basic boolean matching is supported
+      #   @articles = Article.search("phone or fax not email")
+      #
       def search(*args)
         Collection.new(self, *args)
       end
