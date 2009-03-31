@@ -59,3 +59,8 @@ Scenario: Query for All Records Class Agnostic
   Given indexed records named "John, Jane"
   When I query for "John" on Xapit
   Then I should find 1 record
+
+Scenario: Query Matching Or Query
+  Given indexed records named "John, Jane, Jacob"
+  When I query for "Jane or John"
+  Then I should find records named "John, Jane"

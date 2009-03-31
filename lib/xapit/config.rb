@@ -43,6 +43,7 @@ module Xapit
         FileUtils.rm_rf(path) if File.exist? path
         @database = nil
         @writable_database = nil
+        GC.start # to make sure the database gets closed out all the way
       end
     end
   end

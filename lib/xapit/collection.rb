@@ -120,10 +120,10 @@ module Xapit
     end
     
     def query
-      if (search_terms + condition_terms + facet_terms).empty?
+      if (@search_text.split + condition_terms + facet_terms).empty?
         base_query
       else
-        @query ||= base_query.and_query(search_terms + condition_terms + facet_terms)
+        @query ||= base_query.and_query(@search_text.downcase).and_query(condition_terms + facet_terms)
       end
     end
     
@@ -142,10 +142,6 @@ module Xapit
         member.xapit_relevance = match.percent
         member
       end
-    end
-    
-    def search_terms
-      @search_text.split.map { |term| term.downcase }
     end
     
     def condition_terms

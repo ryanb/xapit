@@ -15,6 +15,10 @@ Facets
 + sort facet options
 + handle unique id collision gracefully
 
+Performance
+- benchmark indexing
+- multiple id finds in a single query
+
 Other
 - turn into Ruby Gem with clear instructions on requirements
 + inline rdoc documentation
