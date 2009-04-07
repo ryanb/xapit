@@ -73,11 +73,11 @@ module Xapit
     
     def text_terms(member)
       text_attributes.map do |name, proc|
-        content = member.send(name).to_s.downcase
+        content = member.send(name).to_s
         if proc
-          proc.call(content)
+          proc.call(content).map(&:downcase)
         else
-          content.scan(/[a-z0-9]+/)
+          content.scan(/[a-z0-9]+/i).map(&:downcase)
         end
       end.flatten
     end
