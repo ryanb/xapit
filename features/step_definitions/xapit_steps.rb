@@ -40,6 +40,10 @@ When /^I query for "([^\"]*)" on Xapit$/ do |query|
   @records = Xapit.search(query)
 end
 
+When /^I query "([^\"]*)" with facets "([^\"]*)"$/ do |keywords, facets|
+  @records = XapitMember.search(keywords, :facets => facets)
+end
+
 Then /^I should find records? named "([^\"]*)"$/ do |joined_names|
   @records.map(&:name).join(", ").should == joined_names
 end

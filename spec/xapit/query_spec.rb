@@ -79,4 +79,12 @@ describe Xapit::Query do
     query.or_query("bar")
     query.parsed.should == [:or, "foo", "bar"]
   end
+  
+  it "should combine and query properly when given multiple keywords" do
+    query = Xapian::Query.new(Xapian::Query::OP_AND,
+      Xapian::Query.new(Xapian::Query::OP_AND, ["abc", "123"]),
+      Xapian::Query.new(Xapian::Query::OP_AND, ["foo", "bar"])
+    )
+    Xapit::Query.new("abc 123").and_query("foo bar").xapian_query.description.should == query.description
+  end
 end

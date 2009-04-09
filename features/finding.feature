@@ -69,3 +69,12 @@ Scenario: Query Matching Not Query
   Given indexed records named "John Smith, John Johnson"
   When I query for "John not Smith"
   Then I should find records named "John Johnson"
+
+Scenario: Query for Facets with Keywords
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query "Jane" with facets "0c93ee1"
+  Then I should find record named "Jane"

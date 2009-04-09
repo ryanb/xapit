@@ -14,14 +14,18 @@ module Xapit
       instructions = [:add, instructions] if instructions.kind_of? String
       operator = (instructions.shift == :or ? Xapian::Query::OP_OR : Xapian::Query::OP_AND)
       words = instructions.select { |i| i.kind_of? String }
-      query = Xapian::Query.new(operator, words)
+      query = Xapian::Query.new(operator, words) unless words.empty?
       instructions.select { |i| i.kind_of? Array }.each do |sub_instructions|
         if sub_instructions.first == :not
           sub_operator = Xapian::Query::OP_AND_NOT
         else
           sub_operator = operator
         end
-        query = Xapian::Query.new(sub_operator, query, xapian_query(sub_instructions))
+        if query
+          query = Xapian::Query.new(sub_operator, query, xapian_query(sub_instructions))
+        else
+          query = xapian_query(sub_instructions)
+        end
       end
       query
     end
