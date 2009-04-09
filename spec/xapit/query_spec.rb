@@ -87,4 +87,10 @@ describe Xapit::Query do
     )
     Xapit::Query.new("abc 123").and_query("foo bar").xapian_query.description.should == query.description
   end
+  
+  it "should not modify parsed array when fetching xapian query" do
+    query = Xapit::Query.new("hello world").and_query("foo bar")
+    query.xapian_query
+    query.parsed.should == [:and, [:and, "hello", "world"], [:and, "foo", "bar"]]
+  end
 end

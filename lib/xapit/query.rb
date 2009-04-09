@@ -10,12 +10,12 @@ module Xapit
     
     # REFACTORME this is a bit complex for one method...
     def xapian_query(instructions = nil)
-      instructions ||= @parsed.dup
+      instructions ||= @parsed
       instructions = [:add, instructions] if instructions.kind_of? String
-      operator = (instructions.shift == :or ? Xapian::Query::OP_OR : Xapian::Query::OP_AND)
-      words = instructions.select { |i| i.kind_of? String }
+      operator = (instructions.first == :or ? Xapian::Query::OP_OR : Xapian::Query::OP_AND)
+      words = instructions[1..-1].select { |i| i.kind_of? String }
       query = Xapian::Query.new(operator, words) unless words.empty?
-      instructions.select { |i| i.kind_of? Array }.each do |sub_instructions|
+      instructions[1..-1].select { |i| i.kind_of? Array }.each do |sub_instructions|
         if sub_instructions.first == :not
           sub_operator = Xapian::Query::OP_AND_NOT
         else
