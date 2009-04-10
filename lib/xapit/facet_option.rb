@@ -9,7 +9,8 @@ module Xapit
       if match.nil?
         raise "Unable to find facet option for #{id}."
       else
-        new(*match.document.data.split('|||'))
+        class_name, facet_attribute, name = match.document.data.split('|||')
+        new(class_name.to_s, facet_attribute.to_s, name.to_s)
       end
     end
     
