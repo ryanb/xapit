@@ -74,7 +74,7 @@ You can then perform a search on the model.
   @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
   
   # manually sort based on any number of indexed fields, sort defaults to most relevant
-  @articles = Article.search("phone", :order => [:category_id, :id])
+  @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
   
   # basic boolean matching is supported
   @articles = Article.search("phone or fax not email")

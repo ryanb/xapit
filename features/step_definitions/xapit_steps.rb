@@ -68,8 +68,8 @@ When /^I query facets "([^\"]*)"$/ do |facets|
   @records = XapitMember.search("", :facets => facets)
 end
 
-When /^I query "([^\"]*)" sorted by (.*)$/ do |keywords, sort|
-  @records = XapitMember.search("", :order => sort.split(', '))
+When /^I query "([^\"]*)" sorted by (.*?)( descending)?$/ do |keywords, sort, descending|
+  @records = XapitMember.search("", :order => sort.split(', '), :descending => descending)
 end
 
 Then /^I should have the following facets$/ do |facets_table|

@@ -45,7 +45,7 @@ module Xapit
       if options[:sort_by_values]
         sorter = Xapian::MultiValueSorter.new
         options[:sort_by_values].each do |sort_value|
-          sorter.add(sort_value, false)
+          sorter.add(sort_value, !!options[:sort_descending])
         end
         enquire.set_sort_by_key_then_relevance(sorter)
       end

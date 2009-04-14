@@ -92,3 +92,9 @@ Scenario: Query for All Records Sorted by Age then Name
     | Apple  | 17  |
   When I query "" sorted by age, name
   Then I should find records named "Apple, Zebra, Banana"
+
+@focus
+Scenario: Query for All Records Sorted by Name Descending
+  Given indexed records named "Zebra, Apple, Banana"
+  When I query "" sorted by name descending
+  Then I should find records named "Zebra, Banana, Apple"

@@ -116,7 +116,7 @@ module Xapit
     end
     
     def matchset(offset = nil, limit = nil)
-      query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => sort_by_values)
+      query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => sort_by_values, :sort_descending => @options[:descending])
     end
     
     def sort_by_values
