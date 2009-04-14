@@ -2,7 +2,7 @@
 
 Xapit (pronounced "zap it") is a high level interface for working with a Xapian database.
 
-Note: This project is very early in development. Not all features in this documentation have been implemented. Use at your own risk.
+Note: This project is early in development and the API is subject to change.
 
 
 == Install
