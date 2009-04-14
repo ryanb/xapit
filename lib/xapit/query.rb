@@ -59,7 +59,8 @@ module Xapit
     end
     
     def count
-      matchset(0, 1).matches_estimated
+      # a bit of a hack to get more accurate count estimate
+      matchset(0, 1000000).matches_estimated
     end
     
     private
