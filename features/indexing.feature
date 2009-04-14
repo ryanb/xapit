@@ -19,7 +19,6 @@ Scenario: Split indexed text fields differently
   And I query for "Smith"
   Then I should find records named "JohnXSmith, JaneXSmith"
 
-@focus
 Scenario: Index Multiple Field Values Separately
   Given an empty database at "tmp/xapiandatabase"
   And the following indexed records

@@ -110,7 +110,7 @@ module Xapit
     end
     
     def values(member)
-      sortable_values(member) + facet_values(member)
+      facet_values(member) + sortable_values(member)
     end
     
     # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
@@ -127,9 +127,9 @@ module Xapit
     end
     
     def sortable_position_for(sortable_attribute)
-      position = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
-      raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if position.nil?
-      position
+      index = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
+      raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if index.nil?
+      index + facets.size
     end
     
     private
