@@ -27,7 +27,7 @@ module Xapit
     
     def identifiers_for(member)
       values_for(member).map do |value|
-        Digest::SHA1.hexdigest(@attribute.to_s + value.to_s)[0..6]
+        Digest::SHA1.hexdigest(@attribute.to_s + value)[0..6]
       end
     end
     
@@ -39,7 +39,7 @@ module Xapit
     
     def save_facet_options_for(member)
       values_for(member).map do |value|
-        option = FacetOption.new(member.class.name, @attribute.to_s, value.to_s)
+        option = FacetOption.new(member.class.name, @attribute.to_s, value)
         option.save
       end
     end
@@ -49,10 +49,11 @@ module Xapit
     def values_for(member)
       value = member.send(@attribute)
       if value.kind_of? Array
-        value
+        value.map(&:to_s).reject(&:empty?)
       else
-        [value]
+        [value].map(&:to_s).reject(&:empty?)
       end
     end
   end
 end
+

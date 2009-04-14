@@ -21,4 +21,9 @@ describe Xapit::FacetBlueprint do
   it "should use custom name if given" do
     Xapit::FacetBlueprint.new(XapitMember, 0, :visible, "custom").name.should == "custom"
   end
+  
+  it "should not have identifiers for blank values" do
+    facet = Xapit::FacetBlueprint.new(XapitMember, 0, :to_a)
+    facet.identifiers_for(["", nil, "bar"]).size.should == 1
+  end
 end
