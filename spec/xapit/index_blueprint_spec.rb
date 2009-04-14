@@ -32,6 +32,13 @@ describe Xapit::IndexBlueprint do
     @index.field_terms(member).should == %w[Xcategory-water]
   end
   
+  it "should add terms separately when array is returned" do
+    member = Object.new
+    stub(member).category { ["Water", "Liquid"] }
+    @index.field(:category)
+    @index.field_terms(member).should == %w[Xcategory-water Xcategory-liquid]
+  end
+  
   it "should have base terms with class name and id" do
     member = Object.new
     stub(member).id { 123 }

@@ -1,18 +1,19 @@
 Indexing
+- index multiple field values (if array returned, similar to facets)
 - index spelling of terms
 + re-indexing support for new/changed models (?)
 + auto-reload xapian database in memory if database recently indexed
 
 Finding
-x order option
-- range in conditions
+- stemming (support alternate languages)
+? support non-ascii characters in find (å, ä, ö)
++ range in conditions
 + customize query parser
 + parenthesis to group phrases
 + support "age:17" condition matching in query
 + add classes option to Xapit.search to limit which classes are included
 + support @collection.facets on Xapit.search (multiple classes)
-+ stemming (support alternate languages)
-+ support non-ascii characters in find (å, ä, ö)
++ support :order option for Xapit.search (multiple classes)
 
 Facets
 + sort facet options
@@ -24,5 +25,4 @@ Performance
 
 Other
 - turn into Ruby Gem with clear instructions on requirements
-+ inline rdoc documentation
 + remove dependency on active_support

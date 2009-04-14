@@ -42,7 +42,13 @@ module Xapit
     # Instead you can filter through a field using the :conditions hash in a search query.
     #
     #   Article.search("", :conditions => { :priority => 5 })
-    #
+    # 
+    # Multiple field values are supported if the given attribute is an array.
+    # 
+    #   def priority
+    #     [3, 5] # will match priority search for 3 or 5
+    #   end
+    # 
     def field(*attributes)
       @field_attributes += attributes
     end
@@ -91,8 +97,10 @@ module Xapit
     
     def field_terms(member)
       field_attributes.map do |name|
-        "X#{name}-#{member.send(name).to_s.downcase}"
-      end
+        [member.send(name)].flatten.map do |value|
+          "X#{name}-#{value.to_s.downcase}"
+        end
+      end.flatten
     end
     
     def facet_terms(member)

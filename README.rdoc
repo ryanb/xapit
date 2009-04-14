@@ -38,7 +38,7 @@ Because the indexing happens in Ruby these attributes do no have to be database 
     author.name
   end
 
-This way you can create a completely custom facet by simply defining your own method. Multiple facet options per record are supported if you return an array.
+This way you can create a completely custom facet by simply defining your own method. Multiple facet options or field values per record are supported if you return an array.
 
   def author_names
     authors.map(&:name) # => ["John", "Bob"]

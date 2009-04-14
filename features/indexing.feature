@@ -18,3 +18,14 @@ Scenario: Split indexed text fields differently
   When I index the database splitting name by "X"
   And I query for "Smith"
   Then I should find records named "JohnXSmith, JaneXSmith"
+
+@focus
+Scenario: Index Multiple Field Values Separately
+  Given an empty database at "tmp/xapiandatabase"
+  And the following indexed records
+    | name | age    |
+    | John | 17, 16 |
+    | Jack | 17     |
+    | Jane | 16     |
+  When I query "age" matching "16"
+  Then I should find records named "Jane, John"
