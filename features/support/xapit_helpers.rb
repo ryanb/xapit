@@ -7,6 +7,7 @@ module XapitHelpers
         index.text attribute
         index.field attribute
         index.facet attribute
+        index.sortable attribute
       end
     end
     records.each do |attributes|

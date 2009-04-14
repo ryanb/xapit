@@ -8,6 +8,7 @@ describe Xapit::Collection do
         index.text :name
         index.field :name
         index.facet :name
+        index.sortable :name
       end
       Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
       Xapit::Config.remove_database
@@ -110,6 +111,10 @@ describe Xapit::Collection do
         ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
         results = Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-"))
         results.applied_facet_options.first.existing_facet_identifiers.should == (ids*2)
+      end
+      
+      it "should sort records in specified order" do
+        Xapit::Collection.new(XapitMember, nil, :order => :name).should == [@foo, @hello]
       end
     end
   end

@@ -116,7 +116,14 @@ module Xapit
     end
     
     def matchset(offset = nil, limit = nil)
-      query.matchset(offset || per_page*(current_page-1), limit || per_page)
+      query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => sort_by_values)
+    end
+    
+    def sort_by_values
+      if @member_class
+        index = @member_class.xapit_index_blueprint
+        [index.sortable_position_for(@options[:order])] if @options[:order]
+      end
     end
     
     def query

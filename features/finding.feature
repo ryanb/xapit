@@ -78,3 +78,8 @@ Scenario: Query for Facets with Keywords
     | Jack | 17  |
   When I query "Jane" with facets "0c93ee1"
   Then I should find record named "Jane"
+
+Scenario: Query for Facets with Keywords
+  Given indexed records named "Zebra, Apple, Banana"
+  When I query "" sorted by "name"
+  Then I should find records named "Apple, Banana, Zebra"

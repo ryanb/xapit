@@ -44,15 +44,22 @@ describe Xapit::IndexBlueprint do
     ids = Xapit::FacetBlueprint.new(XapitMember, 0, :foo).identifiers_for(member)
     @index.facet(:foo)
     @index.facet_terms(member).should == ids.map { |id| "F#{id}" }
-    @index.values(member).should == { 0 => ids.join('-') }
+    @index.values(member).should == [ids.join('-')]
     @index.save_facet_options_for(member)
     ids.map { |id| Xapit::FacetOption.find(id).name }.should == ["ABC", "DEF"]
+  end
+  
+  it "should add values for sortable fields" do
+    member = Object.new
+    stub(member).name { "Foo" }
+    @index.sortable(:name)
+    @index.values(member).should == ["foo"]
   end
   
   it "should add terms and values to xapian document" do
     member = Object.new
     stub(member).id { 123 }
-    stub(@index).values.returns(0 => 'value', 1 => 'list')
+    stub(@index).values.returns(%w[value list])
     stub(@index).terms { %w[term list] }
     doc = @index.document_for(member)
     doc.should be_kind_of(Xapian::Document)

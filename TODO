@@ -4,7 +4,7 @@ Indexing
 + auto-reload xapian database in memory if database recently indexed
 
 Finding
-- order option
+x order option
 - range in conditions
 + customize query parser
 + parenthesis to group phrases

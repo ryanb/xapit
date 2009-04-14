@@ -42,6 +42,11 @@ module Xapit
     
     def matchset(offset, limit, options = {})
       enquire = Xapian::Enquire.new(Config.database)
+      if options[:sort_by_values]
+        options[:sort_by_values].each do |sort_value|
+          enquire.sort_by_value_then_relevance!(sort_value, false)
+        end
+      end
       enquire.collapse_key = options[:collapse_key] if options[:collapse_key]
       enquire.query = xapian_query
       enquire.mset(offset, limit)

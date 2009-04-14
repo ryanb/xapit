@@ -68,6 +68,10 @@ When /^I query facets "([^\"]*)"$/ do |facets|
   @records = XapitMember.search("", :facets => facets)
 end
 
+When /^I query "([^\"]*)" sorted by "([^\"]*)"$/ do |keywords, sort|
+  @records = XapitMember.search("", :order => sort)
+end
+
 Then /^I should have the following facets$/ do |facets_table|
   result = []
   @records.facets.each do |facet|

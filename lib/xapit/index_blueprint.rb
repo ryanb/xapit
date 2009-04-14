@@ -4,6 +4,7 @@ module Xapit
   class IndexBlueprint
     attr_reader :text_attributes
     attr_reader :field_attributes
+    attr_reader :sortable_attributes
     attr_reader :facets
     
     # Indexes all classes known to have an index blueprint defined.
@@ -20,6 +21,7 @@ module Xapit
       @args = args
       @text_attributes = {}
       @field_attributes = []
+      @sortable_attributes = []
       @facets = []
       @@instances ||= {}
       @@instances[member_class] = self # TODO make this thread safe
@@ -50,13 +52,18 @@ module Xapit
       @facets << FacetBlueprint.new(@member_class, @facets.size, *args, &block)
     end
     
+    # Adds a sortable attribute for use with the :order option in a search call.
+    def sortable(*attributes)
+      @sortable_attributes += attributes
+    end
+    
     def document_for(member)
       document = Xapian::Document.new
       document.data = "#{member.class}-#{member.id}"
       terms(member).each do |term|
         document.add_term(term)
       end
-      values(member).each do |index, value|
+      values(member).each_with_index do |value, index|
         document.add_value(index, value)
       end
       save_facet_options_for(member)
@@ -95,12 +102,7 @@ module Xapit
     end
     
     def values(member)
-      index = 0
-      facets.inject(Hash.new) do |hash, facet|
-        hash[index] = facet.identifiers_for(member).join("-")
-        index += 1
-        hash
-      end
+      sortable_values(member) + facet_values(member)
     end
     
     # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
@@ -116,7 +118,23 @@ module Xapit
       end
     end
     
+    def sortable_position_for(sortable_attribute)
+      sortable_attributes.index(sortable_attribute.to_sym)
+    end
+    
     private
+    
+    def sortable_values(member)
+      sortable_attributes.map do |sortable|
+        member.send(sortable).to_s.downcase
+      end
+    end
+    
+    def facet_values(member)
+      facets.map do |facet|
+        facet.identifiers_for(member).join("-")
+      end
+    end
     
     # Make sure all models are loaded - without reloading any that
     # ActiveRecord::Base is already aware of (otherwise we start to hit some
