@@ -119,7 +119,9 @@ module Xapit
     end
     
     def sortable_position_for(sortable_attribute)
-      sortable_attributes.index(sortable_attribute.to_sym)
+      position = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
+      raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if position.nil?
+      position
     end
     
     private

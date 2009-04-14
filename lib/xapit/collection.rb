@@ -120,9 +120,15 @@ module Xapit
     end
     
     def sort_by_values
-      if @member_class
+      if @options[:order] && @member_class
         index = @member_class.xapit_index_blueprint
-        [index.sortable_position_for(@options[:order])] if @options[:order]
+        if @options[:order].kind_of? Array
+          @options[:order].map do |attribute|
+            index.sortable_position_for(attribute)
+          end
+        else
+          [index.sortable_position_for(@options[:order])]
+        end
       end
     end
     
