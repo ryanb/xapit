@@ -36,10 +36,11 @@ module Xapit
       #       index.text :name, :content
       #       index.field :category_id
       #       index.facet :author_name, "Author"
+      #       index.sortable :id, :category_id
       #     end
       #   end
       # 
-      # First we index "name" and "content" attributes for full text searching. The "category_id" field is indexed for :conditions searching. The "author_name" is indexed as a facet with "Author" being the display name of the facet. See the facets section below for details.
+      # First we index "name" and "content" attributes for full text searching. The "category_id" field is indexed for :conditions searching. The "author_name" is indexed as a facet with "Author" being the display name of the facet. See the facets section below for details. Finally the "id" and "category_id" attributes are indexed as sortable attributes so they can be included in the :order option in a search.
       # 
       # Because the indexing happens in Ruby these attributes do no have to be database columns. They can be simple Ruby methods. For example, the "author_name" attribute mentioned above can be defined like this.
       # 
