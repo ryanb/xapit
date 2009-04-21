@@ -25,6 +25,9 @@ module Xapit
       #   # basic boolean matching is supported
       #   @articles = Article.search("phone or fax not email")
       #
+      #   # no need to specify first query string when searching all records
+      #   @articles = Article.search(:conditions => { :category_id => params[:category_id] })
+      #
       def search(*args)
         Collection.new(self, *args)
       end
