@@ -97,3 +97,8 @@ Scenario: Query for All Records Sorted by Name Descending
   Given indexed records named "Zebra, Apple, Banana"
   When I query "" sorted by name descending
   Then I should find records named "Zebra, Banana, Apple"
+
+Scenario: Spelling suggestion
+  Given indexed records named "Zebra, Apple"
+  When I query for "zerba aple"
+  Then I should have "zebra apple" as a spelling suggestion
