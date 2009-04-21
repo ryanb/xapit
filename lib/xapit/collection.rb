@@ -16,6 +16,7 @@ module Xapit
     
     def initialize(member_class, search_text, options = {})
       @member_class = member_class
+      @query_parser = SimpleQueryParser.new(member_class, search_text, options)
       @search_text = search_text.to_s
       @options = options
     end
@@ -28,7 +29,7 @@ module Xapit
     
     # The number of total records found despite any pagination settings.
     def size
-      query.count
+      @query_parser.query.count
     end
     alias_method :total_entries, :size
     
@@ -51,22 +52,22 @@ module Xapit
     # See Xapit::Membership for search options.
     def search(keywords, options = {})
       collection = Collection.new(@member_class, keywords, options)
-      collection.base_query = query
+      collection.base_query = @query_parser.query
       collection
     end
     
     def base_query=(base_query)
-      @base_query = base_query
+      @query_parser.base_query = base_query
     end
     
     # The page number we are currently on.
     def current_page
-      @options[:page] ? @options[:page].to_i : 1
+      @query_parser.current_page
     end
     
     # How many records to display on each page, defaults to 20. Sets with :per_page option when performing search.
     def per_page
-      @options[:per_page] ? @options[:per_page].to_i : 20
+      @query_parser.per_page
     end
     
     # Total number of pages with found results.
@@ -100,9 +101,9 @@ module Xapit
     #   <% end %>
     #
     def applied_facet_options
-      facet_identifiers.map do |identifier|
+      @query_parser.facet_identifiers.map do |identifier|
         option = FacetOption.find(identifier)
-        option.existing_facet_identifiers = facet_identifiers
+        option.existing_facet_identifiers = @query_parser.facet_identifiers
         option
       end
     end
@@ -127,41 +128,12 @@ module Xapit
     
     def all_facets
       @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
-        Facet.new(facet_blueprint, query, facet_identifiers)
+        Facet.new(facet_blueprint, @query_parser.query, @query_parser.facet_identifiers)
       end
     end
     
     def matchset(offset = nil, limit = nil)
-      query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => sort_by_values, :sort_descending => @options[:descending])
-    end
-    
-    def sort_by_values
-      if @options[:order] && @member_class
-        index = @member_class.xapit_index_blueprint
-        if @options[:order].kind_of? Array
-          @options[:order].map do |attribute|
-            index.sortable_position_for(attribute)
-          end
-        else
-          [index.sortable_position_for(@options[:order])]
-        end
-      end
-    end
-    
-    def query
-      if (@search_text.split + condition_terms + facet_terms).empty?
-        base_query
-      else
-        @query ||= base_query.and_query(@search_text.downcase).and_query(condition_terms + facet_terms)
-      end
-    end
-    
-    def base_query
-      @base_query || Query.new(initial_query_string)
-    end
-    
-    def initial_query_string
-      @member_class ? "C" + @member_class.name : ""
+      @query_parser.query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => @query_parser.sort_by_values, :sort_descending => @options[:descending])
     end
     
     def fetch_results(offset = nil, limit = nil)
@@ -171,30 +143,6 @@ module Xapit
         member.xapit_relevance = match.percent
         member
       end
-    end
-    
-    def condition_terms
-      if @options[:conditions]
-        @options[:conditions].map do |name, value|
-          "X#{name}-#{value.downcase}"
-        end
-      else
-        []
-      end
-    end
-    
-    def facet_terms
-      if @options[:facets]
-        facet_identifiers.map do |identifier|
-          "F#{identifier}"
-        end
-      else
-        []
-      end
-    end
-    
-    def facet_identifiers
-      @options[:facets].kind_of?(String) ? @options[:facets].split('-') : (@options[:facets] || [])
     end
   end
 end

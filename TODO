@@ -1,6 +1,12 @@
+Query Parsing Refactoring
+- move Xapit::Query query parsing into SimpleQueryParser (it should just be a wrapper)
+- create ClassicQueryParser which uses the Xapian::QueryParser
+- move duplicates into AbstractQueryParser
+- add some options to Xapit::Query (such as default limit) to clean up collection class (move to parser)
+- add :query_parser option to Xapit::Config.setup passing class, default to simple query parser initially
+- try moving default to classic query parser
+
 Indexing
-- index multiple field values (if array returned, similar to facets)
-- index spelling of terms
 + re-indexing support for new/changed models (?)
 + auto-reload xapian database in memory if database recently indexed
 
