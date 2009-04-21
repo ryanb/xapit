@@ -116,6 +116,10 @@ describe Xapit::Collection do
       it "should sort records in specified order" do
         Xapit::Collection.new(XapitMember, nil, :order => :name).should == [@foo, @hello]
       end
+      
+      it "should have no spelling suggestions for empty query" do
+        Xapit::Collection.new(XapitMember, nil).spelling_suggestion.should == nil
+      end
     end
   end
 end

@@ -114,7 +114,12 @@ module Xapit
     #   <% end %>
     # 
     def spelling_suggestion
-      Config.database.get_spelling_suggestion(@search_text.downcase)
+      result = Config.database.get_spelling_suggestion(@search_text.downcase)
+      if result.empty?
+        nil
+      else
+        result
+      end
     end
     
     private
