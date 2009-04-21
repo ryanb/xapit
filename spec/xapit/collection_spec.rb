@@ -21,7 +21,7 @@ describe Xapit::Collection do
         Xapit.index_all
       end
       
-      it "should find all xapit members in database given empty string" do
+      it "should find all xapit members in database given nil" do
         Xapit::Collection.new(XapitMember, nil).should == [@hello, @foo]
       end
       
@@ -58,8 +58,8 @@ describe Xapit::Collection do
       end
       
       it "should support page and per_page options" do
-        Xapit::Collection.new(XapitMember, "", :page => 1, :per_page => 1).should == [@hello]
-        Xapit::Collection.new(XapitMember, "", :page => 2, :per_page => 1).should == [@foo]
+        Xapit::Collection.new(XapitMember, :page => 1, :per_page => 1).should == [@hello]
+        Xapit::Collection.new(XapitMember, :page => 2, :per_page => 1).should == [@foo]
       end
       
       it "should have total_entries, total_pages, current_page, per_page, previous_page, next_page" do
@@ -78,17 +78,17 @@ describe Xapit::Collection do
       end
       
       it "should find nothing when searching unknown facet" do
-        Xapit::Collection.new(XapitMember, "", :facets => ["unknownfacet"]).should be_empty
+        Xapit::Collection.new(XapitMember, :facets => ["unknownfacet"]).should be_empty
       end
       
       it "should find matching facet" do
         ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
-        Xapit::Collection.new(XapitMember, "", :facets => ids*2).should == [@hello]
+        Xapit::Collection.new(XapitMember, :facets => ids*2).should == [@hello]
       end
       
       it "should split facets string on dash" do
         ids = Xapit::FacetBlueprint.new(XapitMember, 0, :name).identifiers_for(@hello)
-        Xapit::Collection.new(XapitMember, "", :facets => (ids*2).join("-")).should == [@hello]
+        Xapit::Collection.new(XapitMember, :facets => (ids*2).join("-")).should == [@hello]
       end
       
       it "should have one facet with two options with blank keywords" do
@@ -114,11 +114,11 @@ describe Xapit::Collection do
       end
       
       it "should sort records in specified order" do
-        Xapit::Collection.new(XapitMember, nil, :order => :name).should == [@foo, @hello]
+        Xapit::Collection.new(XapitMember, :order => :name).should == [@foo, @hello]
       end
       
       it "should have no spelling suggestions for empty query" do
-        Xapit::Collection.new(XapitMember, nil).spelling_suggestion.should == nil
+        Xapit::Collection.new(XapitMember).spelling_suggestion.should == nil
       end
       
       it "should have no spelling suggestion for very different query" do

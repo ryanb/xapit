@@ -14,11 +14,11 @@ module Xapit
       delegate m, :to => :results unless m =~ /^__/ || NON_DELEGATE_METHODS.include?(m.to_s)
     end
     
-    def initialize(member_class, search_text, options = {})
-      @member_class = member_class
-      @query_parser = SimpleQueryParser.new(member_class, search_text, options)
-      @search_text = search_text.to_s
-      @options = options
+    def initialize(*args)
+      @options = args.extract_options!
+      @member_class = args[0]
+      @search_text = args[1].to_s
+      @query_parser = SimpleQueryParser.new(@member_class, @search_text, @options)
     end
     
     # Returns an array of results. You should not need to call this directly because most methods are 
