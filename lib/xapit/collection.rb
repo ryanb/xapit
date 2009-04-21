@@ -107,6 +107,12 @@ module Xapit
       end
     end
     
+    # Includes a suggested variation of a term which will get many more results. Returns nil if no suggestion.
+    # 
+    #   <% if @articles.spelling_suggestion %>
+    #     Did you mean <%= link_to h(@articles.spelling_suggestion), :overwrite_params => { :keywords => @articles.spelling_suggestion } %>?
+    #   <% end %>
+    # 
     def spelling_suggestion
       Config.database.get_spelling_suggestion(@search_text.downcase)
     end

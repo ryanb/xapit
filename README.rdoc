@@ -98,6 +98,15 @@ Simply iterate through the returned set to display the results.
 The "xapit_relevance" holds a percentage (between 0 and 100) determining how relevant the given document is to the user's search query.
 
 
+== Spelling
+
+If the searched term isn't found, but it is similar to another term then it will show up as a spelling suggestion.
+
+  <% if @articles.spelling_suggestion %>
+    Did you mean <%= link_to h(@articles.spelling_suggestion), :overwrite_params => { :keywords => @articles.spelling_suggestion } %>?
+  <% end %>
+
+
 == Facets
 
 Facets allow you to further filter the result set based on certain attributes.
