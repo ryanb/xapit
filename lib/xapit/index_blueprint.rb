@@ -68,6 +68,7 @@ module Xapit
       document.data = "#{member.class}-#{member.id}"
       terms(member).each do |term|
         document.add_term(term)
+        database.add_spelling(term)
       end
       values(member).each_with_index do |value, index|
         document.add_value(index, value)
@@ -116,7 +117,7 @@ module Xapit
     # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
     def index_all
       @member_class.find_each(*@args) do |member|
-        Config.writable_database.add_document(document_for(member))
+        database.add_document(document_for(member))
       end
     end
     
@@ -133,6 +134,10 @@ module Xapit
     end
     
     private
+    
+    def database
+      Config.writable_database
+    end
     
     def sortable_values(member)
       sortable_attributes.map do |sortable|

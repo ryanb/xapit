@@ -107,6 +107,10 @@ module Xapit
       end
     end
     
+    def spelling_suggestion
+      Config.database.get_spelling_suggestion(@search_text.downcase)
+    end
+    
     private
     
     def all_facets

@@ -96,3 +96,8 @@ Then /^I should have the following applied facets$/ do |facets_table|
   end
   result.should == facets_table.hashes # this is somewhat fragile because it depends on order of hash result
 end
+
+Then /^I should have "([^\"]*)" as a spelling suggestion$/ do |term|
+  @records.spelling_suggestion.should == term
+end
+

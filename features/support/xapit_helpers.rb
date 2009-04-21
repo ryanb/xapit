@@ -20,4 +20,4 @@ module XapitHelpers
   end
 end
 
-World { |world| world.extend XapitHelpers }
+World(XapitHelpers)
