@@ -114,11 +114,12 @@ module Xapit
     #   <% end %>
     # 
     def spelling_suggestion
-      result = Config.database.get_spelling_suggestion(@search_text.downcase)
-      if result.empty?
+      if @search_text.downcase.scan(/[a-z0-9]+/).all? { |term| Config.database.get_spelling_suggestion(term).empty? }
         nil
       else
-        result
+        @search_text.downcase.gsub(/[a-z0-9]+/) do |term|
+          Config.database.get_spelling_suggestion(term)
+        end
       end
     end
     

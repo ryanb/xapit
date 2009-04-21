@@ -120,6 +120,18 @@ describe Xapit::Collection do
       it "should have no spelling suggestions for empty query" do
         Xapit::Collection.new(XapitMember, nil).spelling_suggestion.should == nil
       end
+      
+      it "should have no spelling suggestion for very different query" do
+        Xapit::Collection.new(XapitMember, "match nothing").spelling_suggestion.should == nil
+      end
+      
+      it "should have spelling suggestion for single-word query" do
+        Xapit::Collection.new(XapitMember, "wrld").spelling_suggestion.should == "world"
+      end
+      
+      it "should have spelling suggestion for multi-word query" do
+        Xapit::Collection.new(XapitMember, "helo bat wrld").spelling_suggestion.should == "hello bar world"
+      end
     end
   end
 end
