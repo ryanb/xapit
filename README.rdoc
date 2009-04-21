@@ -135,6 +135,13 @@ Xapit can be used outside of Rails too. You'll just need to include the membersh
 This class is expected to respond to "find_each" (Product.find_each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
 
 
+== Bug Reports
+
+If you have found a bug to report or a feature to request, please add it to the GitHub issue tracker if it is not there already.
+
+http://github.com/ryanb/xapit/issues/
+
+
 == Development
 
 This project can be found on github at the following URL.
