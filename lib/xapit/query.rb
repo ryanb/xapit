@@ -60,7 +60,7 @@ module Xapit
     
     def count
       # a bit of a hack to get more accurate count estimate
-      matchset(0, 1000000).matches_estimated
+      matchset(0, Config.database.doccount).matches_estimated
     end
     
     private
