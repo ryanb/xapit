@@ -6,12 +6,21 @@ module Xapit
       # Set this to the path you would like to store your database.
       def setup(options = {})
         reset
-        @options = options
+        @options = options.reverse_merge(default_options)
+      end
+      
+      def default_options
+        {
+          :indexer => SimpleIndexer,
+          :query_parser => SimpleQueryParser,
+          :spelling => true,
+          :stemming => "english"
+        }
       end
       
       # Resets all settings and removes cached database.
       def reset
-        @options = nil
+        @options = default_options
         @database = nil
         @writable_database = nil
       end
@@ -47,11 +56,19 @@ module Xapit
       end
       
       def query_parser
-        @options[:query_parser] || SimpleQueryParser
+        @options[:query_parser]
       end
       
       def indexer
-        @options[:indexer] || SimpleIndexer
+        @options[:indexer]
+      end
+      
+      def spelling?
+        @options[:spelling]
+      end
+      
+      def stemming
+        @options[:stemming]
       end
     end
   end

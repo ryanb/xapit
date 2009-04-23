@@ -27,4 +27,24 @@ describe Xapit::Config do
     Xapit::Config.setup(:indexer => Xapit::ClassicIndexer)
     Xapit::Config.indexer.should == Xapit::ClassicIndexer
   end
+  
+  it "should have spelling enabled by default" do
+    Xapit::Config.setup
+    Xapit::Config.spelling?.should be_true
+  end
+  
+  it "should be able to specify spelling setting at setup" do
+    Xapit::Config.setup(:spelling => false)
+    Xapit::Config.spelling?.should be_false
+  end
+  
+  it "should default stemming to english" do
+    Xapit::Config.setup
+    Xapit::Config.stemming == "english"
+  end
+  
+  it "should be able to specify stemming setting at setup" do
+    Xapit::Config.setup(:stemming => "german")
+    Xapit::Config.stemming == "german"
+  end
 end
