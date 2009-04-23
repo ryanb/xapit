@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Xapit::AbstractIndexer do
   before(:each) do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandb')
+    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandab')
     @index = Xapit::IndexBlueprint.new(XapitMember)
     @indexer = Xapit::SimpleIndexer.new(@index)
   end
