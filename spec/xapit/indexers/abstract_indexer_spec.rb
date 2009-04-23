@@ -7,20 +7,6 @@ describe Xapit::AbstractIndexer do
     @indexer = Xapit::SimpleIndexer.new(@index)
   end
   
-  it "should return terms for text attributes" do
-    member = Object.new
-    stub(member).description { "This is a test" }
-    @index.text(:description)
-    @indexer.text_terms(member).should == %w[this is a test]
-  end
-  
-  it "should convert attribute to string when converting text to terms" do
-    member = Object.new
-    stub(member).num { 123 }
-    @index.text(:num)
-    @indexer.text_terms(member).should == %w[123]
-  end
-  
   it "should map field to term with 'X' prefix" do
     member = Object.new
     stub(member).category { "Water" }
@@ -63,7 +49,7 @@ describe Xapit::AbstractIndexer do
     member = Object.new
     stub(member).id { 123 }
     stub(@indexer).values.returns(%w[value list])
-    stub(@indexer).terms { %w[term list] }
+    stub(@indexer).other_terms { %w[term list] }
     doc = @indexer.document_for(member)
     doc.should be_kind_of(Xapian::Document)
     doc.data.should == "Object-123"

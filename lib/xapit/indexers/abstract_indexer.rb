@@ -11,7 +11,8 @@ module Xapit
     def document_for(member)
       document = Xapian::Document.new
       document.data = "#{member.class}-#{member.id}"
-      terms(member).each do |term|
+      index_text_attributes(member, document)
+      other_terms(member).each do |term|
         document.add_term(term)
         database.add_spelling(term)
       end
@@ -22,23 +23,16 @@ module Xapit
       document
     end
     
-    def terms(member)
-      base_terms(member) + field_terms(member) + text_terms(member) + facet_terms(member)
+    def index_text_attributes(member, document)
+      # to be overridden by subclass
+    end
+    
+    def other_terms(member)
+      base_terms(member) + field_terms(member) + facet_terms(member)
     end
     
     def base_terms(member)
       ["C#{member.class}", "Q#{member.class}-#{member.id}"]
-    end
-    
-    def text_terms(member)
-      @blueprint.text_attributes.map do |name, proc|
-        content = member.send(name).to_s
-        if proc
-          proc.call(content).map(&:downcase)
-        else
-          content.scan(/[a-z0-9]+/i).map(&:downcase)
-        end
-      end.flatten
     end
     
     def field_terms(member)
