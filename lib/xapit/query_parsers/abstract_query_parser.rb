@@ -80,6 +80,7 @@ module Xapit
     end
     
     def spelling_suggestion
+      raise "Spelling has been disabled. Enable spelling in Xapit::Config.setup." unless Config.spelling?
       if @search_text.downcase.scan(/[a-z0-9]+/).all? { |term| Config.database.get_spelling_suggestion(term).empty? }
         nil
       else

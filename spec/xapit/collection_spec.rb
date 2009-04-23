@@ -132,6 +132,11 @@ describe Xapit::Collection do
       it "should have spelling suggestion for multi-word query" do
         Xapit::Collection.new(XapitMember, "helo bat wrld").spelling_suggestion.should == "hello bar world"
       end
+      
+      it "should raise error when fetching spelling suggestion if spelling is disabled" do
+        Xapit::Config.setup(:spelling => false, :database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
+        lambda { Xapit::Collection.new(XapitMember, "foo").spelling_suggestion }.should raise_error
+      end
     end
   end
 end

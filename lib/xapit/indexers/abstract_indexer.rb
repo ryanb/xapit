@@ -14,7 +14,7 @@ module Xapit
       index_text_attributes(member, document)
       other_terms(member).each do |term|
         document.add_term(term)
-        database.add_spelling(term)
+        database.add_spelling(term) if Config.spelling?
       end
       values(member).each_with_index do |value, index|
         document.add_value(index, value)

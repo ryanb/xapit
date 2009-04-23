@@ -3,7 +3,7 @@ module Xapit
     def index_text_attributes(member, document)
       text_terms(member).each do |term|
         document.add_term(term)
-        database.add_spelling(term)
+        database.add_spelling(term) if Config.spelling?
       end
     end
     

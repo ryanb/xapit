@@ -14,9 +14,9 @@ module Xapit
     
     def create_term_generator
       term_generator = Xapian::TermGenerator.new
-      term_generator.set_flags(Xapian::TermGenerator::FLAG_SPELLING, 0)
+      term_generator.set_flags(Xapian::TermGenerator::FLAG_SPELLING, 0) if Config.spelling?
       term_generator.database = database
-      term_generator.stemmer = Xapian::Stem.new("english")
+      term_generator.stemmer = Xapian::Stem.new(Config.stemming)
       term_generator
     end
   end
