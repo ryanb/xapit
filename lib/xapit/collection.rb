@@ -15,7 +15,7 @@ module Xapit
     end
     
     def initialize(*args)
-      @query_parser = SimpleQueryParser.new(*args)
+      @query_parser = Config.query_parser.new(*args)
     end
     
     # Returns an array of results. You should not need to call this directly because most methods are 

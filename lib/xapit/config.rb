@@ -45,6 +45,10 @@ module Xapit
         @writable_database = nil
         GC.start # to make sure the database gets closed out all the way
       end
+      
+      def query_parser
+        @options[:query_parser] || SimpleQueryParser
+      end
     end
   end
 end
