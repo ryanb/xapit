@@ -3,7 +3,7 @@ module Xapit
   # this class unless you are trying to query the Xapian database directly.
   # You may be looking for Xapit::Collection instead.
   class Query
-    attr_reader :default_options
+    attr_reader :default_options, :xapian_query
     
     def initialize(query)
       @xapian_query = build_xapian_query(query)
