@@ -53,7 +53,7 @@ module Xapit
     private
     
     def matches
-      @query.matches(0, 1000, :collapse_key => @blueprint.position)
+      @query.matches(:offset => 0, :limit => 1000, :collapse_key => @blueprint.position)
     end
   end
 end

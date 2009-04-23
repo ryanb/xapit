@@ -1,11 +1,12 @@
 module Xapit
   class AbstractQueryParser
+    attr_reader :member_class
     attr_writer :base_query
     
-    def initialize(member_class, search_text, options = {})
-      @member_class = member_class
-      @search_text = search_text.to_s
-      @options = options
+    def initialize(*args)
+      @options = args.extract_options!
+      @member_class = args[0]
+      @search_text = args[1].to_s
     end
     
     def query
@@ -38,7 +39,16 @@ module Xapit
     end
     
     def base_query
-      @base_query ||= Query.new(initial_query_string)
+      @base_query ||= initial_query
+    end
+    
+    def initial_query
+      query = Query.new(initial_query_string)
+      query.default_options[:offset] = per_page*(current_page-1)
+      query.default_options[:limit] = per_page
+      query.default_options[:sort_by_values] = sort_by_values
+      query.default_options[:sort_descending] = @options[:descending]
+      query
     end
     
     def initial_query_string
@@ -67,6 +77,16 @@ module Xapit
     
     def facet_identifiers
       @options[:facets].kind_of?(String) ? @options[:facets].split('-') : (@options[:facets] || [])
+    end
+    
+    def spelling_suggestion
+      if @search_text.downcase.scan(/[a-z0-9]+/).all? { |term| Config.database.get_spelling_suggestion(term).empty? }
+        nil
+      else
+        @search_text.downcase.gsub(/[a-z0-9]+/) do |term|
+          Config.database.get_spelling_suggestion(term)
+        end
+      end
     end
   end
 end

@@ -15,10 +15,7 @@ module Xapit
     end
     
     def initialize(*args)
-      @options = args.extract_options!
-      @member_class = args[0]
-      @search_text = args[1].to_s
-      @query_parser = SimpleQueryParser.new(@member_class, @search_text, @options)
+      @query_parser = SimpleQueryParser.new(*args)
     end
     
     # Returns an array of results. You should not need to call this directly because most methods are 
@@ -40,18 +37,18 @@ module Xapit
     
     # The first record in the result set.
     def first
-      fetch_results(0, 1).first
+      fetch_results(:offset => 0, :limit => 1).first
     end
     
     # The last record in the result set.
     def last
-      fetch_results(size-1, 1).last
+      fetch_results(:offset => size-1, :limit => 1).last
     end
     
     # Perform another search on this one, inheriting all options already passed.
     # See Xapit::Membership for search options.
     def search(keywords, options = {})
-      collection = Collection.new(@member_class, keywords, options)
+      collection = Collection.new(@query_parser.member_class, keywords, options)
       collection.base_query = @query_parser.query
       collection
     end
@@ -115,29 +112,23 @@ module Xapit
     #   <% end %>
     # 
     def spelling_suggestion
-      if @search_text.downcase.scan(/[a-z0-9]+/).all? { |term| Config.database.get_spelling_suggestion(term).empty? }
-        nil
-      else
-        @search_text.downcase.gsub(/[a-z0-9]+/) do |term|
-          Config.database.get_spelling_suggestion(term)
-        end
-      end
+      @query_parser.spelling_suggestion
     end
     
     private
     
     def all_facets
-      @member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
+      @query_parser.member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
         Facet.new(facet_blueprint, @query_parser.query, @query_parser.facet_identifiers)
       end
     end
     
-    def matchset(offset = nil, limit = nil)
-      @query_parser.query.matchset(offset || per_page*(current_page-1), limit || per_page, :sort_by_values => @query_parser.sort_by_values, :sort_descending => @options[:descending])
+    def matchset(options = {})
+      @query_parser.query.matchset(options)
     end
     
-    def fetch_results(offset = nil, limit = nil)
-      matchset(offset, limit).matches.map do |match|
+    def fetch_results(options = {})
+      matchset(options).matches.map do |match|
         class_name, id = match.document.data.split('-')
         member = class_name.constantize.find(id)
         member.xapit_relevance = match.percent

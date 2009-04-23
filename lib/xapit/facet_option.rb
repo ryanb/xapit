@@ -5,7 +5,7 @@ module Xapit
     
     # Fetch a facet option given an id.
     def self.find(id)
-      match = Query.new("Q#{name}-#{id}").matches(0, 1).first
+      match = Query.new("Q#{name}-#{id}").matches(:offset => 0, :limit => 1).first
       if match.nil?
         raise "Unable to find facet option for #{id}."
       else
