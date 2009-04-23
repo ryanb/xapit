@@ -25,6 +25,7 @@ module Xapit
       @facets = []
       @@instances ||= {}
       @@instances[member_class] = self # TODO make this thread safe
+      @indexer = SimpleIndexer.new(self)
     end
     
     # Adds a text attribute. Each word in the text will be indexed as a separate term allowing full text searching.
@@ -63,67 +64,10 @@ module Xapit
       @sortable_attributes += attributes
     end
     
-    def document_for(member)
-      document = Xapian::Document.new
-      document.data = "#{member.class}-#{member.id}"
-      terms(member).each do |term|
-        document.add_term(term)
-        database.add_spelling(term)
-      end
-      values(member).each_with_index do |value, index|
-        document.add_value(index, value)
-      end
-      save_facet_options_for(member)
-      document
-    end
-    
-    def terms(member)
-      base_terms(member) + field_terms(member) + text_terms(member) + facet_terms(member)
-    end
-    
-    def base_terms(member)
-      ["C#{member.class}", "Q#{member.class}-#{member.id}"]
-    end
-    
-    def text_terms(member)
-      text_attributes.map do |name, proc|
-        content = member.send(name).to_s
-        if proc
-          proc.call(content).map(&:downcase)
-        else
-          content.scan(/[a-z0-9]+/i).map(&:downcase)
-        end
-      end.flatten
-    end
-    
-    def field_terms(member)
-      field_attributes.map do |name|
-        [member.send(name)].flatten.map do |value|
-          "X#{name}-#{value.to_s.downcase}"
-        end
-      end.flatten
-    end
-    
-    def facet_terms(member)
-      facets.map do |facet|
-        facet.identifiers_for(member).map { |id| "F#{id}" }
-      end.flatten
-    end
-    
-    def values(member)
-      facet_values(member) + sortable_values(member)
-    end
-    
     # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
     def index_all
       @member_class.find_each(*@args) do |member|
-        database.add_document(document_for(member))
-      end
-    end
-    
-    def save_facet_options_for(member)
-      facets.each do |facet|
-        facet.save_facet_options_for(member)
+        @indexer.add_member(member)
       end
     end
     
@@ -134,22 +78,6 @@ module Xapit
     end
     
     private
-    
-    def database
-      Config.writable_database
-    end
-    
-    def sortable_values(member)
-      sortable_attributes.map do |sortable|
-        member.send(sortable).to_s.downcase
-      end
-    end
-    
-    def facet_values(member)
-      facets.map do |facet|
-        facet.identifiers_for(member).join("-")
-      end
-    end
     
     # Make sure all models are loaded - without reloading any that
     # ActiveRecord::Base is already aware of (otherwise we start to hit some
