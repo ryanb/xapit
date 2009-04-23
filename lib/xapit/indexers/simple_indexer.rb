@@ -1,10 +1,7 @@
 module Xapit
   class SimpleIndexer < AbstractIndexer
     def index_text_attributes(member, document)
-      text_terms(member).each do |term|
-        document.add_term(term)
-        database.add_spelling(term) if Config.spelling?
-      end
+      index_terms(text_terms(member), document)
     end
     
     def text_terms(member)

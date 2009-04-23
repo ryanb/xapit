@@ -12,15 +12,19 @@ module Xapit
       document = Xapian::Document.new
       document.data = "#{member.class}-#{member.id}"
       index_text_attributes(member, document)
-      other_terms(member).each do |term|
-        document.add_term(term)
-        database.add_spelling(term) if Config.spelling?
-      end
+      index_terms(other_terms(member), document)
       values(member).each_with_index do |value, index|
         document.add_value(index, value)
       end
       save_facet_options_for(member)
       document
+    end
+    
+    def index_terms(terms, document)
+      terms.each do |term|
+        document.add_term(term)
+        database.add_spelling(term) if Config.spelling?
+      end
     end
     
     def index_text_attributes(member, document)

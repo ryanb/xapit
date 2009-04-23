@@ -3,8 +3,12 @@ module Xapit
     def index_text_attributes(member, document)
       term_generator.document = document
       @blueprint.text_attributes.each do |name, proc|
-        # currently no support for proc option
-        term_generator.index_text(member.send(name).to_s)
+        content = member.send(name).to_s
+        if proc
+          index_terms(proc.call(content).reject(&:blank?).map(&:to_s).map(&:downcase), document)
+        else
+          term_generator.index_text(content)
+        end
       end
     end
     
