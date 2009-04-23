@@ -4,7 +4,7 @@ module Xapit
     class << self
       # Setup configuration options. Currently there is only one option: "database_path".
       # Set this to the path you would like to store your database.
-      def setup(options)
+      def setup(options = {})
         reset
         @options = options
       end
@@ -48,6 +48,10 @@ module Xapit
       
       def query_parser
         @options[:query_parser] || SimpleQueryParser
+      end
+      
+      def indexer
+        @options[:indexer] || SimpleIndexer
       end
     end
   end
