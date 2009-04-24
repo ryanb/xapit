@@ -42,6 +42,11 @@ module Xapit
     def field_terms(member)
       @blueprint.field_attributes.map do |name|
         [member.send(name)].flatten.map do |value|
+          if value.kind_of? Time
+            value = value.to_i
+          elsif value.kind_of? Date
+            value = value.to_time.to_i
+          end
           "X#{name}-#{value.to_s.downcase}"
         end
       end.flatten

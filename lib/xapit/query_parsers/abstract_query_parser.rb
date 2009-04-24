@@ -58,7 +58,12 @@ module Xapit
     def condition_terms
       if @options[:conditions]
         @options[:conditions].map do |name, value|
-          "X#{name}-#{value.downcase}"
+          if value.kind_of? Time
+            value = value.to_i
+          elsif value.kind_of? Date
+            value = value.to_time.to_i
+          end
+          "X#{name}-#{value.to_s.downcase}"
         end
       else
         []
