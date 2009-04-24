@@ -62,12 +62,12 @@ Scenario: Query for All Records Class Agnostic
 
 Scenario: Query Matching Or Query
   Given indexed records named "John, Jane, Jacob"
-  When I query for "Jane or John"
+  When I query for "Jane OR John"
   Then I should find records named "John, Jane"
 
 Scenario: Query Matching Not Query
   Given indexed records named "John Smith, John Johnson"
-  When I query for "John not Smith"
+  When I query for "John NOT Smith"
   Then I should find records named "John Johnson"
 
 Scenario: Query for Facets with Keywords

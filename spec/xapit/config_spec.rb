@@ -8,12 +8,12 @@ describe Xapit::Config do
   
   it "should default query parser to SimpleQueryParser" do
     Xapit::Config.setup
-    Xapit::Config.query_parser.should == Xapit::SimpleQueryParser
+    Xapit::Config.query_parser.should == Xapit::ClassicQueryParser
   end
   
   it "should be able to set query parser on setup" do
-    Xapit::Config.setup(:query_parser => Xapit::ClassicQueryParser)
-    Xapit::Config.query_parser.should == Xapit::ClassicQueryParser
+    Xapit::Config.setup(:query_parser => Xapit::SimpleQueryParser)
+    Xapit::Config.query_parser.should == Xapit::SimpleQueryParser
   end
   
   it "should default indexer to SimpleIndexer" do

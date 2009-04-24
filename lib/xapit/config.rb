@@ -10,7 +10,7 @@ module Xapit
       # <tt>:stemming</tt>:       The language to use for stemming, defaults to "english".
       # <tt>:spelling</tt>:       True or false to enable/disable spelling, defaults to true.
       # <tt>:indexer</tt>:        Class to handle the indexing, defaults to SimpleIndexer.
-      # <tt>:query_parser</tt>:   Class to handle the parsing, defaults to SimpleQueryParser.
+      # <tt>:query_parser</tt>:   Class to handle the parsing, defaults to ClassicQueryParser.
       #
       def setup(options = {})
         if @options && options[:database_path] != @options[:database_path]
@@ -23,7 +23,7 @@ module Xapit
       def default_options
         {
           :indexer => SimpleIndexer,
-          :query_parser => SimpleQueryParser,
+          :query_parser => ClassicQueryParser,
           :spelling => true,
           :stemming => "english"
         }
