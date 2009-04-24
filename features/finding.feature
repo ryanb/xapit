@@ -99,6 +99,6 @@ Scenario: Query for All Records Sorted by Name Descending
   Then I should find records named "Zebra, Banana, Apple"
 
 Scenario: Spelling suggestion
-  Given indexed records named "Zebra, Apple"
-  When I query for "zerba aple"
-  Then I should have "zebra apple" as a spelling suggestion
+  Given indexed records named "Zebra, Apple, Bike"
+  When I query for "zerba bike aple"
+  Then I should have "zebra bike apple" as a spelling suggestion

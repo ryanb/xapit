@@ -85,7 +85,12 @@ module Xapit
         nil
       else
         @search_text.downcase.gsub(/[a-z0-9]+/) do |term|
-          Config.database.get_spelling_suggestion(term)
+          suggestion = Config.database.get_spelling_suggestion(term)
+          if suggestion.blank?
+            term
+          else
+            suggestion
+          end
         end
       end
     end
