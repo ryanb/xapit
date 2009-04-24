@@ -21,8 +21,6 @@ describe Xapit::FacetOption do
         index.facet :age, "Person Age"
         index.facet :category
       end
-      Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
-      Xapit::Config.remove_database
     end
     
     it "should have identifier hashing name and value" do

@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Xapit::AbstractIndexer do
   before(:each) do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandab')
     @index = Xapit::IndexBlueprint.new(XapitMember)
     @indexer = Xapit::SimpleIndexer.new(@index)
   end
@@ -28,6 +27,7 @@ describe Xapit::AbstractIndexer do
   end
   
   it "should add terms, values and options for facets" do
+    Xapit::Config.writable_database # force xapit to use a writable database at the beginning
     stub(XapitMember).xapit_index_blueprint { @index }
     member = XapitMember.new(:foo => ["ABC", "DEF"])
     ids = Xapit::FacetBlueprint.new(XapitMember, 0, :foo).identifiers_for(member)

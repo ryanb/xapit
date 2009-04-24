@@ -2,10 +2,15 @@ module Xapit
   # Singleton class for storing Xapit configuration settings. Currently this only includes the database path.
   class Config
     class << self
+      attr_reader :options
+      
       # Setup configuration options. Currently there is only one option: "database_path".
       # Set this to the path you would like to store your database.
       def setup(options = {})
-        reset
+        if @options && options[:database_path] != @options[:database_path]
+          @database = nil
+          @writable_database = nil
+        end
         @options = options.reverse_merge(default_options)
       end
       
@@ -18,13 +23,6 @@ module Xapit
         }
       end
       
-      # Resets all settings and removes cached database.
-      def reset
-        @options = default_options
-        @database = nil
-        @writable_database = nil
-      end
-      
       # See if setup options are already set.
       def setup?
         @options
@@ -33,6 +31,22 @@ module Xapit
       # The configured path to the database.
       def path
         @options[:database_path]
+      end
+      
+      def query_parser
+        @options[:query_parser]
+      end
+      
+      def indexer
+        @options[:indexer]
+      end
+      
+      def spelling?
+        @options[:spelling]
+      end
+      
+      def stemming
+        @options[:stemming]
       end
       
       # Fetch Xapian::Database object at configured path. Database is stored in memory.
@@ -52,23 +66,6 @@ module Xapit
         FileUtils.rm_rf(path) if File.exist? path
         @database = nil
         @writable_database = nil
-        GC.start # to make sure the database gets closed out all the way
-      end
-      
-      def query_parser
-        @options[:query_parser]
-      end
-      
-      def indexer
-        @options[:indexer]
-      end
-      
-      def spelling?
-        @options[:spelling]
-      end
-      
-      def stemming
-        @options[:stemming]
       end
     end
   end

@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Xapit::ClassicIndexer do
   before(:each) do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandatb')
     @index = Xapit::IndexBlueprint.new(XapitMember)
     @indexer = Xapit::ClassicIndexer.new(@index)
   end
@@ -17,7 +16,6 @@ describe Xapit::ClassicIndexer do
   end
   
   it "should use given block to generate text terms" do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandatabas')
     member = Object.new
     stub(member).name { "foobar" }
     @index.text(:name) { |t| [t.length] }

@@ -40,7 +40,6 @@ describe Xapit::IndexBlueprint do
   end
   
   it "should index member document into database" do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandbase')
     XapitMember.new
     @index.index_all
     Xapit::Config.writable_database.doccount.should >= 1
@@ -48,7 +47,6 @@ describe Xapit::IndexBlueprint do
   end
   
   it "should remember all blueprints and index each of them" do
-    Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandatab')
     stub(Xapit::Config.writable_database).add_document
     mock(@index).index_all
     Xapit::IndexBlueprint.index_all

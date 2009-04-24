@@ -3,12 +3,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Xapit::Facet do
   describe "with database" do
     before(:each) do
-      XapitMember.delete_all
       XapitMember.xapit do |index|
         index.facet :visible
       end
-      Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
-      Xapit::Config.remove_database
     end
     
     describe "indexed" do

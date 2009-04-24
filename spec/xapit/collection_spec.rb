@@ -3,15 +3,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Xapit::Collection do
   describe "with database" do
     before(:each) do
-      XapitMember.delete_all
       XapitMember.xapit do |index|
         index.text :name
         index.field :name
         index.facet :name
         index.sortable :name
       end
-      Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
-      Xapit::Config.remove_database
     end
     
     describe "indexed" do
@@ -134,7 +131,7 @@ describe Xapit::Collection do
       end
       
       it "should raise error when fetching spelling suggestion if spelling is disabled" do
-        Xapit::Config.setup(:spelling => false, :database_path => File.dirname(__FILE__) + '/../tmp/xapiandb')
+        Xapit::Config.options[:spelling] = false
         lambda { Xapit::Collection.new(XapitMember, "foo").spelling_suggestion }.should raise_error
       end
     end
