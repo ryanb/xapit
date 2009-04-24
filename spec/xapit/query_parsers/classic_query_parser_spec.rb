@@ -5,8 +5,11 @@ describe Xapit::ClassicQueryParser do
     @parser = Xapit::ClassicQueryParser.new(nil, nil)
   end
   
-  it "should parse nothing for simple string" do
-    expected = Xapian::QueryParser.new.parse_query("foo bar").description
-    @parser.xapian_query_from_text("foo bar").description.should == expected
+  it "should have an initial xapian parser with stemming and default operator support" do
+    expected = Xapian::QueryParser.new
+    expected.stemmer = Xapian::Stem.new("english")
+    expected.stemming_strategy = Xapian::QueryParser::STEM_SOME
+    expected.default_op = Xapian::Query::OP_AND
+    @parser.xapian_query_from_text("foo bar").description.should == expected.parse_query("foo bar").description
   end
 end
