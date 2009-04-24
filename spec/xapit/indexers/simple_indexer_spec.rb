@@ -14,6 +14,13 @@ describe Xapit::SimpleIndexer do
     @indexer.text_terms(member).should == %w[this is a test]
   end
   
+  it "should return text term with stemming added" do
+    member = Object.new
+    stub(member).description { "jumping high" }
+    @index.text(:description)
+    @indexer.text_terms_with_stemming(member).should == %w[jumping Zjump high Zhigh]
+  end
+  
   it "should convert attribute to string when converting text to terms" do
     member = Object.new
     stub(member).num { 123 }
@@ -23,7 +30,7 @@ describe Xapit::SimpleIndexer do
   
   it "should add text terms to document when indexing attributes" do
     Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandataba')
-    stub(@indexer).text_terms { %w[term list] }
+    stub(@indexer).text_terms_with_stemming { %w[term list] }
     document = Xapian::Document.new
     @indexer.index_text_attributes(nil, document)
     document.terms.map(&:term).sort.should == %w[term list].sort

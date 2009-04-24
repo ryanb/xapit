@@ -16,7 +16,6 @@ describe Xapit::ClassicIndexer do
     document.terms.map(&:term).sort.should == %w[Zjump Zhigh jumping high].sort
   end
   
-  
   it "should use given block to generate text terms" do
     Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/../../tmp/xapiandatabas')
     member = Object.new
