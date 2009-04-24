@@ -132,6 +132,23 @@ You can also list the applied facets along with a remove link.
   <% end %>
 
 
+== Config
+
+When installing Xapit as a Rails plugin, an initializer file is automatically created to setup. It looks like this.
+
+  Xapit::Config.setup(:database_path => "#{Rails.root}/db/xapiandb")
+
+There are many other options you can pass into here. This is a more advanced configuration setting which changes the stemming language, disables spelling, and changes the indexer and parser to a classic variation. The classic ones use Xapian's built-in term generator and query parser instead of the ones offered by Xapit.
+
+  Xapit::Config.setup(
+    :database_path => "#{Rails.root}/db/external/xapiandb",
+    :spelling => false,
+    :stemming => "german",
+    :indexer => ClassicIndexer,
+    :query_parser => ClassicQueryParser
+  )
+
+
 == Outside of Rails
 
 Xapit can be used outside of Rails too. You'll just need to include the membership module:
