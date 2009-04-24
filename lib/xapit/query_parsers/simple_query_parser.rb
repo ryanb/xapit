@@ -45,9 +45,9 @@ module Xapit
           words.map! do |word|
             if Config.stemming
               if word =~ /^not\s/i
-                [:not, [:or, word.sub(/^not\s+/i, ''), "Z" + stemmer.call(word.sub(/^not\s+/i, ''))]]
+                [:not, "Z" + stemmer.call(word.sub(/^not\s+/i, ''))]
               else
-                [:or, word, "Z" + stemmer.call(word)]
+                "Z" + stemmer.call(word)
               end
             else
               if word =~ /^not\s/i
@@ -59,8 +59,8 @@ module Xapit
           end
           [:and, *words]
         else
-          if Config.stemming
-            [:or, text, "Z" + stemmer.call(text)]
+          if Config.stemming && !text.blank?
+            "Z" + stemmer.call(text)
           else
             text
           end

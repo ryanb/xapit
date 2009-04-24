@@ -3,15 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe Xapit::SimpleQueryParser do
   describe "with stemming" do
     it "should include stemmed variation for single word" do
-      Xapit::SimpleQueryParser.new(nil, "jumping").parsed.should == [:or, "jumping", "Zjump"]
+      Xapit::SimpleQueryParser.new(nil, "jumping").parsed.should == "Zjump"
     end
     
     it "should include stemmed variations for multiple words" do
-      Xapit::SimpleQueryParser.new(nil, "jumping high").parsed.should == [:and, [:or, "jumping", "Zjump"], [:or, "high", "Zhigh"]]
+      Xapit::SimpleQueryParser.new(nil, "jumping high").parsed.should == [:and, "Zjump", "Zhigh"]
     end
     
     it "should add stemmed variation for 'not' option" do
-      Xapit::SimpleQueryParser.new(nil, "jumping not high").parsed.should == [:and, [:or, "jumping", "Zjump"], [:not, [:or, "high", "Zhigh"]]]
+      Xapit::SimpleQueryParser.new(nil, "jumping not high").parsed.should == [:and, "Zjump", [:not, "Zhigh"]]
     end
   end
   
