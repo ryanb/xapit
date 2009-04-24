@@ -4,14 +4,14 @@ x create ClassicQueryParser which uses the Xapian::QueryParser
 x move duplicates into AbstractQueryParser
 x add some options to Xapit::Query (such as default limit) to clean up collection class (move to parser)
 x add :query_parser option to Xapit::Config.setup passing class, default to simple query parser initially
-- try moving default to classic query parser
+? try moving default to classic query parser
 
 Indexing
 + re-indexing support for new/changed models (?)
 + auto-reload xapian database in memory if database recently indexed
 
 Finding
-- stemming (support alternate languages)
+x stemming (support alternate languages)
 ? support non-ascii characters in find (å, ä, ö)
 + range in conditions
 + customize query parser

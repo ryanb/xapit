@@ -43,17 +43,33 @@ module Xapit
         elsif text =~ /\s+/
           words = text.scan(/(?:\bnot\s+)?[^\s]+/i)
           words.map! do |word|
-            if word =~ /^not\s/i
-              [:not, word.sub(/^not\s+/i, '')]
+            if Config.stemming
+              if word =~ /^not\s/i
+                [:not, [:or, word.sub(/^not\s+/i, ''), "Z" + stemmer.call(word.sub(/^not\s+/i, ''))]]
+              else
+                [:or, word, "Z" + stemmer.call(word)]
+              end
             else
-              word
+              if word =~ /^not\s/i
+                [:not, word.sub(/^not\s+/i, '')]
+              else
+                word
+              end
             end
           end
           [:and, *words]
         else
-          text
+          if Config.stemming
+            [:or, text, "Z" + stemmer.call(text)]
+          else
+            text
+          end
         end
       end
+    end
+    
+    def stemmer
+      @stemmer ||= Xapian::Stem.new(Config.stemming)
     end
   end
 end
