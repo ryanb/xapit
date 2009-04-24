@@ -3,6 +3,7 @@ require 'spec'
 require 'active_support'
 require 'fileutils'
 require File.dirname(__FILE__) + '/../lib/xapit'
+require File.dirname(__FILE__) + '/xapit_member'
 
 Spec::Runner.configure do |config|
   config.mock_with :rr
@@ -10,38 +11,5 @@ Spec::Runner.configure do |config|
     Xapit::Config.setup(:database_path => File.dirname(__FILE__) + '/tmp/xapiandb')
     Xapit::Config.remove_database
     XapitMember.delete_all
-  end
-end
-
-class XapitMember
-  include Xapit::Membership
-  
-  attr_reader :id
-  
-  def self.find_each(&block)
-    @@records.each(&block) if @@records
-  end
-  
-  def self.delete_all
-    @@records = []
-  end
-  
-  def self.find(id)
-    @@records.detect { |r| r.id == id.to_i }
-  end
-  
-  def initialize(attributes = {})
-    @@records ||= []
-    @id = @@records.size + 1
-    @attributes = attributes
-    @@records << self
-  end
-  
-  def method_missing(name, *args)
-    if @attributes.has_key? name
-      @attributes[name]
-    else
-      super
-    end
   end
 end
