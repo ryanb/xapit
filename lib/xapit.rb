@@ -6,6 +6,7 @@ require 'xapian'
 module Xapit
   
   # Index all membership classes with xapit defined. Delegates to Xapit::IndexBlueprint.
+  # You will likely want to call Xapit::Config.remove_database before this.
   def self.index_all(*args, &block)
     IndexBlueprint.index_all(*args, &block)
   end

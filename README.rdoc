@@ -57,6 +57,7 @@ To perform the indexing, run the xapit:index rake task.
 
 It can also be triggered through Ruby code using this command.
 
+  Xapit::Config.remove_database
   Xapit.index_all
 
 

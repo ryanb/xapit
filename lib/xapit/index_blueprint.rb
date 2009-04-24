@@ -65,6 +65,7 @@ module Xapit
     end
     
     # Indexes all records of this blueprint class. It does this using the ".find_each" method on the member class.
+    # You will likely want to call Xapit::Config.remove_database before this.
     def index_all
       @member_class.find_each(*@args) do |member|
         @indexer.add_member(member)
