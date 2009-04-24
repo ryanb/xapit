@@ -4,8 +4,14 @@ module Xapit
     class << self
       attr_reader :options
       
-      # Setup configuration options. Currently there is only one option: "database_path".
-      # Set this to the path you would like to store your database.
+      # Setup configuration options. The following options are supported.
+      # 
+      # <tt>:database_path</tt>:  Where the database is stored.
+      # <tt>:stemming</tt>:       The language to use for stemming, defaults to "english".
+      # <tt>:spelling</tt>:       True or false to enable/disable spelling, defaults to true.
+      # <tt>:indexer</tt>:        Class to handle the indexing, defaults to SimpleIndexer.
+      # <tt>:query_parser</tt>:   Class to handle the parsing, defaults to SimpleQueryParser.
+      #
       def setup(options = {})
         if @options && options[:database_path] != @options[:database_path]
           @database = nil
