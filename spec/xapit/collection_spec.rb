@@ -134,6 +134,11 @@ describe Xapit::Collection do
         Xapit::Config.options[:spelling] = false
         lambda { Xapit::Collection.new(XapitMember, "foo").spelling_suggestion }.should raise_error
       end
+      
+      it "should find similar records" do
+        member = XapitMember.new(:name => "foo bar world")
+        Xapit::Collection.search_similar(member).should == [@foo, @hello]
+      end
     end
   end
 end

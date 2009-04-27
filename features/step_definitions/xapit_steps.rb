@@ -72,6 +72,10 @@ When /^I query "([^\"]*)" sorted by (.*?)( descending)?$/ do |keywords, sort, de
   @records = XapitMember.search("", :order => sort.split(', '), :descending => descending)
 end
 
+When /^I query for similar records for "([^\"]*)"$/ do |keywords|
+  @records = XapitMember.search(keywords).first.search_similar
+end
+
 Then /^I should have the following facets$/ do |facets_table|
   result = []
   @records.facets.each do |facet|

@@ -14,6 +14,15 @@ module Xapit
       delegate m, :to => :results unless m =~ /^__/ || NON_DELEGATE_METHODS.include?(m.to_s)
     end
     
+    def self.search_similar(member, *args)
+      collection = new(member.class, *args)
+      indexer = SimpleIndexer.new(member.class.xapit_index_blueprint)
+      terms = indexer.text_terms(member) + indexer.field_terms(member)
+      collection.base_query.and_query(Xapian::Query.new(Xapian::Query::OP_OR, terms))
+      collection.base_query.not_query("Q#{member.class}-#{member.id}")
+      collection
+    end
+    
     def initialize(*args)
       @query_parser = Config.query_parser.new(*args)
     end
@@ -55,6 +64,10 @@ module Xapit
     
     def base_query=(base_query)
       @query_parser.base_query = base_query
+    end
+    
+    def base_query
+      @query_parser.base_query
     end
     
     # The page number we are currently on.

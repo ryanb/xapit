@@ -20,6 +20,11 @@ module Xapit
       self
     end
     
+    def not_query(query)
+      @xapian_query = Xapian::Query.new(Xapian::Query::OP_AND_NOT, @xapian_query, build_xapian_query(query)) unless query.blank?
+      self
+    end
+    
     def matchset(options = {})
       options.reverse_merge!(default_options)
       enquire = Xapian::Enquire.new(Config.database)

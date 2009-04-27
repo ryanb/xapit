@@ -7,6 +7,11 @@ module Xapit
       base.send(:attr_accessor, :xapit_relevance) # is there a better way to do this?
     end
     
+    # Find similar records to the given model. It takes the same arguments as Membership::ClassMethods.search to further narrow down the results.
+    def search_similar(*args)
+      Collection.search_similar(self, *args)
+    end
+    
     module ClassMethods
       # Used to perform a search on a model.
       #   
