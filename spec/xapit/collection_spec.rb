@@ -143,6 +143,11 @@ describe Xapit::Collection do
         member = XapitMember.new(:name => "foo bar world")
         Xapit::Collection.search_similar(member).should == [@foo, @hello]
       end
+      
+      it "should be able to specify classes" do
+        Xapit::Collection.new(nil, "foo", :classes => [String, Array]).should == []
+        Xapit::Collection.new(nil, "foo", :classes => [String, Array, XapitMember]).should == [@foo]
+      end
     end
   end
 end

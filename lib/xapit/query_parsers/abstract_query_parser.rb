@@ -47,7 +47,7 @@ module Xapit
     end
     
     def initial_query
-      query = Query.new(initial_query_string)
+      query = Query.new(Xapian::Query.new(Xapian::Query::OP_OR, initial_query_strings))
       query.default_options[:offset] = offset
       query.default_options[:limit] = per_page
       query.default_options[:sort_by_values] = sort_by_values
@@ -55,8 +55,16 @@ module Xapit
       query
     end
     
-    def initial_query_string
-      @member_class ? "C" + @member_class.name : ""
+    def initial_query_strings
+      if classes.empty?
+        [""]
+      else
+        classes.map { |klass| "C#{klass.name}" }
+      end
+    end
+    
+    def classes
+      (@options[:classes] || [@member_class]).compact
     end
     
     def condition_terms
