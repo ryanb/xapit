@@ -4,39 +4,9 @@ module Xapit
   module Membership
     def self.included(base)
       base.extend ClassMethods
-      base.send(:attr_accessor, :xapit_relevance) # is there a better way to do this?
-    end
-    
-    # Find similar records to the given model. It takes the same arguments as Membership::ClassMethods.search to further narrow down the results.
-    def search_similar(*args)
-      Collection.search_similar(self, *args)
     end
     
     module ClassMethods
-      # Used to perform a search on a model.
-      #   
-      #   # perform a simple full text search
-      #   @articles = Article.search("phone")
-      #   
-      #   # add pagination if you're using will_paginate
-      #   @articles = Article.search("phone", :per_page => 10, :page => params[:page])
-      #   
-      #   # search based on indexed fields
-      #   @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
-      #   
-      #   # manually sort based on any number of indexed fields, sort defaults to most relevant
-      #   @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
-      #
-      #   # basic boolean matching is supported
-      #   @articles = Article.search("phone or fax not email")
-      #
-      #   # no need to specify first query string when searching all records
-      #   @articles = Article.search(:conditions => { :category_id => params[:category_id] })
-      #
-      def search(*args)
-        Collection.new(self, *args)
-      end
-      
       # Simply call "xapit" on a class and pass a block to define the indexed attributes.
       # 
       #   class Article < ActiveRecord::Base
@@ -71,18 +41,57 @@ module Xapit
       def xapit(*args)
         @xapit_index_blueprint = IndexBlueprint.new(self, *args)
         yield(@xapit_index_blueprint)
+        include AdditionalMethods
+      end
+    end
+    
+    module AdditionalMethods
+      def self.included(base)
+        base.extend ClassMethods
+        base.send(:attr_accessor, :xapit_relevance) # is there a better way to do this?
       end
       
-      # The Xapit::IndexBlueprint object used for this class.
-      def xapit_index_blueprint
-        @xapit_index_blueprint
+      # Find similar records to the given model. It takes the same arguments as Membership::AdditionalMethods::ClassMethods#search to further narrow down the results.
+      def search_similar(*args)
+        Collection.search_similar(self, *args)
       end
+    
+      module ClassMethods
+        # Used to perform a search on a model.
+        #   
+        #   # perform a simple full text search
+        #   @articles = Article.search("phone")
+        #   
+        #   # add pagination if you're using will_paginate
+        #   @articles = Article.search("phone", :per_page => 10, :page => params[:page])
+        #   
+        #   # search based on indexed fields
+        #   @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
+        #   
+        #   # manually sort based on any number of indexed fields, sort defaults to most relevant
+        #   @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
+        #
+        #   # basic boolean matching is supported
+        #   @articles = Article.search("phone or fax not email")
+        #
+        #   # no need to specify first query string when searching all records
+        #   @articles = Article.search(:conditions => { :category_id => params[:category_id] })
+        #
+        def search(*args)
+          Collection.new(self, *args)
+        end
       
-      # Finds a Xapit::FacetBlueprint for the given attribute.
-      def xapit_facet_blueprint(attribute)
-        result = xapit_index_blueprint.facets.detect { |f| f.attribute.to_s == attribute.to_s }
-        raise "Unable to find facet blueprint for #{attribute} on #{name}" if result.nil?
-        result
+        # The Xapit::IndexBlueprint object used for this class.
+        def xapit_index_blueprint
+          @xapit_index_blueprint
+        end
+      
+        # Finds a Xapit::FacetBlueprint for the given attribute.
+        def xapit_facet_blueprint(attribute)
+          result = xapit_index_blueprint.facets.detect { |f| f.attribute.to_s == attribute.to_s }
+          raise "Unable to find facet blueprint for #{attribute} on #{name}" if result.nil?
+          result
+        end
       end
     end
   end

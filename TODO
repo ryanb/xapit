@@ -3,11 +3,8 @@ Indexing
 + auto-reload xapian database in memory if database recently indexed
 
 Finding
-x stemming (support alternate languages)
 ? support non-ascii characters in find (å, ä, ö)
 + range in conditions
-+ customize query parser
-+ parenthesis to group phrases
 + support "age:17" condition matching in query
 + add classes option to Xapit.search to limit which classes are included
 + support @collection.facets on Xapit.search (multiple classes)
