@@ -112,3 +112,8 @@ Scenario: Find similar records
   Given indexed records named "Jason John Smith, John Doe, Jason Smith, Jacob Johnson"
   When I query for similar records for "Jason John Smith"
   Then I should find records named "Jason Smith, John Doe"
+
+Scenario: Unicode characters in search
+  Given indexed records named "über cool, uber hot"
+  When I query for "über"
+  Then I should find records named "über cool"

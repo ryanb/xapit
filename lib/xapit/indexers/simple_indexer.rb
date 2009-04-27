@@ -10,7 +10,7 @@ module Xapit
         if proc
           proc.call(content).reject(&:blank?).map(&:to_s).map(&:downcase)
         else
-          content.scan(/[a-z0-9]+/i).map(&:downcase)
+          content.scan(/\w+/u).map(&:downcase)
         end
       end.flatten
     end

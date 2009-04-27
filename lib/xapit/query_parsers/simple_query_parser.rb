@@ -38,20 +38,20 @@ module Xapit
         [:and, *text]
       else
         text = text.strip
-        if text =~ /\sor\s/i
-          [:or, *text.split(/\s+or\s+/i).map { |t| parse(t) }]
-        elsif text =~ /\s+/
-          words = text.scan(/(?:\bnot\s+)?[^\s]+/i)
+        if text =~ /\sor\s/ui
+          [:or, *text.split(/\s+or\s+/ui).map { |t| parse(t) }]
+        elsif text =~ /\s+/u
+          words = text.scan(/(?:\bnot\s+)?[^\s]+/ui)
           words.map! do |word|
             if Config.stemming
-              if word =~ /^not\s/i
-                [:not, "Z" + stemmer.call(word.sub(/^not\s+/i, ''))]
+              if word =~ /^not\s/ui
+                [:not, "Z" + stemmer.call(word.sub(/^not\s+/ui, ''))]
               else
                 "Z" + stemmer.call(word)
               end
             else
-              if word =~ /^not\s/i
-                [:not, word.sub(/^not\s+/i, '')]
+              if word =~ /^not\s/ui
+                [:not, word.sub(/^not\s+/ui, '')]
               else
                 word
               end
