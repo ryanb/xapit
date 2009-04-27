@@ -80,6 +80,11 @@ module Xapit
       @query_parser.per_page
     end
     
+    # The offset for the current page
+    def offset
+      @query_parser.offset
+    end
+    
     # Total number of pages with found results.
     def total_pages
       (total_entries / per_page.to_f).ceil

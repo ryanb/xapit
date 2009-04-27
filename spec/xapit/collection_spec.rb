@@ -59,6 +59,10 @@ describe Xapit::Collection do
         Xapit::Collection.new(XapitMember, :page => 2, :per_page => 1).should == [@foo]
       end
       
+      it "should have offset" do
+        Xapit::Collection.new(XapitMember, :page => 2, :per_page => 1).offset.should == 1
+      end
+      
       it "should have total_entries, total_pages, current_page, per_page, previous_page, next_page" do
         collection = Xapit::Collection.new(XapitMember, "", :per_page => 1, :page => 2)
         collection.total_entries.should == 2

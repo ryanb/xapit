@@ -25,6 +25,10 @@ module Xapit
       @options[:per_page] ? @options[:per_page].to_i : 20
     end
     
+    def offset
+      per_page*(current_page-1)
+    end
+    
     def sort_by_values
       if @options[:order] && @member_class
         index = @member_class.xapit_index_blueprint
@@ -44,7 +48,7 @@ module Xapit
     
     def initial_query
       query = Query.new(initial_query_string)
-      query.default_options[:offset] = per_page*(current_page-1)
+      query.default_options[:offset] = offset
       query.default_options[:limit] = per_page
       query.default_options[:sort_by_values] = sort_by_values
       query.default_options[:sort_descending] = @options[:descending]
