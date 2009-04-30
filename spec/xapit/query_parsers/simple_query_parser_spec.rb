@@ -82,12 +82,5 @@ describe Xapit::SimpleQueryParser do
       )
       Xapit::SimpleQueryParser.new(nil, "foo not bar").xapian_query.description.should == query.description
     end
-  
-    it "should not modify parsed array when fetching xapian query" do
-      pending
-      query = Xapit::SimpleQueryParser.new("hello world").and_query("foo bar")
-      query.xapian_query
-      query.parsed.should == [:and, [:and, "hello", "world"], [:and, "foo", "bar"]]
-    end
   end
 end
