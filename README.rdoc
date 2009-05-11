@@ -115,7 +115,7 @@ Facets allow you to further filter the result set based on certain attributes.
   <% for facet in @articles.facets %>
     <%= facet.name %>
     <% for option in facet.options %>
-      <%= link_to option.name, :overwrite_params => { :facets => option }) %>
+      <%= link_to option.name, :overwrite_params => { :facets => option } %>
       (<%= option.count %>)
     <% end %>
   <% end %>
@@ -128,7 +128,7 @@ You can also list the applied facets along with a remove link.
 
   <% for option in @articles.applied_facet_options %>
     <%=h option.name %>
-    <%= link_to "remove", :overwrite_params => { :facets => option }) %>
+    <%= link_to "remove", :overwrite_params => { :facets => option } %>
   <% end %>
 
 

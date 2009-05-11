@@ -112,7 +112,7 @@ module Xapit
     #
     #   <% for option in @articles.applied_facet_options %>
     #     <%=h option.name %>
-    #     <%= link_to "remove", :overwrite_params => { :facets => option }) %>
+    #     <%= link_to "remove", :overwrite_params => { :facets => option } %>
     #   <% end %>
     #
     def applied_facet_options

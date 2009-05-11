@@ -5,7 +5,7 @@ module Xapit
   # <% for facet in @articles.facets %>
   #   <%= facet.name %>
   #   <% for option in facet.options %>
-  #     <%= link_to option.name, :overwrite_params => { :facets => option }) %>
+  #     <%= link_to option.name, :overwrite_params => { :facets => option } %>
   #     (<%= option.count %>)
   #   <% end %>
   # <% end %>
