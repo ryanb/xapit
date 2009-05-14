@@ -2,10 +2,10 @@ module Xapit
   class ClassicIndexer < AbstractIndexer
     def index_text_attributes(member, document)
       term_generator.document = document
-      @blueprint.text_attributes.each do |name, proc|
+      @blueprint.text_attributes.each do |name, options|
         content = member.send(name).to_s
-        if proc
-          index_terms(proc.call(content).reject(&:blank?).map(&:to_s).map(&:downcase), document)
+        if options[:proc]
+          index_terms(options[:proc].call(content).reject(&:blank?).map(&:to_s).map(&:downcase), document)
         else
           term_generator.index_text(content)
         end

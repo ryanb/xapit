@@ -10,25 +10,26 @@ describe Xapit::SimpleIndexer do
     member = Object.new
     stub(member).description { "This is a test" }
     @index.text(:description)
-    @indexer.text_terms(member).should == %w[this is a test]
+    @indexer.terms_for_attribute_without_stemming(member, :description, {}).should == %w[this is a test]
   end
   
   it "should return text term with stemming added" do
     member = Object.new
     stub(member).description { "jumping high" }
     @index.text(:description)
-    @indexer.text_terms_with_stemming(member).should == %w[jumping Zjump high Zhigh]
+    @indexer.terms_for_attribute(member, :description, {}).should == %w[jumping Zjump high Zhigh]
   end
   
   it "should convert attribute to string when converting text to terms" do
     member = Object.new
     stub(member).num { 123 }
     @index.text(:num)
-    @indexer.text_terms(member).should == %w[123]
+    @indexer.terms_for_attribute_without_stemming(member, :num, {}).should == %w[123]
   end
   
   it "should add text terms to document when indexing attributes" do
-    stub(@indexer).text_terms_with_stemming { %w[term list] }
+    @index.text(:description)
+    stub(@indexer).terms_for_attribute { %w[term list] }
     document = Xapian::Document.new
     @indexer.index_text_attributes(nil, document)
     document.terms.map(&:term).sort.should == %w[term list].sort
@@ -37,7 +38,16 @@ describe Xapit::SimpleIndexer do
   it "should use given block to generate text terms" do
     member = Object.new
     stub(member).name { "foobar" }
-    @index.text(:name) { |t| [t.length] }
-    @indexer.text_terms(member).should == ["6"]
+    proc = lambda { |t| [t.length] }
+    @indexer.terms_for_attribute_without_stemming(member, :name, { :proc => proc }).should == ["6"]
+  end
+  
+  it "should increment term frequency by weight option" do
+    member = Object.new
+    stub(member).description { "This is a test" }
+    @index.text(:description, :weight => 10)
+    document = Xapian::Document.new
+    @indexer.index_text_attributes(member, document)
+    document.terms.first.wdf.should == 10
   end
 end

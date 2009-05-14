@@ -28,3 +28,14 @@ Scenario: Index Multiple Field Values Separately
     | Jane | 16     |
   When I query "age" matching "16"
   Then I should find records named "Jane, John"
+
+Scenario: Index Weighted Attributes
+  Given an empty database at "tmp/xapiandatabase"
+  And the following indexed records with "name" weighted by "10"
+    | name | description |
+    | foo  | bar         |
+    | bar  | foo         |
+  When I query for "bar"
+  Then I should find records named "bar, foo"
+  When I query for "foo"
+  Then I should find records named "foo, bar"

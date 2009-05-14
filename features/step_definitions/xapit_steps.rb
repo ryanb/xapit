@@ -21,6 +21,16 @@ Given /^the following indexed records$/ do |records_table|
   create_records(records_table.hashes)
 end
 
+Given /^the following indexed records with "([^\"]*)" weighted by "([^\"]*)"$/ do |weight_name, weight_value, records_table|
+  create_records(records_table.hashes) do |index, attribute|
+    if attribute.to_s == weight_name
+      index.text attribute, :weight => weight_value.to_i
+    else
+      index.text attribute
+    end
+  end
+end
+
 When /^I index the database$/ do
   Xapit.index_all
 end

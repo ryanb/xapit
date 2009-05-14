@@ -2,6 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Xapit::AbstractIndexer do
   before(:each) do
+    XapitMember.xapit { } # to ensure methods are included
     @index = Xapit::IndexBlueprint.new(XapitMember)
     @indexer = Xapit::SimpleIndexer.new(@index)
   end

@@ -10,8 +10,8 @@ describe Xapit::IndexBlueprint do
     @index.text(:bar, :blah)
     @index.text(:custom) { |t| t*t }
     @index.text_attributes.keys.should include(:foo, :bar, :blah, :custom)
-    @index.text_attributes[:foo].should be_nil
-    @index.text_attributes[:custom].should be_kind_of(Proc)
+    @index.text_attributes[:foo][:proc].should be_nil
+    @index.text_attributes[:custom][:proc].should be_kind_of(Proc)
   end
   
   it "should remember field attributes" do

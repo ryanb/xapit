@@ -48,6 +48,10 @@ Finally, you can pass any find options to the xapit method to determine what get
 
   xapit(:batch_size => 100, :include => :author, :conditions => { :visible => true })
 
+You can specify a :weight option to give a text attribute more importance. This will cause search terms matching that attribute to have a higher rank. The default weight is 1. Decimal (0.5) weight values are not supported.
+
+  index.text :name, :weight => 10
+
 
 == Index
 

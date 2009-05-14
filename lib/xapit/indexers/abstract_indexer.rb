@@ -58,6 +58,18 @@ module Xapit
       end.flatten
     end
     
+    # used primarily by search similar functionality
+    def text_terms(member) # REFACTORME some duplicaiton with simple indexer
+      @blueprint.text_attributes.map do |name, options|
+        content = member.send(name).to_s
+        if options[:proc]
+          options[:proc].call(content).reject(&:blank?).map(&:to_s).map(&:downcase)
+        else
+          content.scan(/\w+/u).map(&:downcase)
+        end
+      end.flatten
+    end
+    
     def values(member)
       facet_values(member) + sortable_values(member)
     end

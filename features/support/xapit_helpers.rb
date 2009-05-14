@@ -4,10 +4,14 @@ module XapitHelpers
     XapitMember.delete_all
     XapitMember.xapit do |index|
       records.first.keys.each do |attribute|
-        index.text attribute
-        index.field attribute
-        index.facet attribute
-        index.sortable attribute
+        if block_given?
+          yield(index, attribute)
+        else
+          index.text attribute
+          index.field attribute
+          index.facet attribute
+          index.sortable attribute
+        end
       end
     end
     records.each do |attributes|

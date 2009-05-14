@@ -38,6 +38,11 @@ module Xapit
       #     index.text(:keywords) { |words| words.split(', ') }
       #   end
       # 
+      # You can specify a :weight option to give a text attribute more importance. This will cause search terms matching
+      # that attribute to have a higher rank. The default weight is 1. Decimal (0.5) weight values are not supported.
+      #
+      #   index.text :name, :weight => 10
+      # 
       def xapit(*args)
         @xapit_index_blueprint = IndexBlueprint.new(self, *args)
         yield(@xapit_index_blueprint)
