@@ -6,11 +6,12 @@ module Xapit
       
       # Setup configuration options. The following options are supported.
       # 
-      # <tt>:database_path</tt>:  Where the database is stored.
-      # <tt>:stemming</tt>:       The language to use for stemming, defaults to "english".
-      # <tt>:spelling</tt>:       True or false to enable/disable spelling, defaults to true.
-      # <tt>:indexer</tt>:        Class to handle the indexing, defaults to SimpleIndexer.
-      # <tt>:query_parser</tt>:   Class to handle the parsing, defaults to ClassicQueryParser.
+      # <tt>:database_path</tt>:     Where the database is stored.
+      # <tt>:stemming</tt>:          The language to use for stemming, defaults to "english".
+      # <tt>:spelling</tt>:          True or false to enable/disable spelling, defaults to true.
+      # <tt>:indexer</tt>:           Class to handle the indexing, defaults to SimpleIndexer.
+      # <tt>:query_parser</tt>:      Class to handle the parsing, defaults to ClassicQueryParser.
+      # <tt>:breadcrumb_facets</tt>: Use breadcrumb mode for applied facets. See Collection#applied_facet_options for details.
       #
       def setup(options = {})
         if @options && options[:database_path] != @options[:database_path]
@@ -53,6 +54,10 @@ module Xapit
       
       def stemming
         @options[:stemming]
+      end
+      
+      def breadcrumb_facets?
+        @options[:breadcrumb_facets]
       end
       
       # Fetch Xapian::Database object at configured path. Database is stored in memory.

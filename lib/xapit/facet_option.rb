@@ -43,7 +43,11 @@ module Xapit
     # this one. This conveniently allows you to use this as both an "add this facet" and "remove this facet" link.
     def to_param
       if existing_facet_identifiers.include? identifier
-        (existing_facet_identifiers - [identifier]).join('-')
+        if Xapit::Config.breadcrumb_facets?
+          existing_facet_identifiers[0..existing_facet_identifiers.index(identifier)].join('-')
+        else
+          (existing_facet_identifiers - [identifier]).join('-')
+        end
       else
         (existing_facet_identifiers + [identifier]).join('-')
       end
