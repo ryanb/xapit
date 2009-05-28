@@ -3,3 +3,4 @@ doc
 *.sqlite3
 tmp/**/*
 spec/tmp/**/*
+Manifest
