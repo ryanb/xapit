@@ -6,16 +6,21 @@ module Xapit
           document.add_term(term, options[:weight] || 1)
           database.add_spelling(term) if Config.spelling?
         end
+        if Config.stemming
+          stemmed_terms_for_attribute(member, name, options).each do |term|
+            document.add_term(term, options[:weight] || 1)
+          end
+        end
+      end
+    end
+    
+    def stemmed_terms_for_attribute(member, name, options)
+      terms_for_attribute(member, name, options).map do |term|
+        "Z#{stemmer.call(term)}"
       end
     end
     
     def terms_for_attribute(member, name, options)
-      terms_for_attribute_without_stemming(member, name, options).map do |term|
-        [term, "Z#{stemmer.call(term)}"]
-      end.flatten
-    end
-    
-    def terms_for_attribute_without_stemming(member, name, options)
       content = member.send(name).to_s
       if options[:proc]
         options[:proc].call(content).reject(&:blank?).map(&:to_s).map(&:downcase)

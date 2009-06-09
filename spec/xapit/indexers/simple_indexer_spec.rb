@@ -10,21 +10,21 @@ describe Xapit::SimpleIndexer do
     member = Object.new
     stub(member).description { "This is a test" }
     @index.text(:description)
-    @indexer.terms_for_attribute_without_stemming(member, :description, {}).should == %w[this is a test]
+    @indexer.terms_for_attribute(member, :description, {}).should == %w[this is a test]
   end
   
-  it "should return text term with stemming added" do
+  it "should return text terms with stemming added" do
     member = Object.new
     stub(member).description { "jumping high" }
     @index.text(:description)
-    @indexer.terms_for_attribute(member, :description, {}).should == %w[jumping Zjump high Zhigh]
+    @indexer.stemmed_terms_for_attribute(member, :description, {}).should == %w[Zjump Zhigh]
   end
   
   it "should convert attribute to string when converting text to terms" do
     member = Object.new
     stub(member).num { 123 }
     @index.text(:num)
-    @indexer.terms_for_attribute_without_stemming(member, :num, {}).should == %w[123]
+    @indexer.terms_for_attribute(member, :num, {}).should == %w[123]
   end
   
   it "should add text terms to document when indexing attributes" do
@@ -32,14 +32,14 @@ describe Xapit::SimpleIndexer do
     stub(@indexer).terms_for_attribute { %w[term list] }
     document = Xapian::Document.new
     @indexer.index_text_attributes(nil, document)
-    document.terms.map(&:term).sort.should == %w[term list].sort
+    document.terms.map(&:term).sort.should == %w[Zlist Zterm list term].sort
   end
   
   it "should use given block to generate text terms" do
     member = Object.new
     stub(member).name { "foobar" }
     proc = lambda { |t| [t.length] }
-    @indexer.terms_for_attribute_without_stemming(member, :name, { :proc => proc }).should == ["6"]
+    @indexer.terms_for_attribute(member, :name, { :proc => proc }).should == ["6"]
   end
   
   it "should increment term frequency by weight option" do
