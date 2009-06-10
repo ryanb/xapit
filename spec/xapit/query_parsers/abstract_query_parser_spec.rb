@@ -27,8 +27,8 @@ describe Xapit::AbstractQueryParser do
     parser.spelling_suggestion.should == "foo bar"
   end
     
-  it "should allow an array of not conditions to be specified" do
+  it "should allow an array of conditions to be specified and use OR xapian query." do
     parser = Xapit::AbstractQueryParser.new(:not_conditions => { :foo => %w[hello world]})
-    parser.not_condition_terms.should == %w[Xfoo-hello Xfoo-world]
+    parser.not_condition_terms.first.xapian_query.description.should == Xapit::Query.new(%w[Xfoo-hello Xfoo-world], :or).xapian_query.description
   end
 end

@@ -112,7 +112,7 @@ module Xapit
       if conditions
         conditions.map do |name, value|
           if value.kind_of? Array
-            value.map { |v| condition_term(name, v) }
+            Query.new(value.map { |v| condition_term(name, v) }, :or)
           else
             condition_term(name, value)
           end

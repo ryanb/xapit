@@ -54,10 +54,20 @@ module Xapit
     end
     
     def build_xapian_query(query, operator = :and)
-      if query.kind_of? Xapian::Query
-        query
+      extract_queries(query, operator).inject do |query, extra_query|
+        query = query.xapian_query if query.respond_to? :xapian_query
+        extra_query = extra_query.xapian_query if extra_query.respond_to? :xapian_query
+        Xapian::Query.new(xapian_operator(operator), query, extra_query)
+      end
+    end
+    
+    def extract_queries(query, operator)
+      queries = [query].flatten
+      terms = queries.select { |q| q.kind_of? String }
+      if terms.empty?
+        queries
       else
-        Xapian::Query.new(xapian_operator(operator), [query].flatten)
+        (queries - terms) + [Xapian::Query.new(xapian_operator(operator), terms)]
       end
     end
     

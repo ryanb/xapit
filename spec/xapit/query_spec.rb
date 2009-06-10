@@ -44,4 +44,13 @@ describe Xapit::Query do
     query.or_query("bar")
     query.xapian_query.description.should == expected.description
   end
+  
+  it "should build a query from an array of mixed strings and queries" do
+    expected = Xapian::Query.new(Xapian::Query::OP_AND,
+      Xapian::Query.new(Xapian::Query::OP_AND, ["foo"]),
+      Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])
+    )
+    query = Xapit::Query.new([Xapit::Query.new("foo"), Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])])
+    query.xapian_query.description.should == expected.description
+  end
 end
