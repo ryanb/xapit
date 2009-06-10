@@ -111,16 +111,24 @@ module Xapit
     def condition_terms_from_hash(conditions)
       if conditions
         conditions.map do |name, value|
-          if value.kind_of? Time
-            value = value.to_i
-          elsif value.kind_of? Date
-            value = value.to_time.to_i
+          if value.kind_of? Array
+            value.map { |v| condition_term(name, v) }
+          else
+            condition_term(name, value)
           end
-          "X#{name}-#{value.to_s.downcase}"
-        end
+        end.flatten
       else
         []
       end
+    end
+    
+    def condition_term(name, value)
+      if value.kind_of? Time
+        value = value.to_i
+      elsif value.kind_of? Date
+        value = value.to_time.to_i
+      end
+      "X#{name}-#{value.to_s.downcase}"
     end
   end
 end

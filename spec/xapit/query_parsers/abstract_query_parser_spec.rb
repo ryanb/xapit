@@ -26,4 +26,9 @@ describe Xapit::AbstractQueryParser do
     parser = Xapit::AbstractQueryParser.new(nil, "foo barr")
     parser.spelling_suggestion.should == "foo bar"
   end
+    
+  it "should allow an array of not conditions to be specified" do
+    parser = Xapit::AbstractQueryParser.new(:not_conditions => { :foo => %w[hello world]})
+    parser.not_condition_terms.should == %w[Xfoo-hello Xfoo-world]
+  end
 end
