@@ -117,3 +117,13 @@ Scenario: Unicode characters in search
   Given indexed records named "über cool, uber hot"
   When I query for "über"
   Then I should find records named "über cool"
+
+@focus
+Scenario: Query Field Not Matching
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query "age" not matching "17"
+  Then I should find records named "John"

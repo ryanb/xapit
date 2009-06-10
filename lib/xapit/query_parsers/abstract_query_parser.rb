@@ -10,10 +10,10 @@ module Xapit
     end
     
     def query
-      if (@search_text.split + condition_terms + facet_terms).empty?
+      if (@search_text.split + condition_terms + not_condition_terms + facet_terms).empty?
         base_query
       else
-        @query ||= base_query.and_query(xapian_query_from_text(@search_text)).and_query(condition_terms + facet_terms)
+        @query ||= base_query.and_query(xapian_query_from_text(@search_text)).and_query(condition_terms + facet_terms).not_query(not_condition_terms)
       end
     end
     
@@ -68,18 +68,11 @@ module Xapit
     end
     
     def condition_terms
-      if @options[:conditions]
-        @options[:conditions].map do |name, value|
-          if value.kind_of? Time
-            value = value.to_i
-          elsif value.kind_of? Date
-            value = value.to_time.to_i
-          end
-          "X#{name}-#{value.to_s.downcase}"
-        end
-      else
-        []
-      end
+      condition_terms_from_hash(@options[:conditions])
+    end
+    
+    def not_condition_terms
+      condition_terms_from_hash(@options[:not_conditions])
     end
     
     def facet_terms
@@ -111,6 +104,23 @@ module Xapit
     def term_suggestion(term)
       suggestion = Config.database.get_spelling_suggestion(term.downcase)
       suggestion.blank? ? nil : suggestion
+    end
+    
+    private
+    
+    def condition_terms_from_hash(conditions)
+      if conditions
+        conditions.map do |name, value|
+          if value.kind_of? Time
+            value = value.to_i
+          elsif value.kind_of? Date
+            value = value.to_time.to_i
+          end
+          "X#{name}-#{value.to_s.downcase}"
+        end
+      else
+        []
+      end
     end
   end
 end
