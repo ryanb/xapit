@@ -53,4 +53,10 @@ describe Xapit::Query do
     query = Xapit::Query.new([Xapit::Query.new("foo"), Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])])
     query.xapian_query.description.should == expected.description
   end
+  
+  it "should use xapit query passed in" do
+    expected = Xapian::Query.new(Xapian::Query::OP_AND, ["foo bar"])
+    query = Xapit::Query.new(Xapit::Query.new("foo bar"))
+    query.xapian_query.description.should == expected.description
+  end
 end

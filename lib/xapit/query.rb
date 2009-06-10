@@ -54,10 +54,14 @@ module Xapit
     end
     
     def build_xapian_query(query, operator = :and)
-      extract_queries(query, operator).inject do |query, extra_query|
-        query = query.xapian_query if query.respond_to? :xapian_query
-        extra_query = extra_query.xapian_query if extra_query.respond_to? :xapian_query
-        Xapian::Query.new(xapian_operator(operator), query, extra_query)
+      extract_queries(query, operator).inject(nil) do |query, extra_query|
+        if query
+          extra_query = extra_query.xapian_query if extra_query.respond_to? :xapian_query
+          Xapian::Query.new(xapian_operator(operator), query, extra_query)
+        else
+          extra_query = extra_query.xapian_query if extra_query.respond_to? :xapian_query
+          extra_query
+        end
       end
     end
     
