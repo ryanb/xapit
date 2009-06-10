@@ -5,24 +5,21 @@ module Xapit
   class Query
     attr_reader :default_options, :xapian_query
     
-    def initialize(query)
-      @xapian_query = build_xapian_query(query)
+    def initialize(*args)
+      @xapian_query = build_xapian_query(*args)
       @default_options = { :offset => 0, :sort_descending => false }
     end
     
-    def and_query(query)
-      @xapian_query = Xapian::Query.new(Xapian::Query::OP_AND, @xapian_query, build_xapian_query(query)) unless query.blank?
-      self
+    def and_query(*args)
+      merge_query(:and, *args)
     end
     
-    def or_query(query)
-      @xapian_query = Xapian::Query.new(Xapian::Query::OP_OR, @xapian_query, build_xapian_query(query)) unless query.blank?
-      self
+    def or_query(*args)
+      merge_query(:or, *args)
     end
     
-    def not_query(query)
-      @xapian_query = Xapian::Query.new(Xapian::Query::OP_AND_NOT, @xapian_query, build_xapian_query(query)) unless query.blank?
-      self
+    def not_query(*args)
+      merge_query(:not, *args)
     end
     
     def matchset(options = {})
@@ -51,11 +48,25 @@ module Xapit
     
     private
     
-    def build_xapian_query(query)
+    def merge_query(operator, *args)
+      @xapian_query = Xapian::Query.new(xapian_operator(operator), @xapian_query, build_xapian_query(*args)) unless args.first.blank?
+      self
+    end
+    
+    def build_xapian_query(query, operator = :and)
       if query.kind_of? Xapian::Query
         query
       else
-        Xapian::Query.new(Xapian::Query::OP_AND, [query].flatten)
+        Xapian::Query.new(xapian_operator(operator), [query].flatten)
+      end
+    end
+    
+    def xapian_operator(operator)
+      case operator
+      when :and then Xapian::Query::OP_AND
+      when :or then Xapian::Query::OP_OR
+      when :not then Xapian::Query::OP_AND_NOT
+      else raise "Unknown Xapian operator #{operator}"
       end
     end
   end

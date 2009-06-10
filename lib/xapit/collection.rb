@@ -18,7 +18,7 @@ module Xapit
       collection = new(member.class, *args)
       indexer = SimpleIndexer.new(member.class.xapit_index_blueprint)
       terms = indexer.text_terms(member) + indexer.field_terms(member)
-      collection.base_query.and_query(Xapian::Query.new(Xapian::Query::OP_OR, terms))
+      collection.base_query.and_query(terms, :or)
       collection.base_query.not_query("Q#{member.class}-#{member.id}")
       collection
     end

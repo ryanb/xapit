@@ -47,7 +47,7 @@ module Xapit
     end
     
     def initial_query
-      query = Query.new(Xapian::Query.new(Xapian::Query::OP_OR, initial_query_strings))
+      query = Query.new(initial_query_strings, :or)
       query.default_options[:offset] = offset
       query.default_options[:limit] = per_page
       query.default_options[:sort_by_values] = sort_by_values

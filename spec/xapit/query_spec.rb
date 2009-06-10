@@ -19,6 +19,12 @@ describe Xapit::Query do
     query.xapian_query.description.should == expected.description
   end
   
+  it "should build a query from an array of strings with :or operator" do
+    expected = Xapian::Query.new(Xapian::Query::OP_OR, %w[foo bar])
+    query = Xapit::Query.new(%w[foo bar], :or)
+    query.xapian_query.description.should == expected.description
+  end
+  
   it "should AND two queries together" do
     expected = Xapian::Query.new(Xapian::Query::OP_AND,
       Xapian::Query.new(Xapian::Query::OP_AND, ["foo"]),
