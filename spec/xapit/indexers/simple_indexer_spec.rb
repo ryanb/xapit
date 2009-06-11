@@ -50,4 +50,20 @@ describe Xapit::SimpleIndexer do
     @indexer.index_text_attributes(member, document)
     document.terms.first.wdf.should == 10
   end
+  
+  it "should increment term frequency by weight option" do
+    member = Object.new
+    stub(member).description { "This is a test" }
+    @index.text(:description, :weight => 10)
+    document = Xapian::Document.new
+    @indexer.index_text_attributes(member, document)
+    document.terms.first.wdf.should == 10
+  end
+  
+  it "should return terms separated by array" do
+    member = Object.new
+    stub(member).description { ["foo bar", 6, "", nil] }
+    @index.text(:description)
+    @indexer.terms_for_attribute(member, :description, {}).should == ["foo bar", "6"]
+  end
 end

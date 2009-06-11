@@ -21,11 +21,13 @@ module Xapit
     end
     
     def terms_for_attribute(member, name, options)
-      content = member.send(name).to_s
+      content = member.send(name)
       if options[:proc]
-        options[:proc].call(content).reject(&:blank?).map(&:to_s).map(&:downcase)
+        options[:proc].call(content.to_s).reject(&:blank?).map(&:to_s).map(&:downcase)
+      elsif content.kind_of? Array
+        content.reject(&:blank?).map(&:to_s).map(&:downcase)
       else
-        content.scan(/\w+/u).map(&:downcase)
+        content.to_s.scan(/\w+/u).map(&:downcase)
       end
     end
     

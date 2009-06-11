@@ -23,4 +23,13 @@ describe Xapit::ClassicIndexer do
     @indexer.index_text_attributes(member, document)
     document.terms.map(&:term).sort.should == %w[6].sort
   end
+  
+  it "should return terms separated by array" do
+    member = Object.new
+    stub(member).description { ["foo bar", 6, "", nil] }
+    @index.text(:description)
+    document = Xapian::Document.new
+    @indexer.index_text_attributes(member, document)
+    document.terms.map(&:term).sort.should == ["foo bar", "6"].sort
+  end
 end

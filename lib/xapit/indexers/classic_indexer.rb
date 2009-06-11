@@ -3,11 +3,13 @@ module Xapit
     def index_text_attributes(member, document)
       term_generator.document = document
       @blueprint.text_attributes.each do |name, options|
-        content = member.send(name).to_s
+        content = member.send(name)
         if options[:proc]
-          index_terms(options[:proc].call(content).reject(&:blank?).map(&:to_s).map(&:downcase), document)
+          index_terms(options[:proc].call(content.to_s).reject(&:blank?).map(&:to_s).map(&:downcase), document)
+        elsif content.kind_of? Array
+          index_terms(content.reject(&:blank?).map(&:to_s).map(&:downcase), document)
         else
-          term_generator.index_text(content)
+          term_generator.index_text(content.to_s)
         end
       end
     end
