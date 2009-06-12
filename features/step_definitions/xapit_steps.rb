@@ -1,10 +1,10 @@
 Given /^I configured the database to be saved at "([^\"]*)"$/ do |path|
-  Xapit::Config.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
+  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
 end
 
 Given /^an empty database at "([^\"]*)"$/ do |path|
-  Xapit::Config.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
-  Xapit::Config.remove_database
+  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
+  Xapit.remove_database
   XapitMember.delete_all
 end
 

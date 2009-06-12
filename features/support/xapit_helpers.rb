@@ -1,6 +1,6 @@
 module XapitHelpers
   def create_records(records,  perform_index = true)
-    Xapit::Config.remove_database
+    Xapit.remove_database
     XapitMember.delete_all
     XapitMember.xapit do |index|
       records.first.keys.each do |attribute|

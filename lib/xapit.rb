@@ -4,9 +4,8 @@ require 'xapian'
 
 # Looking for more documentation? A good place to start is Xapit::Membership
 module Xapit
-  
   # Index all membership classes with xapit defined. Delegates to Xapit::IndexBlueprint.
-  # You will likely want to call Xapit::Config.remove_database before this.
+  # You will likely want to call Xapit.remove_database before this.
   def self.index_all(*args, &block)
     IndexBlueprint.index_all(*args, &block)
   end
@@ -20,6 +19,24 @@ module Xapit
   # See Xapit::Membership for details on search options.
   def self.search(*args)
     Collection.new(nil, *args)
+  end
+  
+  # Setup configuration options. The following options are supported.
+  # 
+  # <tt>:database_path</tt>:     Where the database is stored.
+  # <tt>:stemming</tt>:          The language to use for stemming, defaults to "english".
+  # <tt>:spelling</tt>:          True or false to enable/disable spelling, defaults to true.
+  # <tt>:indexer</tt>:           Class to handle the indexing, defaults to SimpleIndexer.
+  # <tt>:query_parser</tt>:      Class to handle the parsing, defaults to ClassicQueryParser.
+  # <tt>:breadcrumb_facets</tt>: Use breadcrumb mode for applied facets. See Collection#applied_facet_options for details.
+  #
+  def self.setup(*args)
+    Config.setup(*args)
+  end
+  
+  # Removes the configured database file and clears the stored one in memory.
+  def self.remove_database
+    Config.remove_database
   end
 end
 

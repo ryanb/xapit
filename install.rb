@@ -3,7 +3,7 @@ unless File.exist? path
   puts "Adding setup_xapit.rb initializer."
   File.open(path, "w") do |f|
     f.write <<-EOS
-Xapit::Config.setup(:database_path => "\#{Rails.root}/db/xapiandb")
+Xapit.setup(:database_path => "\#{Rails.root}/db/xapiandb")
 EOS
   end
 end

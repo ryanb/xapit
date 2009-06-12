@@ -118,7 +118,7 @@ module Xapit
     # If you set :breadcrumb_facets option to true in Config#setup the link will drop leftover facets
     # instead of removing the current one. This makes it easy to add a breadcrumb style interface.
     #
-    #   Config.setup(:breadcrumb_facets => true)
+    #   Xapit.setup(:breadcrumb_facets => true)
     #   <% for option in @articles.applied_facet_options %>
     #     <%= link_to h(option.name), :overwrite_params => { :facets => option } %> &gt;
     #   <% end %>

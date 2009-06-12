@@ -90,7 +90,7 @@ module Xapit
     end
     
     def spelling_suggestion
-      raise "Spelling has been disabled. Enable spelling in Xapit::Config.setup." unless Config.spelling?
+      raise "Spelling has been disabled. Enable spelling in Xapit.setup." unless Config.spelling?
       if [@search_text, *@search_text.scan(/\w+/)].all? { |term| term_suggestion(term).nil? }
         nil
       else

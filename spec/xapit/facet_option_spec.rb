@@ -9,7 +9,7 @@ describe Xapit::FacetOption do
   end
   
   it "should remove current identifier from previous identifiers if it exists" do
-    Xapit::Config.setup(:breadcrumb_facets => false)
+    Xapit.setup(:breadcrumb_facets => false)
     option = Xapit::FacetOption.new(nil, nil, nil)
     option.existing_facet_identifiers = ["abc", "123", "foo"]
     stub(option).identifier { "foo" }
@@ -17,7 +17,7 @@ describe Xapit::FacetOption do
   end
   
   it "should support breadcrumb style facets" do
-    Xapit::Config.setup(:breadcrumb_facets => true)
+    Xapit.setup(:breadcrumb_facets => true)
     option = Xapit::FacetOption.new(nil, nil, nil)
     option.existing_facet_identifiers = ["abc", "123", "foo"]
     stub(option).identifier { "123" }

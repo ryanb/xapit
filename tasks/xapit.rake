@@ -4,7 +4,7 @@ unless @xapit_rake_loaded
   namespace :xapit do
     desc "Index all xapit models."
     task :index => :environment do
-      Xapit::Config.remove_database
+      Xapit.remove_database
       Xapit.index_all do |member_class|
         puts "Indexing #{member_class.name}"
       end

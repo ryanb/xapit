@@ -61,7 +61,7 @@ To perform the indexing, run the xapit:index rake task.
 
 It can also be triggered through Ruby code using this command.
 
-  Xapit::Config.remove_database
+  Xapit.remove_database
   Xapit.index_all
 
 
@@ -140,11 +140,11 @@ You can also list the applied facets along with a remove link.
 
 When installing Xapit as a Rails plugin, an initializer file is automatically created to setup. It looks like this.
 
-  Xapit::Config.setup(:database_path => "#{Rails.root}/db/xapiandb")
+  Xapit.setup(:database_path => "#{Rails.root}/db/xapiandb")
 
 There are many other options you can pass into here. This is a more advanced configuration setting which changes the stemming language, disables spelling, and changes the indexer and parser to a classic variation. The classic ones use Xapian's built-in term generator and query parser instead of the ones offered by Xapit.
 
-  Xapit::Config.setup(
+  Xapit.setup(
     :database_path => "#{Rails.root}/db/external/xapiandb",
     :spelling => false,
     :stemming => "german",
