@@ -11,8 +11,13 @@ class XapitMember
     @@records = []
   end
   
-  def self.find(id)
-    @@records.detect { |r| r.id == id.to_i }
+  def self.find(ids)
+    if ids.kind_of? Array
+      # change the order to mimic database where we can't predict the order
+      ids.sort.map { |id| @@records.detect { |r| r.id == id.to_i } }
+    else
+      @@records.detect { |r| r.id == ids.to_i }
+    end
   end
   
   def initialize(attributes = {})
