@@ -93,7 +93,14 @@ module Xapit
         
         # The Xapit::AbstractAdapter used to perform database queries on.
         def xapit_adapter
-          @xapit_adapter ||= Xapit::ActiveRecordAdapter.new(self)
+          @xapit_adapter ||= begin
+            adapter_class = AbstractAdapter.subclasses.detect { |a| a.for_class?(self) }
+            if adapter_class
+              adapter_class.new(self)
+            else
+              raise "Unable to find Xapit adapter for class #{self.name}"
+            end
+          end
         end
         
         # Finds a Xapit::FacetBlueprint for the given attribute.

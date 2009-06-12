@@ -1,7 +1,8 @@
 module Xapit
-  class ActiveRecordAdapter
-    def initialize(target)
-      @target = target
+  # This adapter is used for all ActiveRecord models. See AbstractAdapter for details.
+  class ActiveRecordAdapter < AbstractAdapter
+    def self.for_class?(member_class)
+      member_class.ancestors.map(&:to_s).include? "ActiveRecord::Base"
     end
     
     def find_single(id)

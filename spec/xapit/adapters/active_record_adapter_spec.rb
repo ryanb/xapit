@@ -1,6 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Xapit::ActiveRecordAdapter do
+  it "should be used for ActiveRecord::Base subclasses" do
+    Xapit::ActiveRecordAdapter.should_not be_for_class(Object)
+    klass = Object.new
+    stub(klass).ancestors { ["ActiveRecord::Base"] }
+    Xapit::ActiveRecordAdapter.should be_for_class(klass)
+  end
+  
   it "should pass find_single to find method to target" do
     target = Object.new
     mock(target).find(1) { :record }

@@ -21,6 +21,7 @@ describe XapitMember do
       XapitMember.xapit do |index|
         index.text :description
       end
+      XapitMember.instance_variable_set("@xapit_adapter", nil)
     end
     
     it "should have xapit index blueprint" do
@@ -39,6 +40,16 @@ describe XapitMember do
     
     it "should have an adapter" do
       XapitMember.xapit_adapter.class.should == Xapit::ActiveRecordAdapter
+    end
+    
+    it "should use DataMapper adapter if that is ancestor" do
+      stub(XapitMember).ancestors { ["DataMapper::Resource"] }
+      XapitMember.xapit_adapter.class.should == Xapit::DataMapperAdapter
+    end
+    
+    it "should raise an exception when no adapter is found" do
+      stub(XapitMember).ancestors { [] }
+      lambda { XapitMember.xapit_adapter }.should raise_error
     end
   end
 end
