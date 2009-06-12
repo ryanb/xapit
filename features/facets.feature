@@ -61,3 +61,30 @@ Scenario: Ignore Facets That Do Not Narrow Down List
   Then I should have the following facets
     | facet | option | count |
     | Name  | Jack   | 1     |
+
+Scenario: Query for One Facet
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query facets "0c93ee1"
+  Then I should find records named "Jane, Jack"
+
+Scenario: Query for Two Facets
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query facets "0c93ee1-078661c"
+  Then I should find records named "Jane"
+
+Scenario: Query for Facets with Keywords
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 17  |
+  When I query "Jane" with facets "0c93ee1"
+  Then I should find record named "Jane"

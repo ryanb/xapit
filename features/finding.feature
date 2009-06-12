@@ -36,24 +36,6 @@ Scenario: Query for Page 2
   Then I should find 1 record
   And I should have 3 records total
 
-Scenario: Query for One Facet
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query facets "0c93ee1"
-  Then I should find records named "Jane, Jack"
-
-Scenario: Query for Two Facets
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query facets "0c93ee1-078661c"
-  Then I should find records named "Jane"
-
 Scenario: Query for All Records Class Agnostic
   Given indexed records named "John, Jane"
   When I query for "John" on Xapit
@@ -68,49 +50,6 @@ Scenario: Query Matching Not Query
   Given indexed records named "John Smith, John Johnson"
   When I query for "John NOT Smith"
   Then I should find records named "John Johnson"
-
-Scenario: Query for Facets with Keywords
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query "Jane" with facets "0c93ee1"
-  Then I should find record named "Jane"
-
-Scenario: Query for All Records Sorted by Name
-  Given indexed records named "Zebra, Apple, Banana"
-  When I query "" sorted by name
-  Then I should find records named "Apple, Banana, Zebra"
-
-Scenario: Query for All Records Sorted by Age then Name
-  Given the following indexed records
-    | name   | age |
-    | Banana | 23  |
-    | Zebra  | 17  |
-    | Apple  | 17  |
-  When I query "" sorted by age, name
-  Then I should find records named "Apple, Zebra, Banana"
-
-Scenario: Query for All Records Sorted by Name Descending
-  Given indexed records named "Zebra, Apple, Banana"
-  When I query "" sorted by name descending
-  Then I should find records named "Zebra, Banana, Apple"
-
-Scenario: Spelling suggestion
-  Given indexed records named "Zebra, Apple, Bike"
-  When I query for "zerba bike aple"
-  Then I should have "zebra bike apple" as a spelling suggestion
-
-Scenario: Match similar words with stemming
-  Given indexed records named "flies, fly, glider"
-  When I query for "flying"
-  Then I should find records named "flies, fly"
-
-Scenario: Find similar records
-  Given indexed records named "Jason John Smith, John Doe, Jason Smith, Jacob Johnson"
-  When I query for similar records for "Jason John Smith"
-  Then I should find records named "Jason Smith, John Doe"
 
 Scenario: Unicode characters in search
   Given indexed records named "über cool, uber hot"

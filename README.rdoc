@@ -169,7 +169,7 @@ Adapters are used to support multiple ORMs since not everyone uses ActiveRecord.
 
 If you have found a bug to report or a feature to request, please add it to the GitHub issue tracker if it is not there already.
 
-http://github.com/ryanb/xapit/issues/
+http://github.com/ryanb/xapit/issues
 
 
 == Development
