@@ -64,6 +64,13 @@ It can also be triggered through Ruby code using this command.
   Xapit.remove_database
   Xapit.index_all
 
+You may want to trigger this via a cron job on a recurring schedule (i.e. every day) to update the Xapian database. However it will only take effect after the Rails application is restarted because the Xapian database is stored in memory.
+
+There are two projects in development to help improve this reindexing.
+
+  http://github.com/ryanb/xapit-sync/tree/master
+  http://github.com/ryanb/xapit-server/tree/master
+
 
 == Search
 
