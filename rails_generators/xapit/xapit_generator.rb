@@ -1,4 +1,4 @@
-class NiftyConfigGenerator < Rails::Generator::Base
+class XapitGenerator < Rails::Generator::Base
   def manifest
     record do |m|
       m.directory "config/initializers"
