@@ -26,6 +26,7 @@ describe XapitMember do
     it "should have xapit index blueprint" do
       XapitMember.xapit_index_blueprint.should be_kind_of(Xapit::IndexBlueprint)
     end
+    
     it "should return collection from search" do
       XapitMember.search("foo").class.should == Xapit::Collection
     end
@@ -34,6 +35,10 @@ describe XapitMember do
       member = XapitMember.new
       member.xapit_relevance = 123
       member.xapit_relevance.should == 123
+    end
+    
+    it "should have an adapter" do
+      XapitMember.xapit_adapter.class.should == Xapit::ActiveRecordAdapter
     end
   end
 end

@@ -90,7 +90,12 @@ module Xapit
         def xapit_index_blueprint
           @xapit_index_blueprint
         end
-      
+        
+        # The Xapit::AbstractAdapter used to perform database queries on.
+        def xapit_adapter
+          @xapit_adapter ||= Xapit::ActiveRecordAdapter.new(self)
+        end
+        
         # Finds a Xapit::FacetBlueprint for the given attribute.
         def xapit_facet_blueprint(attribute)
           result = xapit_index_blueprint.facets.detect { |f| f.attribute.to_s == attribute.to_s }

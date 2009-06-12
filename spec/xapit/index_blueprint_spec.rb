@@ -2,6 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Xapit::IndexBlueprint do
   before(:each) do
+    XapitMember.xapit { } # call so methods are generated
     @index = Xapit::IndexBlueprint.new(XapitMember)
   end
   
@@ -53,8 +54,8 @@ describe Xapit::IndexBlueprint do
   end
   
   it "should pass in extra arguments to each method" do
-    index = Xapit::IndexBlueprint.new(Object, :foo, :bar => :blah)
-    mock(Object).find_each(:foo, :bar => :blah)
+    index = Xapit::IndexBlueprint.new(XapitMember, :foo, :bar => :blah)
+    mock(XapitMember).find_each(:foo, :bar => :blah)
     index.index_all
   end
 end
