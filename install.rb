@@ -1,9 +1,6 @@
-path = "#{Rails.root}/config/initializers/setup_xapit.rb"
-unless File.exist? path
+source = File.join(File.dirname(__FILE__), '/rails_generators/xapit/templates/setup_xapit.rb')
+destination = "#{Rails.root}/config/initializers/setup_xapit.rb"
+unless File.exist? destination
   puts "Adding setup_xapit.rb initializer."
-  File.open(path, "w") do |f|
-    f.write <<-EOS
-Xapit.setup(:database_path => "\#{Rails.root}/db/xapiandb")
-EOS
-  end
+  File.cp(source, destination)
 end
