@@ -79,10 +79,16 @@ module Xapit
       end
     end
     
-    def sortable_position_for(sortable_attribute)
+    def position_of_sortable(sortable_attribute)
       index = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
       raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if index.nil?
       index + facets.size
+    end
+    
+    def position_of_field(field_attribute)
+      index = field_attributes.map(&:to_s).index(field_attribute.to_s)
+      raise "Unable to find indexed field attribute \"#{field_attribute}\" in #{@member_class} field attributes: #{field_attributes.inspect}" if index.nil?
+      index + facets.size + sortable_attributes.size
     end
     
     private

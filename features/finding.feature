@@ -64,3 +64,12 @@ Scenario: Query Field Not Matching
     | Jack | 17  |
   When I query "age" not matching "17"
   Then I should find records named "John"
+
+Scenario: Query Range of Integer
+  Given the following indexed records
+    | name | age |
+    | John | 8   |
+    | Jane | 13  |
+    | Jack | 24  |
+  When I query "age" between 8 and 15
+  Then I should find records named "John, Jane"

@@ -37,7 +37,14 @@ describe Xapit::IndexBlueprint do
     @index.facet(:foo)
     @index.facet(:test)
     @index.sortable(:bar, :blah)
-    @index.sortable_position_for(:blah).should == 3
+    @index.position_of_sortable(:blah).should == 3
+  end
+  
+  it "should have a field position offset by facets + sortable" do
+    @index.facet(:foo)
+    @index.sortable(:bar, :blah)
+    @index.field(:bar, :blah)
+    @index.position_of_field(:blah).should == 4
   end
   
   it "should index member document into database" do

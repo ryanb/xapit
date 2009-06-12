@@ -74,6 +74,10 @@ When /^I query "([^\"]*)" not matching "([^\"]*)"$/ do |field, value|
   @records = XapitMember.search("", :not_conditions => { field.to_sym => value })
 end
 
+When /^I query "([^\"]*)" between (\d+) and (\d+)$/ do |field, beginning, ending|
+  @records = XapitMember.search("", :conditions => { field.to_sym => beginning.to_i..ending.to_i })
+end
+
 When /^I query page ([0-9]+) at ([0-9]+) per page$/ do |page, per_page|
   @records = XapitMember.search("", :page => page, :per_page => per_page.to_i)
 end

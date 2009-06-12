@@ -71,11 +71,24 @@ module Xapit
     end
     
     def values(member)
-      facet_values(member) + sortable_values(member)
+      facet_values(member) + sortable_values(member) + field_values(member)
     end
     
     def sortable_values(member)
       @blueprint.sortable_attributes.map do |sortable|
+        value = member.send(sortable)
+        value = value.first if value.kind_of? Array
+        if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
+          Xapian.sortable_serialise(value.to_f)
+        else
+          value.to_s.downcase
+        end
+      end
+    end
+    
+    # TODO remove duplication with sortable_values
+    def field_values(member)
+      @blueprint.field_attributes.map do |sortable|
         value = member.send(sortable)
         value = value.first if value.kind_of? Array
         if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/

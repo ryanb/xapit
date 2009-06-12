@@ -31,4 +31,11 @@ describe Xapit::AbstractQueryParser do
     parser = Xapit::AbstractQueryParser.new(:not_conditions => { :foo => %w[hello world]})
     parser.not_condition_terms.first.xapian_query.description.should == Xapit::Query.new(%w[Xfoo-hello Xfoo-world], :or).xapian_query.description
   end
+    
+  it "should allow range condition to be specified and use VALUE_RANGE xapian query." do
+    XapitMember.xapit { |i| i.field :foo }
+    expected = Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, 0, Xapian.sortable_serialise(2), Xapian.sortable_serialise(5))
+    parser = Xapit::AbstractQueryParser.new(XapitMember, :conditions => { :foo => 2..5 })
+    parser.condition_terms.first.description.should == expected.description
+  end
 end

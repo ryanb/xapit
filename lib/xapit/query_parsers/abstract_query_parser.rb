@@ -34,10 +34,10 @@ module Xapit
         index = @member_class.xapit_index_blueprint
         if @options[:order].kind_of? Array
           @options[:order].map do |attribute|
-            index.sortable_position_for(attribute)
+            index.position_of_sortable(attribute)
           end
         else
-          [index.sortable_position_for(@options[:order])]
+          [index.position_of_sortable(@options[:order])]
         end
       end
     end
@@ -113,6 +113,9 @@ module Xapit
         conditions.map do |name, value|
           if value.kind_of? Array
             Query.new(value.map { |v| condition_term(name, v) }, :or)
+          elsif value.kind_of?(Range) && @member_class
+            position = @member_class.xapit_index_blueprint.position_of_field(name)
+            Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapian.sortable_serialise(value.begin.to_f), Xapian.sortable_serialise(value.end.to_f))
           else
             condition_term(name, value)
           end

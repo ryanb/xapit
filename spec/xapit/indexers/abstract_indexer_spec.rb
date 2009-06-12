@@ -85,4 +85,11 @@ describe Xapit::AbstractIndexer do
     @index.sortable(:age)
     @indexer.values(member).should == [Xapian.sortable_serialise(1)]
   end
+  
+  it "should add sortable_serialze value for numeric field" do
+    member = Object.new
+    stub(member).age { [1, 2] }
+    @index.field(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(1)]
+  end
 end
