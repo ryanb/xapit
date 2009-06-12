@@ -153,17 +153,9 @@ There are many other options you can pass into here. This is a more advanced con
   )
 
 
-== Outside of Rails
+== Adapters
 
-Xapit can be used outside of Rails too. You'll just need to include the membership module:
-
-  class Product # not Active Record
-    include Xapit::Membership
-  
-    xapit # ...
-  end
-
-This class is expected to respond to "find_each" (Product.find_each) which is used to iterate through the records when indexing and "find" for fetching a record by "id".
+Adapters are used to support multiple ORMs since not everyone uses ActiveRecord. The right adapter is detected automatically so you should not have to do anything for popular ORMs. However if your ORM is not supported then it is very easy to make your own adapter. See AbstractAdapter class for details.
 
 
 == Bug Reports
