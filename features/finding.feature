@@ -45,7 +45,6 @@ Scenario: Query for One Facet
   When I query facets "0c93ee1"
   Then I should find records named "Jane, Jack"
 
-
 Scenario: Query for Two Facets
   Given the following indexed records
     | name | age |
@@ -118,7 +117,6 @@ Scenario: Unicode characters in search
   When I query for "über"
   Then I should find records named "über cool"
 
-@focus
 Scenario: Query Field Not Matching
   Given the following indexed records
     | name | age |

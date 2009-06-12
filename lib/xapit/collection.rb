@@ -103,7 +103,7 @@ module Xapit
     # Xapit::Facet objects matching this search query. See class for details.
     def facets
       all_facets.select do |facet|
-        facet.options.size > 1
+        facet.options.size > 0
       end
     end
     

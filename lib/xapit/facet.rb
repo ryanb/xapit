@@ -23,11 +23,13 @@ module Xapit
     # Xapit::FacetOption objects for this facet. This only lists the ones which match the current query.
     def options
       matching_identifiers.map do |identifier, count|
-        option = FacetOption.find(identifier)
-        if option.facet.attribute == @blueprint.attribute
-          option.count = count
-          option.existing_facet_identifiers = @existing_facet_identifiers
-          option
+        if count < @query.count
+          option = FacetOption.find(identifier)
+          if option.facet.attribute == @blueprint.attribute
+            option.count = count
+            option.existing_facet_identifiers = @existing_facet_identifiers
+            option
+          end
         end
       end.compact.sort_by(&:name)
     end
