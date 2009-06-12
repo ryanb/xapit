@@ -73,6 +73,12 @@ module Xapit
         #   # search based on indexed fields
         #   @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
         #   
+        #   # search for multiple negative conditions (doesn't match 3, 5, or 8)
+        #   @articles = Article.search(:not_conditions => { :category_id => [3, 5, 8] })
+        #   
+        #   # search for range of conditions by number
+        #   @articles = Article.search(:conditions => { :released_at => 2.years.ago..Time.now })
+        #   
         #   # manually sort based on any number of indexed fields, sort defaults to most relevant
         #   @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
         #

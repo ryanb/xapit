@@ -1,3 +1,27 @@
+*0.2.0* (June 12th, 2009)
+
+* sort numeric attributes properly
+
+* adding xapit generator for use with gem install
+
+* adding Xapit.setup/remove_database instead of through Xapit::Config
+
+* adding foundation for adapters to support other ORMs
+
+* facet options which do not narrow down results are ignored
+
+* performance improvements when fetching records and displaying facets
+
+* search conditions can take an array or range of values
+
+  :conditions => { :priority => [2, 5, 7] }
+  :conditions => { :priority => 2..7 }
+
+* adding not_condition option in search method
+
+* fixing spelling suggestions when used with stemming
+
+
 *0.1.0* (May 28th, 2009)
 
 * initial release
