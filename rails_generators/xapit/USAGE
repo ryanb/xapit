@@ -1,0 +1,13 @@
+Description:
+    Generates files necessary to setup Xapit. This includes an initializer
+    to specify the configuration (setup_xapit.rb) and a rake file to load
+    the rake tasks (xapit.rake).
+    
+    IMPORTANT: Only use this generator if you are using the gem version of
+    Xapit, it is not needed if you are installing via Rails plugin.
+
+Examples:
+    script/generate xapit
+
+        Initializer: config/initializers/setup_xapit.rb
+        Rake Tasks:  lib/tasks/xapit.rake
