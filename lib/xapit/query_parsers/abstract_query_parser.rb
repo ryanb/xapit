@@ -115,7 +115,7 @@ module Xapit
             Query.new(value.map { |v| condition_term(name, v) }, :or)
           elsif value.kind_of?(Range) && @member_class
             position = @member_class.xapit_index_blueprint.position_of_field(name)
-            Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapian.sortable_serialise(value.begin.to_f), Xapian.sortable_serialise(value.end.to_f))
+            Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
           else
             condition_term(name, value)
           end

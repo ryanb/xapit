@@ -78,11 +78,7 @@ module Xapit
       @blueprint.sortable_attributes.map do |sortable|
         value = member.send(sortable)
         value = value.first if value.kind_of? Array
-        if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
-          Xapian.sortable_serialise(value.to_f)
-        else
-          value.to_s.downcase
-        end
+        Xapit.serialize_value(value)
       end
     end
     
@@ -91,11 +87,7 @@ module Xapit
       @blueprint.field_attributes.map do |sortable|
         value = member.send(sortable)
         value = value.first if value.kind_of? Array
-        if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
-          Xapian.sortable_serialise(value.to_f)
-        else
-          value.to_s.downcase
-        end
+        Xapit.serialize_value(value)
       end
     end
     

@@ -72,7 +72,7 @@ describe Xapit::AbstractIndexer do
     @indexer.field_terms(member).should == ["Xcreated_on-#{member.created_on.to_time.to_i}"]
   end
   
-  it "should use sortable_serialze for numeric fields" do
+  it "should use sortable_serialze for numeric sortable" do
     member = Object.new
     stub(member).age { 7.89 }
     @index.sortable(:age)
@@ -91,5 +91,21 @@ describe Xapit::AbstractIndexer do
     stub(member).age { [1, 2] }
     @index.field(:age)
     @indexer.values(member).should == [Xapian.sortable_serialise(1)]
+  end
+  
+  it "should use sortable_serialze for date field" do
+    date = Date.today
+    member = Object.new
+    stub(member).age { date }
+    @index.field(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(date.to_time.to_i)]
+  end
+  
+  it "should use sortable_serialze for time field" do
+    time = Time.now
+    member = Object.new
+    stub(member).age { time }
+    @index.field(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(time.to_i)]
   end
 end
