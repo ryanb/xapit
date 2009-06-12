@@ -76,15 +76,14 @@ module Xapit
     
     def sortable_values(member)
       @blueprint.sortable_attributes.map do |sortable|
-        values = member.send(sortable)
-        [values].flatten.map do |value|
-          if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
-            Xapian.sortable_serialise(value.to_f)
-          else
-            value.to_s.downcase
-          end
+        value = member.send(sortable)
+        value = value.first if value.kind_of? Array
+        if value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
+          Xapian.sortable_serialise(value.to_f)
+        else
+          value.to_s.downcase
         end
-      end.flatten
+      end
     end
     
     def facet_values(member)

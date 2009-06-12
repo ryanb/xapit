@@ -78,4 +78,11 @@ describe Xapit::AbstractIndexer do
     @index.sortable(:age)
     @indexer.values(member).should == [Xapian.sortable_serialise(7.89)]
   end
+  
+  it "should only use first value if sortable attribute is an array" do
+    member = Object.new
+    stub(member).age { [1, 2] }
+    @index.sortable(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(1)]
+  end
 end
