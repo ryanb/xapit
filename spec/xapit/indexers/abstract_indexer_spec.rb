@@ -71,4 +71,11 @@ describe Xapit::AbstractIndexer do
     @index.field(:created_on)
     @indexer.field_terms(member).should == ["Xcreated_on-#{member.created_on.to_time.to_i}"]
   end
+  
+  it "should use sortable_serialze for numeric fields" do
+    member = Object.new
+    stub(member).age { 7.89 }
+    @index.sortable(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(7.89)]
+  end
 end
