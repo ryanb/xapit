@@ -14,7 +14,16 @@ To install as a Rails plugin, run this command.
 
   script/plugin install git://github.com/ryanb/xapit.git
 
-Note: this will soon also be available as a Ruby gem, but not yet.
+Or to install as a gem in Rails first add this to config/environment.rb.
+
+  config.gem 'xapit'
+  
+And then install the gem and run the generator.
+
+  sudo rake gems:install
+  script/generate xapit
+
+Important: only run the generator script on a gem install, not for the plugin.
 
 
 == Setup
@@ -68,8 +77,8 @@ You may want to trigger this via a cron job on a recurring schedule (i.e. every 
 
 There are two projects in development to help improve this reindexing.
 
-  http://github.com/ryanb/xapit-sync/tree/master
-  http://github.com/ryanb/xapit-server/tree/master
+http://github.com/ryanb/xapit-sync/tree/master
+http://github.com/ryanb/xapit-server/tree/master
 
 
 == Search
