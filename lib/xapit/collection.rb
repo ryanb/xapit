@@ -141,13 +141,15 @@ module Xapit
       @query_parser.spelling_suggestion
     end
     
-    private
-    
+    # All Xapit::Facet objects, even if they do not include options.
+    # Usually you'll want to call Collection#facets
     def all_facets
       @query_parser.member_class.xapit_index_blueprint.facets.map do |facet_blueprint|
         Facet.new(facet_blueprint, @query_parser.query, @query_parser.facet_identifiers)
       end
     end
+    
+    private
     
     def matchset(options = {})
       @query_parser.query.matchset(options)

@@ -20,16 +20,21 @@ module Xapit
       @existing_facet_identifiers = existing_facet_identifiers
     end
     
-    # Xapit::FacetOption objects for this facet. This only lists the ones which match the current query.
+    # Xapit::FacetOption objects for this facet which match the current query.
+    # Hides options which don't narrow down results.
     def options
+      unfiltered_options.select { |o| o.count < @query.count }
+    end
+    
+    # Xapit::FacetOption objects for this facet which match the current query.
+    # Includes options which may not narrow down result set.
+    def unfiltered_options
       matching_identifiers.map do |identifier, count|
-        if count < @query.count
-          option = FacetOption.find(identifier)
-          if option.facet.attribute == @blueprint.attribute
-            option.count = count
-            option.existing_facet_identifiers = @existing_facet_identifiers
-            option
-          end
+        option = FacetOption.find(identifier)
+        if option.facet.attribute == @blueprint.attribute
+          option.count = count
+          option.existing_facet_identifiers = @existing_facet_identifiers
+          option
         end
       end.compact.sort_by(&:name)
     end
