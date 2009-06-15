@@ -1,3 +1,5 @@
+* adding Xapit::Config#reload_database method
+
 *0.2.1* (June 15th, 2009)
 
 * including Xapit::Membership into ActiveRecord when using gem
