@@ -113,9 +113,6 @@ module Xapit
         conditions.map do |name, value|
           if value.kind_of? Array
             Query.new(value.map { |v| condition_term(name, v) }, :or)
-          elsif value.kind_of?(Range) && @member_class
-            position = @member_class.xapit_index_blueprint.position_of_field(name)
-            Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
           else
             condition_term(name, value)
           end
@@ -126,12 +123,17 @@ module Xapit
     end
     
     def condition_term(name, value)
-      if value.kind_of? Time
-        value = value.to_i
-      elsif value.kind_of? Date
-        value = value.to_time.to_i
+      if value.kind_of?(Range) && @member_class
+        position = @member_class.xapit_index_blueprint.position_of_field(name)
+        Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
+      else
+        if value.kind_of? Time
+          value = value.to_i
+        elsif value.kind_of? Date
+          value = value.to_time.to_i
+        end
+        "X#{name}-#{value.to_s.downcase}"
       end
-      "X#{name}-#{value.to_s.downcase}"
     end
   end
 end
