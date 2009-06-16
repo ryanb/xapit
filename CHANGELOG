@@ -1,10 +1,14 @@
+*0.2.2* (June 16th, 2009)
+
 * performance improvements
 
 * adding Xapit::Config#close_database method for convenience
 
+
 *0.2.1* (June 15th, 2009)
 
 * including Xapit::Membership into ActiveRecord when using gem
+
 
 *0.2.0* (June 12th, 2009)
 
