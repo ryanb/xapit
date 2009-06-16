@@ -67,14 +67,17 @@ module Xapit
       # Removes the configured database file and clears the stored one in memory.
       def remove_database # this can be a bit dangers, maybe do some checking here first?
         FileUtils.rm_rf(path) if File.exist? path
-        reload_database
-      end
-      
-      # Clear the current database from memory to fetch it again (upon request).
-      # Note: It is best to only use this on a readable database.
-      def reload_database
         @database = nil
         @writable_database = nil
+      end
+      
+      # Clear the current database from memory. Unfortunately this is a hack because
+      # Xapian doesn't provide a "close" method on the database. We just have to hope
+      # no other references are lying around.
+      def close_database
+        @database = nil
+        @writable_database = nil
+        GC.start
       end
     end
   end
