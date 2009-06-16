@@ -43,12 +43,13 @@ module Xapit
     
     def count
       # a bit of a hack to get more accurate count estimate
-      matchset(:limit => Config.database.doccount).matches_estimated
+      @count ||= matchset(:limit => Config.database.doccount).matches_estimated
     end
     
     private
     
     def merge_query(operator, *args)
+      @count = nil
       @xapian_query = Xapian::Query.new(xapian_operator(operator), @xapian_query, build_xapian_query(*args)) unless args.first.blank?
       self
     end

@@ -1,4 +1,6 @@
-* adding Xapit::Config#reload_database method
+* performance improvements
+
+* adding Xapit::Config#close_database method for convenience
 
 *0.2.1* (June 15th, 2009)
 
