@@ -47,6 +47,7 @@ module Xapit
         @xapit_index_blueprint = IndexBlueprint.new(self, *args)
         yield(@xapit_index_blueprint)
         include AdditionalMethods
+        include XapitSync::Membership if defined? XapitSync
       end
     end
     
