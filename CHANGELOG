@@ -1,3 +1,12 @@
+*0.2.3* (June 18th, 2009)
+
+* adding compatability with Xapit Sync
+
+* adding create/update/destroy record methods for modifying a single record in index
+
+* allow ranges to be specified in conditions array
+
+
 *0.2.2* (June 16th, 2009)
 
 * performance improvements

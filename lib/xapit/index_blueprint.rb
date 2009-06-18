@@ -79,26 +79,31 @@ module Xapit
       end
     end
     
+    # The Xapian value index position of a sortable attribute
     def position_of_sortable(sortable_attribute)
       index = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
       raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if index.nil?
       index + facets.size
     end
     
+    # The Xapian value index position of a field attribute
     def position_of_field(field_attribute)
       index = field_attributes.map(&:to_s).index(field_attribute.to_s)
       raise "Unable to find indexed field attribute \"#{field_attribute}\" in #{@member_class} field attributes: #{field_attributes.inspect}" if index.nil?
       index + facets.size + sortable_attributes.size
     end
     
+    # Add a single record to the index
     def create_record(member_id)
       @indexer.add_member(@member_class.xapit_adapter.find_single(member_id))
     end
     
+    # Update a single record in the index
     def update_record(member_id)
       @indexer.update_member(@member_class.xapit_adapter.find_single(member_id))
     end
     
+    # Remove a single record from the index
     def destroy_record(member_id)
       Xapit::Config.writable_database.delete_document("Q#{@member_class}-#{member_id}")
     end
