@@ -66,10 +66,18 @@ describe Xapit::IndexBlueprint do
     index.index_all
   end
   
-  it "should remove a record from the index" do
+  it "should add a record from the index" do
     member = XapitMember.new(:name => "New Record!")
     @index.text :name
     @index.create_record(member.id)
     XapitMember.search("New Record").should == [member]
+  end
+  
+  it "should remove a record from the index" do
+    member = XapitMember.new(:name => "Bad Record!")
+    @index.text :name
+    @index.index_all
+    @index.destroy_record(member.id)
+    XapitMember.search("Bad Record").should == []
   end
 end
