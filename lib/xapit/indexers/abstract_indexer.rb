@@ -8,6 +8,10 @@ module Xapit
       database.add_document(document_for(member))
     end
     
+    def update_member(member)
+      database.replace_document("Q#{member.class}-#{member.id}", document_for(member))
+    end
+    
     def document_for(member)
       document = Xapian::Document.new
       document.data = "#{member.class}-#{member.id}"

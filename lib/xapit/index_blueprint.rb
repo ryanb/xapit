@@ -95,6 +95,10 @@ module Xapit
       @indexer.add_member(@member_class.xapit_adapter.find_single(member_id))
     end
     
+    def update_record(member_id)
+      @indexer.update_member(@member_class.xapit_adapter.find_single(member_id))
+    end
+    
     def destroy_record(member_id)
       Xapit::Config.writable_database.delete_document("Q#{@member_class}-#{member_id}")
     end

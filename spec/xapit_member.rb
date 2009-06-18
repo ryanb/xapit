@@ -40,4 +40,8 @@ class XapitMember
       super
     end
   end
+  
+  def update_attribute(name, value)
+    @attributes[name] = value
+  end
 end
