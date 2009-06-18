@@ -65,4 +65,11 @@ describe Xapit::IndexBlueprint do
     mock(XapitMember).find_each(:foo, :bar => :blah)
     index.index_all
   end
+  
+  it "should remove a record from the index" do
+    member = XapitMember.new(:name => "New Record!")
+    @index.text :name
+    @index.create_record(member.id)
+    XapitMember.search("New Record").should == [member]
+  end
 end

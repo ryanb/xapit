@@ -91,6 +91,10 @@ module Xapit
       index + facets.size + sortable_attributes.size
     end
     
+    def create_record(member_id)
+      @indexer.add_member(@member_class.xapit_adapter.find_single(member_id))
+    end
+    
     private
     
     # Make sure all models are loaded - without reloading any that
