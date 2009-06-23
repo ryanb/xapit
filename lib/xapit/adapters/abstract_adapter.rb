@@ -27,7 +27,8 @@ module Xapit
     end
     
     # Fetch a single record by the given id.
-    def find_single(id)
+    # The args are the same as those passed from the XapitMember#xapit call.
+    def find_single(id, *args)
       raise "To be implemented in subclass"
     end
     

@@ -1,4 +1,7 @@
+*0.2.4* (June 23rd, 2009)
+
 * only create/update record in index if it matches xapit find conditions
+
 
 *0.2.3* (June 18th, 2009)
 

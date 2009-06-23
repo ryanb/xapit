@@ -93,13 +93,14 @@ module Xapit
       index + facets.size + sortable_attributes.size
     end
     
-    # Add a single record to the index
+    # Add a single record to the index if it matches the xapit options.
     def create_record(member_id)
       member = @member_class.xapit_adapter.find_single(member_id, *@args)
       @indexer.add_member(member) if member
     end
     
-    # Update a single record in the index
+    # Update a single record in the index. If the record does not match the xapit
+    # conditions then it is removed from the index instead.
     def update_record(member_id)
       member = @member_class.xapit_adapter.find_single(member_id, *@args)
       if member
@@ -109,7 +110,7 @@ module Xapit
       end
     end
     
-    # Remove a single record from the index
+    # Remove a single record from the index.
     def destroy_record(member_id)
       Xapit::Config.writable_database.delete_document("Q#{@member_class}-#{member_id}")
     end
