@@ -5,8 +5,8 @@ module Xapit
       member_class.ancestors.map(&:to_s).include? "ActiveRecord::Base"
     end
     
-    def find_single(id)
-      @target.find(id)
+    def find_single(id, *args)
+      @target.find_by_id(id, *args)
     end
     
     def find_multiple(ids)

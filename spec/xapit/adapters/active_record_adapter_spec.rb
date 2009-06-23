@@ -10,9 +10,9 @@ describe Xapit::ActiveRecordAdapter do
   
   it "should pass find_single to find method to target" do
     target = Object.new
-    mock(target).find(1) { :record }
+    mock(target).find_by_id(1, :conditions => "foo") { :record }
     adapter = Xapit::ActiveRecordAdapter.new(target)
-    adapter.find_single(1).should == :record
+    adapter.find_single(1, :conditions => "foo").should == :record
   end
   
   it "should pass find_multiple to find method to target" do

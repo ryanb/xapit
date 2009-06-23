@@ -81,14 +81,6 @@ describe Xapit::IndexBlueprint do
     XapitMember.search("Bad Record").should == []
   end
   
-  it "should remove a record from the index" do
-    member = XapitMember.new(:name => "Bad Record!")
-    @index.text :name
-    @index.index_all
-    @index.destroy_record(member.id)
-    XapitMember.search("Bad Record").should == []
-  end
-  
   it "should update a record in the index" do
     member = XapitMember.new(:name => "New Record!")
     @index.text :name
@@ -96,5 +88,25 @@ describe Xapit::IndexBlueprint do
     member.update_attribute(:name, "Changed Record!")
     @index.update_record(member.id)
     XapitMember.search("Changed Record").should == [member]
+  end
+  
+  it "should not create record index if member isn't found" do
+    Xapit::Config.writable_database # make sure the database is built
+    member = XapitMember.new(:name => "New Record!")
+    stub(XapitMember).find { nil }
+    @index.text :name
+    @index.create_record(member.id)
+    XapitMember.search("New Record").should be_empty
+  end
+  
+  it "should remove record from index when updating a member which doesn't exist" do
+    member = XapitMember.new(:name => "New Record!")
+    @index.text :name
+    @index.index_all
+    stub(XapitMember).find { nil }
+    member.update_attribute(:name, "Changed Record!")
+    @index.update_record(member.id)
+    XapitMember.search("New Record").should be_empty
+    XapitMember.search("Changed Record").should be_empty
   end
 end

@@ -95,12 +95,18 @@ module Xapit
     
     # Add a single record to the index
     def create_record(member_id)
-      @indexer.add_member(@member_class.xapit_adapter.find_single(member_id))
+      member = @member_class.xapit_adapter.find_single(member_id, *@args)
+      @indexer.add_member(member) if member
     end
     
     # Update a single record in the index
     def update_record(member_id)
-      @indexer.update_member(@member_class.xapit_adapter.find_single(member_id))
+      member = @member_class.xapit_adapter.find_single(member_id, *@args)
+      if member
+        @indexer.update_member(member)
+      else
+        destroy_record(member_id)
+      end
     end
     
     # Remove a single record from the index

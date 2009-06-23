@@ -1,3 +1,5 @@
+* only create/update record in index if it matches xapit find conditions
+
 *0.2.3* (June 18th, 2009)
 
 * adding compatability with Xapit Sync
