@@ -6,6 +6,7 @@ describe Xapit::ClassicQueryParser do
   end
   
   it "should have an initial xapian parser with stemming and default operator support" do
+    Xapit::Config.writable_database # just so a database exists
     expected = Xapian::QueryParser.new
     expected.stemmer = Xapian::Stem.new("english")
     expected.stemming_strategy = Xapian::QueryParser::STEM_SOME

@@ -91,3 +91,12 @@ Scenario: Query no partial match on conditions with one letter
     | Jack | Striker  |
   When I query "name" matching "J*"
   Then I should find 0 records
+
+Scenario: Query partial match in keywords
+  Given the following indexed records
+    | name | sirname  |
+    | John | Jacobson |
+    | Bill | Niel     |
+    | Jack | Striker  |
+  When I query for "Ja*"
+  Then I should find records named "John, Jack"
