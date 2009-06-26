@@ -13,4 +13,8 @@ describe Xapit::ClassicQueryParser do
     expected.default_op = Xapian::Query::OP_AND
     @parser.xapian_query_from_text("foo bar").description.should == expected.parse_query("foo bar").description
   end
+  
+  it "should remove asterisks from terms with one letter" do
+    @parser.cleanup_text("J*").should == "J"
+  end
 end

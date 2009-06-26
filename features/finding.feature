@@ -100,3 +100,12 @@ Scenario: Query partial match in keywords
     | Jack | Striker  |
   When I query for "Ja*"
   Then I should find records named "John, Jack"
+
+Scenario: Query no partial match in keywords with one letter
+  Given the following indexed records
+    | name | sirname  |
+    | John | Jacobson |
+    | Bill | Niel     |
+    | Jack | J        |
+  When I query for " J*"
+  Then I should find records named "Jack"
