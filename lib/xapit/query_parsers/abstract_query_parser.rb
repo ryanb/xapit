@@ -126,7 +126,7 @@ module Xapit
       if value.kind_of?(Range) && @member_class
         position = @member_class.xapit_index_blueprint.position_of_field(name)
         Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
-      elsif value.to_s.ends_with? "*" && value.to_s.size > 2
+      elsif value.to_s.ends_with?("*") && value.to_s.strip.length > 2
         wildcard_query(value, "X#{name}-")
       else
         if value.kind_of? Time

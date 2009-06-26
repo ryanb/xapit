@@ -89,7 +89,7 @@ Scenario: Query no partial match on conditions with one letter
     | John | Jacobson |
     | Jane | Niel     |
     | Jack | Striker  |
-  When I query "name" matching "J*"
+  When I query "name" matching " J*"
   Then I should find 0 records
 
 Scenario: Query partial match in keywords
