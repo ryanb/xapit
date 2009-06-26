@@ -74,8 +74,7 @@ Scenario: Query Range of Integer
   When I query "age" between 8 and 15
   Then I should find records named "John, Jane"
 
-@focus
-Scenario: Query Partial Match
+Scenario: Query Partial Match on Condition
   Given the following indexed records
     | name | sirname  |
     | John | Jacobson |
@@ -83,3 +82,12 @@ Scenario: Query Partial Match
     | Jack | Striker  |
   When I query "name" matching "Ja*"
   Then I should find records named "Jane, Jack"
+
+Scenario: Query no partial match on conditions with one letter
+  Given the following indexed records
+    | name | sirname  |
+    | John | Jacobson |
+    | Jane | Niel     |
+    | Jack | Striker  |
+  When I query "name" matching "J*"
+  Then I should find 0 records
