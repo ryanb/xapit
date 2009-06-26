@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'echoe'
 
-Echoe.new('xapit', '0.2.4') do |p|
+Echoe.new('xapit', '0.2.5') do |p|
   p.summary        = "Ruby library for interacting with Xapian, a full text search engine."
   p.description    = "Ruby library for interacting with Xapian, a full text search engine."
   p.url            = "http://github.com/ryanb/xapit"
