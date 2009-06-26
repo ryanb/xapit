@@ -73,3 +73,13 @@ Scenario: Query Range of Integer
     | Jack | 24  |
   When I query "age" between 8 and 15
   Then I should find records named "John, Jane"
+
+@focus
+Scenario: Query Partial Match
+  Given the following indexed records
+    | name | sirname  |
+    | John | Jacobson |
+    | Jane | Niel     |
+    | Jack | Striker  |
+  When I query "name" matching "Ja*"
+  Then I should find records named "Jane, Jack"

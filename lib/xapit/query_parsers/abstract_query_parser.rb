@@ -126,6 +126,8 @@ module Xapit
       if value.kind_of?(Range) && @member_class
         position = @member_class.xapit_index_blueprint.position_of_field(name)
         Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
+      elsif value.to_s.ends_with? "*"
+        wildcard_query(value, "X#{name}-")
       else
         if value.kind_of? Time
           value = value.to_i
@@ -134,6 +136,15 @@ module Xapit
         end
         "X#{name}-#{value.to_s.downcase}"
       end
+    end
+    
+    # Expands the wildcard in the term (just at the end) and returns a query
+    # which will match any term that starts with the given term.
+    def wildcard_query(term, prefix = "")
+      partial_term = term.sub(/\*$/, '') # remove asterisk at end if it exists
+      parser = Xapian::QueryParser.new
+      parser.database = Xapit::Config.database
+      parser.parse_query(partial_term, Xapian::QueryParser::FLAG_PARTIAL, prefix)
     end
   end
 end
