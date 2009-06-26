@@ -89,6 +89,9 @@ module Xapit
         #   # no need to specify first query string when searching all records
         #   @articles = Article.search(:conditions => { :category_id => params[:category_id] })
         #
+        #   # search partial terms with asterisk (only supported at end of term)
+        #   @articles = Article.search("sab*", :conditions => { :name => "Din*" })
+        #
         def search(*args)
           Collection.new(self, *args)
         end

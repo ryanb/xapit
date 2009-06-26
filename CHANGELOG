@@ -1,3 +1,5 @@
+* adding wildcard matching for general search query (ClassicQueryParser only)
+
 * adding wildcard matching when asterisk exists at end of condition
 
   :conditions => { :name => "foo*" }
