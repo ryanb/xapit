@@ -65,7 +65,7 @@ describe Xapit::Facet do
       
       it "should not list facets if only one option is found" do
         blueprint = Xapit::FacetBlueprint.new(XapitMember, 0, :visible)
-        facets = XapitMember.search("", :facets => blueprint.identifiers_for(@visible1)).facets
+        facets = XapitMember.search(:facets => blueprint.identifiers_for(@visible1)).facets
         facets.should be_empty
       end
     end

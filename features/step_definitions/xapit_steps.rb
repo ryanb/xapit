@@ -67,31 +67,31 @@ Then /^I should have ([0-9]+) records? total$/ do |num|
 end
 
 When /^I query "([^\"]*)" matching "([^\"]*)"$/ do |field, value|
-  @records = XapitMember.search("", :conditions => { field.to_sym => value })
+  @records = XapitMember.search(:conditions => { field.to_sym => value })
 end
 
 When /^I query "([^\"]*)" not matching "([^\"]*)"$/ do |field, value|
-  @records = XapitMember.search("", :not_conditions => { field.to_sym => value })
+  @records = XapitMember.search(:not_conditions => { field.to_sym => value })
 end
 
 When /^I query "([^\"]*)" matching "([^\"]*)" or "([^\"]*)" matching "([^\"]*)"$/ do |field1, value1, field2, value2|
-  @records = XapitMember.search("", :conditions => [{ field1.to_sym => value1 }, { field2.to_sym => value2 }])
+  @records = XapitMember.search(:conditions => [{ field1.to_sym => value1 }, { field2.to_sym => value2 }])
 end
 
 When /^I query "([^\"]*)" between (\d+) and (\d+)$/ do |field, beginning, ending|
-  @records = XapitMember.search("", :conditions => { field.to_sym => beginning.to_i..ending.to_i })
+  @records = XapitMember.search(:conditions => { field.to_sym => beginning.to_i..ending.to_i })
 end
 
 When /^I query page ([0-9]+) at ([0-9]+) per page$/ do |page, per_page|
-  @records = XapitMember.search("", :page => page, :per_page => per_page.to_i)
+  @records = XapitMember.search(:page => page, :per_page => per_page.to_i)
 end
 
 When /^I query facets "([^\"]*)"$/ do |facets|
-  @records = XapitMember.search("", :facets => facets)
+  @records = XapitMember.search(:facets => facets)
 end
 
 When /^I query "([^\"]*)" sorted by (.*?)( descending)?$/ do |keywords, sort, descending|
-  @records = XapitMember.search("", :order => sort.split(', '), :descending => descending)
+  @records = XapitMember.search(:order => sort.split(', '), :descending => descending)
 end
 
 When /^I query for similar records for "([^\"]*)"$/ do |keywords|

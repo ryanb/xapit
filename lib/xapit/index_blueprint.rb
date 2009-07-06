@@ -49,7 +49,7 @@ module Xapit
     # Adds a field attribute. Field terms are not split by word so it is not designed for full text search.
     # Instead you can filter through a field using the :conditions hash in a search query.
     #
-    #   Article.search("", :conditions => { :priority => 5 })
+    #   Article.search(:conditions => { :priority => 5 })
     # 
     # Multiple field values are supported if the given attribute is an array.
     # 
