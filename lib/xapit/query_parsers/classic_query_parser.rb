@@ -18,6 +18,11 @@ module Xapit
       parser.stemmer = Xapian::Stem.new(Config.stemming)
       parser.stemming_strategy = Xapian::QueryParser::STEM_SOME
       parser.default_op = Xapian::Query::OP_AND
+      if @member_class
+        @member_class.xapit_index_blueprint.field_attributes.each do |field|
+          parser.add_prefix(field.to_s, "X#{field}-")
+        end
+      end
       parser
     end
   end

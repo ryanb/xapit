@@ -84,7 +84,10 @@ module Xapit
         #   @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
         #
         #   # basic boolean matching is supported
-        #   @articles = Article.search("phone or fax not email")
+        #   @articles = Article.search("phone OR fax NOT email")
+        #
+        #   # field conditions in query string
+        #   @articles = Article.search("priority:3")
         #
         #   # no need to specify first query string when searching all records
         #   @articles = Article.search(:conditions => { :category_id => params[:category_id] })

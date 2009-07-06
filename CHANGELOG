@@ -1,3 +1,7 @@
+* search for field conditions in query string, only supported by ClassicQueryParser
+  
+  search("age:17")
+
 * check if xapian database exists before removing
 
 * search multiple conditions with OR by passing an array
