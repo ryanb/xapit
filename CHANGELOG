@@ -1,3 +1,8 @@
+* search multiple conditions with OR by passing an array
+
+  :conditions => [{ :category_id => 1 }, { :priority => 2 }]
+
+
 *0.2.5* (June 26th, 2009)
 
 * adding wildcard matching for general search query (ClassicQueryParser only)

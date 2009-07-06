@@ -68,11 +68,11 @@ module Xapit
     end
     
     def condition_terms
-      condition_terms_from_hash(@options[:conditions])
+      parse_conditions(@options[:conditions])
     end
     
     def not_condition_terms
-      condition_terms_from_hash(@options[:not_conditions])
+      parse_conditions(@options[:not_conditions])
     end
     
     def facet_terms
@@ -108,18 +108,24 @@ module Xapit
     
     private
     
-    def condition_terms_from_hash(conditions)
-      if conditions
-        conditions.map do |name, value|
-          if value.kind_of? Array
-            Query.new(value.map { |v| condition_term(name, v) }, :or)
-          else
-            condition_term(name, value)
-          end
-        end.flatten
+    def parse_conditions(conditions)
+      if conditions.kind_of? Array
+        [Query.new(conditions.map { |hash| Query.new(condition_terms_from_hash(hash)) }, :or)]
+      elsif conditions.kind_of? Hash
+        condition_terms_from_hash(conditions)
       else
         []
       end
+    end
+    
+    def condition_terms_from_hash(conditions)
+      conditions.map do |name, value|
+        if value.kind_of? Array
+          Query.new(value.map { |v| condition_term(name, v) }, :or)
+        else
+          condition_term(name, value)
+        end
+      end.flatten
     end
     
     def condition_term(name, value)

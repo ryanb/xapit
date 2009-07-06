@@ -92,6 +92,9 @@ module Xapit
         #   # search partial terms with asterisk (only supported at end of term)
         #   @articles = Article.search("sab*", :conditions => { :name => "Din*" })
         #
+        #   # search multiple conditions with OR by passing an array
+        #   @articles = Article.search(:conditions => [{ :category_id => 1 }, { :priority => 2 }])
+        #
         def search(*args)
           Collection.new(self, *args)
         end

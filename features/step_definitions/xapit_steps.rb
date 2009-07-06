@@ -74,6 +74,10 @@ When /^I query "([^\"]*)" not matching "([^\"]*)"$/ do |field, value|
   @records = XapitMember.search("", :not_conditions => { field.to_sym => value })
 end
 
+When /^I query "([^\"]*)" matching "([^\"]*)" or "([^\"]*)" matching "([^\"]*)"$/ do |field1, value1, field2, value2|
+  @records = XapitMember.search("", :conditions => [{ field1.to_sym => value1 }, { field2.to_sym => value2 }])
+end
+
 When /^I query "([^\"]*)" between (\d+) and (\d+)$/ do |field, beginning, ending|
   @records = XapitMember.search("", :conditions => { field.to_sym => beginning.to_i..ending.to_i })
 end

@@ -109,3 +109,12 @@ Scenario: Query no partial match in keywords with one letter
     | Jack | J        |
   When I query for " J*"
   Then I should find records named "Jack"
+
+Scenario: Query for separate OR conditions
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 18  |
+  When I query "age" matching "17" or "name" matching "Jack"
+  Then I should find records named "Jane, Jack"
