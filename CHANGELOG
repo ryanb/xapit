@@ -1,3 +1,5 @@
+*0.2.6* (July 6th, 2009)
+
 * search for field conditions in query string, only supported by ClassicQueryParser
   
   search("age:17")
