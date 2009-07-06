@@ -1,3 +1,5 @@
+* check if xapian database exists before removing
+
 * search multiple conditions with OR by passing an array
 
   :conditions => [{ :category_id => 1 }, { :priority => 2 }]

@@ -45,4 +45,18 @@ describe Xapit::Config do
     Xapit::Config.setup(:stemming => "german")
     Xapit::Config.stemming == "german"
   end
+  
+  it "should remove the database if it is a true xapian database" do
+    Xapit::Config.writable_database # load the database
+    Xapit::Config.remove_database
+    File.exist?(Xapit::Config.path).should be_false
+  end
+  
+  it "should NOT remove the database if it is not a xapian database" do
+    path = Xapit::Config.path + "/testing"
+    FileUtils.mkdir_p(path)
+    Xapit::Config.remove_database
+    File.exist?(Xapit::Config.path).should be_true
+    FileUtils.rm_rf(Xapit::Config.path)
+  end
 end
