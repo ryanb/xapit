@@ -2,14 +2,24 @@ module Xapit
   class AbstractQueryParser
     attr_reader :member_class
     attr_writer :base_query
+    attr_accessor :extra_queries
     
     def initialize(*args)
       @options = args.extract_options!
       @member_class = args[0]
       @search_text = args[1].to_s
+      @extra_queries = []
     end
     
     def query
+      if @extra_queries.blank?
+        primary_query
+      else
+        primary_query.or_query(@extra_queries, :or)
+      end
+    end
+    
+    def primary_query
       if (@search_text.split + condition_terms + not_condition_terms + facet_terms).empty?
         base_query
       else

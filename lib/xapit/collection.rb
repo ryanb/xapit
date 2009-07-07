@@ -56,10 +56,30 @@ module Xapit
     
     # Perform another search on this one, inheriting all options already passed.
     # See Xapit::Membership for search options.
-    def search(keywords, options = {})
-      collection = Collection.new(@query_parser.member_class, keywords, options)
+    #
+    #   Article.search("kite").search("sky") # only performs one query
+    # 
+    def search(*args)
+      collection = Collection.new(@query_parser.member_class, *args)
       collection.base_query = @query_parser.query
       collection
+    end
+    
+    # Chain another search returning all records matched by either this search or the previous search
+    # Inherits all options passed in earlier search (such as :page and :order)
+    # See Xapit::Membership for search options.
+    #
+    #   Article.search("kite").or_search(:conditions => { :priority => 1 })
+    # 
+    def or_search(*args)
+      collection = Collection.new(@query_parser.member_class, *args)
+      collection.base_query = @query_parser.base_query.dup # TODO duplication is necessary here because query is later modified, maybe I should make query immutable.
+      collection.extra_queries << @query_parser.query
+      collection
+    end
+    
+    def query
+      @query_parser.query
     end
     
     def base_query=(base_query)
@@ -68,6 +88,14 @@ module Xapit
     
     def base_query
       @query_parser.base_query
+    end
+    
+    def extra_queries=(extra_queries)
+      @query_parser.extra_queries = extra_queries
+    end
+    
+    def extra_queries
+      @query_parser.extra_queries
     end
     
     # The page number we are currently on.

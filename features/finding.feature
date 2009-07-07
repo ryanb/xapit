@@ -119,7 +119,6 @@ Scenario: Query for separate OR conditions
   When I query "age" matching "17" or "name" matching "Jack"
   Then I should find records named "Jane, Jack"
 
-@focus
 Scenario: Query for condition in keywords string
   Given the following indexed records
     | name | age |
@@ -128,3 +127,12 @@ Scenario: Query for condition in keywords string
     | Jack | 17  |
   When I query for "age:17"
   Then I should find records named "Jane, Jack"
+
+Scenario: Query for separate OR conditions and keywords
+  Given the following indexed records
+    | name | age |
+    | John | 23  |
+    | Jane | 17  |
+    | Jack | 18  |
+  When I query for "John" or "age" matching "18" ordered by "name"
+  Then I should find records named "Jack, John"

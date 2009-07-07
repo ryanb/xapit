@@ -78,6 +78,10 @@ When /^I query "([^\"]*)" matching "([^\"]*)" or "([^\"]*)" matching "([^\"]*)"$
   @records = XapitMember.search(:conditions => [{ field1.to_sym => value1 }, { field2.to_sym => value2 }])
 end
 
+When /^I query for "([^\"]*)" or "([^\"]*)" matching "([^\"]*)" ordered by "([^\"]*)"$/ do |keywords, field, value, order|
+  @records = XapitMember.search(keywords, :order => order).or_search(:conditions => { field.to_sym => value })
+end
+
 When /^I query "([^\"]*)" between (\d+) and (\d+)$/ do |field, beginning, ending|
   @records = XapitMember.search(:conditions => { field.to_sym => beginning.to_i..ending.to_i })
 end
