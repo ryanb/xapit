@@ -13,6 +13,7 @@ module Xapit
     [].methods.each do |m|
       delegate m, :to => :results unless m =~ /^__/ || NON_DELEGATE_METHODS.include?(m.to_s)
     end
+    delegate :query, :base_query, :base_query=, :extra_queries, :extra_queries=, :to => :@query_parser
     
     def self.search_similar(member, *args)
       collection = new(member.class, *args)
@@ -76,26 +77,6 @@ module Xapit
       collection.base_query = @query_parser.base_query.dup # TODO duplication is necessary here because query is later modified, maybe I should make query immutable.
       collection.extra_queries << @query_parser.query
       collection
-    end
-    
-    def query
-      @query_parser.query
-    end
-    
-    def base_query=(base_query)
-      @query_parser.base_query = base_query
-    end
-    
-    def base_query
-      @query_parser.base_query
-    end
-    
-    def extra_queries=(extra_queries)
-      @query_parser.extra_queries = extra_queries
-    end
-    
-    def extra_queries
-      @query_parser.extra_queries
     end
     
     # The page number we are currently on.
