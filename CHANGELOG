@@ -1,3 +1,7 @@
+* support punctuation in wildcard matching
+
+* fixing nested search calls
+
 * chain a separate search with "or_search" to find records matching either one
   
   search("foo").or_search(:conditions => { :priority => 3 })

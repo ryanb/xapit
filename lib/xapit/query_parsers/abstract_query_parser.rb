@@ -165,10 +165,10 @@ module Xapit
     # Expands the wildcard in the term (just at the end) and returns a query
     # which will match any term that starts with the given term.
     def wildcard_query(term, prefix = "")
-      partial_term = term.sub(/\*$/, '') # remove asterisk at end if it exists
+      full_term = (prefix + term.downcase).sub(/\*$/, '') # remove asterisk at end if it exists
       parser = Xapian::QueryParser.new
       parser.database = Xapit::Config.database
-      parser.parse_query(partial_term, Xapian::QueryParser::FLAG_PARTIAL, prefix)
+      parser.parse_query(full_term[-1..-1], Xapian::QueryParser::FLAG_PARTIAL, full_term[0..-2])
     end
   end
 end
