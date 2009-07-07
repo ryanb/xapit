@@ -148,6 +148,22 @@ describe Xapit::Collection do
         Xapit::Collection.new(nil, "foo", :classes => [String, Array]).should == []
         Xapit::Collection.new(nil, "foo", :classes => [String, Array, XapitMember]).should == [@foo]
       end
+      
+      it "should support nested or_search" do
+        Xapit::Collection.new(XapitMember, "world", :order => :name).or_search("foo").should == [@foo, @hello]
+      end
+      
+      it "should override options in nested or_search" do
+        Xapit::Collection.new(XapitMember, "world", :order => :name, :per_page => 2).or_search("foo", :per_page => 1).should == [@foo]
+      end
+      
+      it "should combine multiple or_search" do
+        @buz = XapitMember.new(:name => "buz")
+        @zot = XapitMember.new(:name => "zot")
+        Xapit.remove_database
+        Xapit.index_all
+        Xapit::Collection.new(XapitMember, "world", :order => :name).or_search("foo").or_search("buz").should == [@buz, @foo, @hello]
+      end
     end
   end
 end

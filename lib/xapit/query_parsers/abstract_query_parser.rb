@@ -1,6 +1,6 @@
 module Xapit
   class AbstractQueryParser
-    attr_reader :member_class
+    attr_reader :member_class, :options
     attr_writer :base_query
     attr_accessor :extra_queries
     
@@ -15,7 +15,7 @@ module Xapit
       if @extra_queries.blank?
         primary_query
       else
-        primary_query.or_query(@extra_queries, :or)
+        Query.new([primary_query] + @extra_queries, :or)
       end
     end
     
@@ -114,6 +114,19 @@ module Xapit
     def term_suggestion(term)
       suggestion = Config.database.get_spelling_suggestion(term.downcase)
       suggestion.blank? ? nil : suggestion
+    end
+    
+    def matchset(options = {})
+      query.matchset(query_options.merge(options))
+    end
+    
+    def query_options
+      {
+        :offset => offset,
+        :limit => per_page,
+        :sort_by_values => sort_by_values,
+        :sort_descending => @options[:descending]
+      }
     end
     
     private

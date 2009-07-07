@@ -38,7 +38,7 @@ module Xapit
     def size
       @query_parser.query.count
     end
-    alias_method :total_entries, :size
+    alias_method :total_entries, :size # alias to total_entries to support will_paginate
     
     # Returns true if no results are found.
     def empty?
@@ -73,9 +73,11 @@ module Xapit
     #   Article.search("kite").or_search(:conditions => { :priority => 1 })
     # 
     def or_search(*args)
-      collection = Collection.new(@query_parser.member_class, *args)
+      options = args.extract_options!
+      collection = Collection.new(@query_parser.member_class, args[0].to_s, @query_parser.options.merge(options))
       collection.base_query = @query_parser.base_query.dup # TODO duplication is necessary here because query is later modified, maybe I should make query immutable.
-      collection.extra_queries << @query_parser.query
+      collection.extra_queries = @query_parser.extra_queries
+      collection.extra_queries << @query_parser.primary_query
       collection
     end
     
@@ -96,7 +98,7 @@ module Xapit
     
     # Total number of pages with found results.
     def total_pages
-      (total_entries / per_page.to_f).ceil
+      (size / per_page.to_f).ceil
     end
     
     # The previous page number. Returns nil if on first page.
@@ -160,14 +162,10 @@ module Xapit
     
     private
     
-    def matchset(options = {})
-      @query_parser.query.matchset(options)
-    end
-    
     # TODO this could use some refactoring
     # See issue #11 for why this is so complex.
     def fetch_results(options = {})
-      matches = matchset(options).matches
+      matches = @query_parser.matchset(options).matches
       records_by_class = {}
       matches.each do |match|
         class_name, id = match.document.data.split('-')
