@@ -61,7 +61,8 @@ module Xapit
     #   Article.search("kite").search("sky") # only performs one query
     # 
     def search(*args)
-      collection = Collection.new(@query_parser.member_class, *args)
+      options = args.extract_options!
+      collection = Collection.new(@query_parser.member_class, args[0].to_s, @query_parser.options.merge(options))
       collection.base_query = @query_parser.query
       collection
     end
