@@ -19,8 +19,8 @@ module Xapit
       collection = new(member.class, *args)
       indexer = SimpleIndexer.new(member.class.xapit_index_blueprint)
       terms = indexer.text_terms(member) + indexer.field_terms(member)
-      collection.base_query.and_query(terms, :or)
-      collection.base_query.not_query("Q#{member.class}-#{member.id}")
+      query = collection.base_query.and_query(terms, :or).not_query("Q#{member.class}-#{member.id}")
+      collection.base_query = query
       collection
     end
     
@@ -75,7 +75,7 @@ module Xapit
     def or_search(*args)
       options = args.extract_options!
       collection = Collection.new(@query_parser.member_class, args[0].to_s, @query_parser.options.merge(options))
-      collection.base_query = @query_parser.base_query.dup # TODO duplication is necessary here because query is later modified, maybe I should make query immutable.
+      collection.base_query = @query_parser.base_query
       collection.extra_queries = @query_parser.extra_queries
       collection.extra_queries << @query_parser.primary_query
       collection

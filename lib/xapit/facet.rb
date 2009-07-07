@@ -16,7 +16,7 @@ module Xapit
     
     def initialize(blueprint, query, existing_facet_identifiers)
       @blueprint = blueprint
-      @query = query.dup
+      @query = query
       @existing_facet_identifiers = existing_facet_identifiers
     end
     

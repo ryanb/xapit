@@ -31,8 +31,7 @@ describe Xapit::Query do
       Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])
     )
     query = Xapit::Query.new("foo")
-    query.and_query("bar")
-    query.xapian_query.description.should == expected.description
+    query.and_query("bar").xapian_query.description.should == expected.description
   end
   
   it "should OR two queries together" do
@@ -41,8 +40,7 @@ describe Xapit::Query do
       Xapian::Query.new(Xapian::Query::OP_AND, ["bar"])
     )
     query = Xapit::Query.new("foo")
-    query.or_query("bar")
-    query.xapian_query.description.should == expected.description
+    query.or_query("bar").xapian_query.description.should == expected.description
   end
   
   it "should build a query from an array of mixed strings and queries" do
