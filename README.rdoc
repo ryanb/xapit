@@ -8,7 +8,7 @@ Note: This project is early in development and the API is subject to change.
 == Install
 
 If you haven't already, first install Xapian and the Xapian Bindings for Ruby.
-http://wiki.github.com/Overbryd/acts_as_xapian/installation
+http://wiki.github.com/ryanb/xapit/xapian-installation
 
 To install as a Rails plugin, run this command.
 
