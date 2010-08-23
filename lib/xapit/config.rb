@@ -66,7 +66,7 @@ module Xapit
       
       # Removes the configured database file and clears the stored one in memory.
       def remove_database
-        FileUtils.rm_rf(path) if File.exist? File.join(path, "iamflint")
+        FileUtils.rm_rf(path) if File.exist? File.join(path, "record.DB")
         @database = nil
         @writable_database = nil
       end
