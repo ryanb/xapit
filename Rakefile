@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'rake'
 require 'echoe'
+require 'cucumber'
+require 'cucumber/rake/task'
 
 Echoe.new('xapit', '0.2.7') do |p|
   p.summary        = "Ruby library for interacting with Xapian, a full text search engine."
@@ -13,3 +15,9 @@ Echoe.new('xapit', '0.2.7') do |p|
 end
 
 Dir["#{File.dirname(__FILE__)}/tasks/*.rb"].sort.each { |ext| load ext }
+
+Cucumber::Rake::Task.new(:features) do |t|
+  t.cucumber_opts = "features --format progress"
+end
+
+task :default => [:spec, :features]

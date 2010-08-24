@@ -1,11 +1,12 @@
 Given /^I configured the database to be saved at "([^\"]*)"$/ do |path|
-  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
+  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}", :template_path => File.dirname(__FILE__) + "/../../spec/fixtures/blankdb")
 end
 
 Given /^an empty database at "([^\"]*)"$/ do |path|
   Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
   Xapit.remove_database
   XapitMember.delete_all
+  GC.start
 end
 
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|
