@@ -1,5 +1,5 @@
 Background:
-  Given an empty database at "tmp/xapiandatabase"
+  Given an empty database at "tmp/testdb"
 
 Scenario: Spelling suggestion
   Given indexed records named "Zebra, Apple, Bike"

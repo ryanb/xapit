@@ -1,5 +1,5 @@
 Background:
-  Given an empty database at "tmp/xapiandatabase"
+  Given an empty database at "tmp/testdb"
 
 Scenario: Query Matching No Records
   Given indexed records named "John, Jane"

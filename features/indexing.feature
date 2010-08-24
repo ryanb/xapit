@@ -1,26 +1,26 @@
 Scenario: Save xapian database on index
-  Given no file exists at "tmp/xapiandb"
-  And I configured the database to be saved at "tmp/xapiandb"
+  Given no file exists at "tmp/testdb"
+  And I configured the database to be saved at "tmp/testdb"
   And 3 records
   When I index the database
-  Then I should find a directory at "tmp/xapiandb"
+  Then I should find a directory at "tmp/testdb"
 
 Scenario: Fetch all records which are indexed
-  Given an empty database at "tmp/xapiandb"
+  Given an empty database at "tmp/testdb"
   And records named "John, Jane, Joe"
   When I index the database
   And I query for ""
   Then I should find records named "John, Jane, Joe"
 
 Scenario: Split indexed text fields differently
-  Given an empty database at "tmp/xapiandb"
+  Given an empty database at "tmp/testdb"
   And records named "JohnXSmith, JaneXSmith, JoeXBlack"
   When I index the database splitting name by "X"
   And I query for "Smith"
   Then I should find records named "JohnXSmith, JaneXSmith"
 
 Scenario: Index Multiple Field Values Separately
-  Given an empty database at "tmp/xapiandatabase"
+  Given an empty database at "tmp/testdb"
   And the following indexed records
     | name | age    |
     | John | 17, 16 |
@@ -30,7 +30,7 @@ Scenario: Index Multiple Field Values Separately
   Then I should find records named "Jane, John"
 
 Scenario: Index Weighted Attributes
-  Given an empty database at "tmp/xapiandatabase"
+  Given an empty database at "tmp/testdb"
   And the following indexed records with "name" weighted by "10"
     | name | description |
     | foo  | bar         |
