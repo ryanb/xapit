@@ -9,7 +9,7 @@ module Xapit
     end
     
     def cleanup_text(text)
-      text.gsub(/\b([a-z])\*/i) { $1 }
+      text.gsub(/\b([a-z])\*/i, "\\1").gsub(/[^\w\*\s:]/u, "")
     end
     
     def build_xapian_parser

@@ -136,3 +136,14 @@ Scenario: Query for separate OR conditions and keywords
     | Jack | 18  |
   When I query for "John" or "age" matching "18" ordered by "name"
   Then I should find records named "Jack, John"
+
+Scenario: Query ignore punctuation in keyword
+  Given the following indexed records
+    | name | sirname    |
+    | Jack | John-son's |
+    | Bill | Johnsons   |
+    | Jane | Johnson    |
+  When I query for "Johnsons"
+  Then I should find records named "Jack, Bill"
+  When I query for "Jo-hn'sons"
+  Then I should find records named "Jack, Bill"

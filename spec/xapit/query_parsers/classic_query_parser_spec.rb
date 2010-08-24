@@ -17,4 +17,8 @@ describe Xapit::ClassicQueryParser do
   it "should remove asterisks from terms with one letter" do
     @parser.cleanup_text("J*").should == "J"
   end
+  
+  it "should strip out punctuation other than asterisk and colon" do
+    @parser.cleanup_text("a- b':cd*").should == "a b:cd*"
+  end
 end

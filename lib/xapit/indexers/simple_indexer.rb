@@ -27,7 +27,7 @@ module Xapit
       elsif content.kind_of? Array
         content.reject(&:blank?).map(&:to_s).map(&:downcase)
       else
-        content.to_s.scan(/\w+/u).map(&:downcase)
+        content.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") }.map(&:downcase)
       end
     end
     
