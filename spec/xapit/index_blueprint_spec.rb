@@ -50,12 +50,12 @@ describe Xapit::IndexBlueprint do
   it "should index member document into database" do
     XapitMember.new
     @index.index_all
-    Xapit::Config.writable_database.doccount.should >= 1
-    Xapit::Config.writable_database.flush
+    Xapit::Config.database.doccount.should >= 1
+    Xapit::Config.database.writable_database.flush
   end
   
   it "should remember all blueprints and index each of them" do
-    stub(Xapit::Config.writable_database).add_document
+    stub(Xapit::Config.database).add_document
     mock(@index).index_all
     Xapit::IndexBlueprint.index_all
   end
@@ -91,7 +91,7 @@ describe Xapit::IndexBlueprint do
   end
   
   it "should not create record index if member isn't found" do
-    Xapit::Config.writable_database # make sure the database is built
+    Xapit::Config.database.writable_database # make sure the database is built
     member = XapitMember.new(:name => "New Record!")
     stub(XapitMember).find { nil }
     @index.text :name

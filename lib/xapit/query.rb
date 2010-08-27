@@ -23,7 +23,7 @@ module Xapit
     
     def matchset(options = {})
       options.reverse_merge! :offset => 0, :sort_descending => false
-      enquire = Xapian::Enquire.new(Config.database)
+      enquire = Xapian::Enquire.new(Config.database.readable_database)
       if options[:sort_by_values]
         sorter = Xapian::MultiValueSorter.new
         options[:sort_by_values].each do |sort_value|
@@ -42,7 +42,7 @@ module Xapit
     
     def count
       # a bit of a hack to get more accurate count estimate
-      @count ||= matchset(:limit => Config.database.doccount).matches_estimated
+      @count ||= matchset(:limit => Config.database.readable_database.doccount).matches_estimated
     end
     
     private

@@ -22,7 +22,7 @@ describe Xapit::AbstractQueryParser do
   end
     
   it "should give spelling suggestion on full term" do
-    Xapit::Config.writable_database.add_spelling("foo bar")
+    Xapit::Config.database.add_spelling("foo bar")
     parser = Xapit::AbstractQueryParser.new(nil, "foo barr")
     parser.spelling_suggestion.should == "foo bar"
   end

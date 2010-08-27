@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Xapit::Config do
   it "should be able to set database path and fetch writable or readable" do
-    Xapit::Config.writable_database.should be_kind_of(Xapian::WritableDatabase)
-    Xapit::Config.database.should be_kind_of(Xapian::Database)
+    Xapit::Config.database.writable_database.should be_kind_of(Xapian::WritableDatabase)
+    Xapit::Config.database.readable_database.should be_kind_of(Xapian::Database)
   end
   
   it "should default query parser to SimpleQueryParser" do
@@ -47,7 +47,6 @@ describe Xapit::Config do
   end
   
   it "should remove the database if it is a true xapian database" do
-    Xapit::Config.writable_database # load the database
     Xapit::Config.remove_database
     File.exist?(Xapit::Config.path).should be_false
   end

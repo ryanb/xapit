@@ -112,7 +112,7 @@ module Xapit
     
     # Remove a single record from the index.
     def destroy_record(member_id)
-      Xapit::Config.writable_database.delete_document("Q#{@member_class}-#{member_id}")
+      Xapit::Config.database.delete_document("Q#{@member_class}-#{member_id}")
     end
     
     private

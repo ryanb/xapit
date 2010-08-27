@@ -6,10 +6,7 @@ module Xapit
       
       # See Xapit#setup
       def setup(options = {})
-        if @options && options[:database_path] != @options[:database_path]
-          @database = nil
-          @writable_database = nil
-        end
+        @database = nil
         @options = options.reverse_merge(default_options)
       end
       
@@ -59,22 +56,14 @@ module Xapit
         @options[:breadcrumb_facets]
       end
       
-      # Fetch Xapian::Database object at configured path. Database is stored in memory.
       def database
-        @writable_database || (@database ||= Xapian::Database.new(path))
-      end
-      
-      # Fetch Xapian::WritableDatabase object at configured path. Database is stored in memory.
-      # Creates the database directory if needed.
-      def writable_database
-        @writable_database ||= generate_database
+        @database ||= Xapit::LocalDatabase.new(path, template_path)
       end
       
       # Removes the configured database file and clears the stored one in memory.
       def remove_database
         FileUtils.rm_rf(path) if File.exist? File.join(path, "record.DB")
         @database = nil
-        @writable_database = nil
       end
       
       # Clear the current database from memory. Unfortunately this is a hack because
@@ -83,16 +72,7 @@ module Xapit
       # TODO looks like it does in 1.2, I should investigate and switch to that.
       def close_database
         @database = nil
-        @writable_database = nil
         GC.start
-      end
-      
-      private
-      
-      def generate_database
-        FileUtils.mkdir_p(File.dirname(path)) unless File.exist?(File.dirname(path))
-        FileUtils.cp_r(template_path, path) if template_path && !File.exist?(path)
-        Xapian::WritableDatabase.new(path, Xapian::DB_CREATE_OR_OPEN)
       end
     end
   end

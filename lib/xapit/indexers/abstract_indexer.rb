@@ -110,7 +110,7 @@ module Xapit
     private
     
     def database
-      Config.writable_database
+      Config.database
     end
   end
 end

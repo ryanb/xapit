@@ -34,7 +34,7 @@ module Xapit
         doc = Xapian::Document.new
         doc.data = [facet.member_class.name, facet.attribute, name].join("|||")
         doc.add_term("Q#{self.class.name}-#{identifier}")
-        Xapit::Config.writable_database.add_document(doc)
+        Xapit::Config.database.add_document(doc)
       end
     end
     

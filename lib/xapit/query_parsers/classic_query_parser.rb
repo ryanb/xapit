@@ -14,7 +14,7 @@ module Xapit
     
     def build_xapian_parser
       parser = Xapian::QueryParser.new
-      parser.database = Config.database
+      parser.database = Config.database.readable_database
       parser.stemmer = Xapian::Stem.new(Config.stemming)
       parser.stemming_strategy = Xapian::QueryParser::STEM_SOME
       parser.default_op = Xapian::Query::OP_AND

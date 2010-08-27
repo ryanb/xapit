@@ -167,7 +167,7 @@ module Xapit
     def wildcard_query(term, prefix = "")
       full_term = (prefix + term.downcase).sub(/\*$/, '') # remove asterisk at end if it exists
       parser = Xapian::QueryParser.new
-      parser.database = Xapit::Config.database
+      parser.database = Xapit::Config.database.readable_database
       parser.parse_query(full_term[-1..-1], Xapian::QueryParser::FLAG_PARTIAL, full_term[0..-2])
     end
   end
