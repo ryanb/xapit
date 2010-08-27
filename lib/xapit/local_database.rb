@@ -6,7 +6,7 @@ module Xapit
     end
     
     def readable_database
-      writable_database
+      @writable_database || (@readable_database ||= Xapian::Database.new(@path))
     end
     
     def writable_database
