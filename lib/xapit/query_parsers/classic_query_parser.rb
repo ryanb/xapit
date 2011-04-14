@@ -3,15 +3,15 @@ module Xapit
     def xapian_query_from_text(text)
       xapian_parser.parse_query(cleanup_text(text), Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_PHRASE | Xapian::QueryParser::FLAG_BOOLEAN | Xapian::QueryParser::FLAG_LOVEHATE)
     end
-    
+
     def xapian_parser
       @xapian_parser ||= build_xapian_parser
     end
-    
+
     def cleanup_text(text)
       text.gsub(/\b([a-z])\*/i, "\\1").gsub(/[^\w\*\s:]/u, "")
     end
-    
+
     def build_xapian_parser
       parser = Xapian::QueryParser.new
       parser.database = Config.database.readable_database

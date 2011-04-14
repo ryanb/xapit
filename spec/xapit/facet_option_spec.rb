@@ -7,7 +7,7 @@ describe Xapit::FacetOption do
     stub(option).identifier { "foo" }
     option.to_param.should == "abc-123-foo"
   end
-  
+
   it "should remove current identifier from previous identifiers if it exists" do
     Xapit.setup(:breadcrumb_facets => false)
     option = Xapit::FacetOption.new(nil, nil, nil)
@@ -15,7 +15,7 @@ describe Xapit::FacetOption do
     stub(option).identifier { "foo" }
     option.to_param.should == "abc-123"
   end
-  
+
   it "should support breadcrumb style facets" do
     Xapit.setup(:breadcrumb_facets => true)
     option = Xapit::FacetOption.new(nil, nil, nil)
@@ -23,7 +23,7 @@ describe Xapit::FacetOption do
     stub(option).identifier { "123" }
     option.to_param.should == "abc-123"
   end
-  
+
   describe "with database" do
     before(:each) do
       XapitMember.xapit do |index|
@@ -31,12 +31,12 @@ describe Xapit::FacetOption do
         index.facet :category
       end
     end
-    
+
     it "should have identifier hashing name and value" do
       option = Xapit::FacetOption.new("XapitMember", "age", "17")
       option.identifier.should == "0c93ee1"
     end
-    
+
     it "should find facet option from database given id" do
       doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||17"
@@ -46,7 +46,7 @@ describe Xapit::FacetOption do
       option.name.should == "17"
       option.facet.name.should == "Person Age"
     end
-    
+
     it "should save facet to database" do
       Xapit::Config.database.writable_database # make sure there's a database setup in case we try to read from it
       option = Xapit::FacetOption.new(nil, nil, nil)
@@ -55,7 +55,7 @@ describe Xapit::FacetOption do
       option.save
       Xapit::FacetOption.find(option.identifier).should_not be_nil
     end
-    
+
     it "should not save facet if it already exists" do
       doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||17"
@@ -66,7 +66,7 @@ describe Xapit::FacetOption do
       stub(option).identifier { "abc123" }
       option.save
     end
-    
+
     it "should find facet option which doesn't have a value" do
       doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||"

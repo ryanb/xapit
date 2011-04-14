@@ -5,14 +5,14 @@
 * fixing nested search calls
 
 * chain a separate search with "or_search" to find records matching either one
-  
+
   search("foo").or_search(:conditions => { :priority => 3 })
 
 
 *0.2.6* (July 6th, 2009)
 
 * search for field conditions in query string, only supported by ClassicQueryParser
-  
+
   search("age:17")
 
 * check if xapian database exists before removing

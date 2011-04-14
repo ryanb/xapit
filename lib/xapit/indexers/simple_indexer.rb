@@ -15,13 +15,13 @@ module Xapit
         end
       end
     end
-    
+
     def stemmed_terms_for_attribute(member, name, options)
       terms_for_attribute(member, name, options).map do |term|
         "Z#{stemmer.call(term)}"
       end
     end
-    
+
     def terms_for_attribute(member, name, options)
       content = member.send(name)
       if options[:proc]
@@ -32,7 +32,7 @@ module Xapit
         content.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") }.map(&:downcase)
       end
     end
-    
+
     def stemmer
       @stemmer ||= Xapian::Stem.new(Config.stemming)
     end

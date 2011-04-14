@@ -21,18 +21,18 @@ module Xapit
       end
       query
     end
-    
+
     def parsed
       parse(@search_text.downcase)
     end
-    
+
     def xapian_query_from_text(text)
       xapian_query(parse(text.downcase))
     end
-    
+
     private
-    
-    
+
+
     def parse(text)
       if text.kind_of? Array
         [:and, *text]
@@ -67,7 +67,7 @@ module Xapit
         end
       end
     end
-    
+
     def stemmer
       @stemmer ||= Xapian::Stem.new(Config.stemming)
     end

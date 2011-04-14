@@ -4,23 +4,23 @@ module Xapit
   # You may be looking for Xapit::Collection instead.
   class Query
     attr_reader :xapian_query
-    
+
     def initialize(*args)
       @xapian_query = build_xapian_query(*args)
     end
-    
+
     def and_query(*args)
       merge_query(:and, *args)
     end
-    
+
     def or_query(*args)
       merge_query(:or, *args)
     end
-    
+
     def not_query(*args)
       merge_query(:not, *args)
     end
-    
+
     def matchset(options = {})
       options.reverse_merge! :offset => 0, :sort_descending => false
       enquire = Xapian::Enquire.new(Config.database.readable_database)
@@ -35,18 +35,18 @@ module Xapit
       enquire.query = @xapian_query
       enquire.mset(options[:offset], options[:limit])
     end
-    
+
     def matches(options = {})
       matchset(options).matches
     end
-    
+
     def count
       # a bit of a hack to get more accurate count estimate
       @count ||= matchset(:limit => Config.database.readable_database.doccount).matches_estimated
     end
-    
+
     private
-    
+
     def merge_query(operator, *args)
       if args.first.blank?
         self
@@ -54,7 +54,7 @@ module Xapit
         Xapit::Query.new([@xapian_query, build_xapian_query(*args)], operator)
       end
     end
-    
+
     def build_xapian_query(query, operator = :and)
       extract_queries(query, operator).inject(nil) do |query, extra_query|
         if query
@@ -66,7 +66,7 @@ module Xapit
         end
       end
     end
-    
+
     def extract_queries(query, operator)
       queries = [query].flatten
       terms = queries.select { |q| q.kind_of? String }
@@ -76,7 +76,7 @@ module Xapit
         (queries - terms) + [Xapian::Query.new(xapian_operator(operator), terms)]
       end
     end
-    
+
     def xapian_operator(operator)
       case operator
       when :and then Xapian::Query::OP_AND

@@ -3,7 +3,7 @@ class XapitGenerator < Rails::Generator::Base
     record do |m|
       m.directory "config/initializers"
       m.file "setup_xapit.rb", "config/initializers/setup_xapit.rb"
-      
+
       m.directory "lib/tasks"
       m.file "xapit.rake", "lib/tasks/xapit.rake"
     end

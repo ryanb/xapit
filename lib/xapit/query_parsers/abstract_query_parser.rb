@@ -3,14 +3,14 @@ module Xapit
     attr_reader :member_class, :options
     attr_writer :base_query
     attr_accessor :extra_queries
-    
+
     def initialize(*args)
       @options = args.extract_options!
       @member_class = args[0]
       @search_text = args[1].to_s
       @extra_queries = []
     end
-    
+
     def query
       if @extra_queries.blank?
         primary_query
@@ -18,7 +18,7 @@ module Xapit
         Query.new([primary_query] + @extra_queries, :or)
       end
     end
-    
+
     def primary_query
       if (@search_text.split + condition_terms + not_condition_terms + facet_terms).empty?
         base_query
@@ -26,19 +26,19 @@ module Xapit
         @query ||= base_query.and_query(xapian_query_from_text(@search_text)).and_query(condition_terms + facet_terms).not_query(not_condition_terms)
       end
     end
-    
+
     def current_page
       @options[:page] ? @options[:page].to_i : 1
     end
-    
+
     def per_page
       @options[:per_page] ? @options[:per_page].to_i : 20
     end
-    
+
     def offset
       per_page*(current_page-1)
     end
-    
+
     def sort_by_values
       if @options[:order] && @member_class
         index = @member_class.xapit_index_blueprint
@@ -51,15 +51,15 @@ module Xapit
         end
       end
     end
-    
+
     def base_query
       @base_query ||= initial_query
     end
-    
+
     def initial_query
       Query.new(initial_query_strings, :or)
     end
-    
+
     def initial_query_strings
       if classes.empty?
         [""]
@@ -67,19 +67,19 @@ module Xapit
         classes.map { |klass| "C#{klass.name}" }
       end
     end
-    
+
     def classes
       (@options[:classes] || [@member_class]).compact
     end
-    
+
     def condition_terms
       parse_conditions(@options[:conditions])
     end
-    
+
     def not_condition_terms
       parse_conditions(@options[:not_conditions])
     end
-    
+
     def facet_terms
       if @options[:facets]
         facet_identifiers.map do |identifier|
@@ -89,11 +89,11 @@ module Xapit
         []
       end
     end
-    
+
     def facet_identifiers
       @options[:facets].kind_of?(String) ? @options[:facets].split('-') : (@options[:facets] || [])
     end
-    
+
     def spelling_suggestion
       raise "Spelling has been disabled. Enable spelling in Xapit.setup." unless Config.spelling?
       if [@search_text, *@search_text.scan(/\w+/)].all? { |term| term_suggestion(term).nil? }
@@ -105,16 +105,16 @@ module Xapit
         end
       end
     end
-    
+
     def term_suggestion(term)
       suggestion = Config.database.get_spelling_suggestion(term.downcase)
       suggestion.blank? ? nil : suggestion
     end
-    
+
     def matchset(options = {})
       query.matchset(query_options.merge(options))
     end
-    
+
     def query_options
       {
         :offset => offset,
@@ -123,9 +123,9 @@ module Xapit
         :sort_descending => @options[:descending]
       }
     end
-    
+
     private
-    
+
     def parse_conditions(conditions)
       if conditions.kind_of? Array
         [Query.new(conditions.map { |hash| Query.new(condition_terms_from_hash(hash)) }, :or)]
@@ -135,7 +135,7 @@ module Xapit
         []
       end
     end
-    
+
     def condition_terms_from_hash(conditions)
       conditions.map do |name, value|
         if value.kind_of? Array
@@ -145,7 +145,7 @@ module Xapit
         end
       end.flatten
     end
-    
+
     def condition_term(name, value)
       if value.kind_of?(Range) && @member_class
         position = @member_class.xapit_index_blueprint.position_of_field(name)
@@ -161,7 +161,7 @@ module Xapit
         "X#{name}-#{value.to_s.downcase}"
       end
     end
-    
+
     # Expands the wildcard in the term (just at the end) and returns a query
     # which will match any term that starts with the given term.
     def wildcard_query(term, prefix = "")

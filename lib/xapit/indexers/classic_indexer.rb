@@ -13,11 +13,11 @@ module Xapit
         end
       end
     end
-    
+
     def term_generator
       @term_generator ||= create_term_generator
     end
-    
+
     def create_term_generator
       term_generator = Xapian::TermGenerator.new
       term_generator.set_flags(Xapian::TermGenerator::FLAG_SPELLING, 0) if Config.spelling?
