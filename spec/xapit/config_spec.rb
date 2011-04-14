@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "spec_helper"
 
 describe Xapit::Config do
   it "should be able to set database path and fetch writable or readable" do

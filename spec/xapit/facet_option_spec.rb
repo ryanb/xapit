@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "spec_helper"
 
 describe Xapit::FacetOption do
   it "should combine previous identifiers with current one on to_param" do

@@ -1,5 +1,5 @@
 Given /^I configured the database to be saved at "([^\"]*)"$/ do |path|
-  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}", :template_path => File.dirname(__FILE__) + "/../../spec/fixtures/blankdb")
+  Xapit.setup(:database_path => File.expand_path("../../../#{path}", __FILE__), :template_path => File.expand_path("../../../spec/fixtures/blankdb", __FILE__))
 end
 
 Given /^an empty database at "([^\"]*)"$/ do |path|
