@@ -52,10 +52,10 @@ describe Xapit::AbstractIndexer do
     stub(@indexer).values.returns(%w[value list])
     stub(@indexer).other_terms { %w[term list] }
     doc = @indexer.document_for(member)
-    doc.should be_kind_of(Xapian::Document)
+    doc.should be_kind_of(Xapit::Document)
     doc.data.should == "Object-123"
-    doc.values.map(&:value).sort.should == %w[value list].sort
-    doc.terms.map(&:term).sort.should == %w[term list].sort
+    doc.values.sort.should == %w[value list].sort
+    doc.terms.sort.should == %w[term list].sort
   end
   
   it "should convert time to integer before saving as field term" do

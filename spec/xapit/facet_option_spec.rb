@@ -38,9 +38,9 @@ describe Xapit::FacetOption do
     end
     
     it "should find facet option from database given id" do
-      doc = Xapian::Document.new
+      doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||17"
-      doc.add_term("QXapit::FacetOption-abc123")
+      doc.terms << "QXapit::FacetOption-abc123"
       Xapit::Config.database.add_document(doc)
       option = Xapit::FacetOption.find("abc123")
       option.name.should == "17"
@@ -57,9 +57,9 @@ describe Xapit::FacetOption do
     end
     
     it "should not save facet if it already exists" do
-      doc = Xapian::Document.new
+      doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||17"
-      doc.add_term("QXapit::FacetOption-abc123")
+      doc.terms << "QXapit::FacetOption-abc123"
       Xapit::Config.database.add_document(doc)
       stub(Xapit::Config.database).add_document { raise "should not add doc" }
       option = Xapit::FacetOption.new(XapitMember, nil, nil)
@@ -68,9 +68,9 @@ describe Xapit::FacetOption do
     end
     
     it "should find facet option which doesn't have a value" do
-      doc = Xapian::Document.new
+      doc = Xapit::Document.new
       doc.data = "XapitMember|||age|||"
-      doc.add_term("QXapit::FacetOption-abc123")
+      doc.terms << "QXapit::FacetOption-abc123"
       Xapit::Config.database.add_document(doc)
       option = Xapit::FacetOption.find("abc123")
       option.name.should == ""

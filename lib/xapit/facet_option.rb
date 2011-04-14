@@ -31,9 +31,9 @@ module Xapit
     # Saves the given facet option to the database if it hasn't been already.
     def save
       unless self.class.exist?(identifier)
-        doc = Xapian::Document.new
+        doc = Xapit::Document.new
         doc.data = [facet.member_class.name, facet.attribute, name].join("|||")
-        doc.add_term("Q#{self.class.name}-#{identifier}")
+        doc.terms << "Q#{self.class.name}-#{identifier}"
         Xapit::Config.database.add_document(doc)
       end
     end

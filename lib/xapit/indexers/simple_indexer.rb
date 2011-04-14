@@ -3,12 +3,14 @@ module Xapit
     def index_text_attributes(member, document)
       @blueprint.text_attributes.map do |name, options|
         terms_for_attribute(member, name, options).each do |term|
-          document.add_term(term, options[:weight] || 1)
-          database.add_spelling(term) if Config.spelling?
+          document.terms << term
+          document.term_weights << options[:weight] || 1
+          document.spellings << term if Config.spelling?
         end
         if Config.stemming
           stemmed_terms_for_attribute(member, name, options).each do |term|
-            document.add_term(term, options[:weight] || 1)
+            document.terms << term
+            document.term_weights << options[:weight] || 1
           end
         end
       end
