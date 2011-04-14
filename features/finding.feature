@@ -1,149 +1,151 @@
-Background:
-  Given an empty database at "tmp/testdb"
+Feature: Finding
 
-Scenario: Query Matching No Records
-  Given indexed records named "John, Jane"
-  When I query for "Sam"
-  Then I should find 0 records
+  Background:
+    Given an empty database at "tmp/testdb"
 
-Scenario: Query Matching One Record
-  Given indexed records named "John, Jane"
-  When I query for "John"
-  Then I should find record named "John"
+  Scenario: Query Matching No Records
+    Given indexed records named "John, Jane"
+    When I query for "Sam"
+    Then I should find 0 records
 
-Scenario: Query Matching Two Records
-  Given indexed records named "John Smith, Jane Smith, John Smithsonian"
-  When I query for "Smith"
-  Then I should find records named "John Smith, Jane Smith"
+  Scenario: Query Matching One Record
+    Given indexed records named "John, Jane"
+    When I query for "John"
+    Then I should find record named "John"
 
-Scenario: Query Field Matching
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query "age" matching "17"
-  Then I should find records named "Jane, Jack"
+  Scenario: Query Matching Two Records
+    Given indexed records named "John Smith, Jane Smith, John Smithsonian"
+    When I query for "Smith"
+    Then I should find records named "John Smith, Jane Smith"
 
-Scenario: Query for Page 1
-  Given 3 indexed records
-  When I query page 1 at 2 per page
-  Then I should find 2 records
+  Scenario: Query Field Matching
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query "age" matching "17"
+    Then I should find records named "Jane, Jack"
 
-Scenario: Query for Page 2
-  Given 3 indexed records
-  When I query page 2 at 2 per page
-  Then I should find 1 record
-  And I should have 3 records total
+  Scenario: Query for Page 1
+    Given 3 indexed records
+    When I query page 1 at 2 per page
+    Then I should find 2 records
 
-Scenario: Query for All Records Class Agnostic
-  Given indexed records named "John, Jane"
-  When I query for "John" on Xapit
-  Then I should find 1 record
+  Scenario: Query for Page 2
+    Given 3 indexed records
+    When I query page 2 at 2 per page
+    Then I should find 1 record
+    And I should have 3 records total
 
-Scenario: Query Matching Or Query
-  Given indexed records named "John, Jane, Jacob"
-  When I query for "Jane OR John"
-  Then I should find records named "John, Jane"
+  Scenario: Query for All Records Class Agnostic
+    Given indexed records named "John, Jane"
+    When I query for "John" on Xapit
+    Then I should find 1 record
 
-Scenario: Query Matching Not Query
-  Given indexed records named "John Smith, John Johnson"
-  When I query for "John NOT Smith"
-  Then I should find records named "John Johnson"
+  Scenario: Query Matching Or Query
+    Given indexed records named "John, Jane, Jacob"
+    When I query for "Jane OR John"
+    Then I should find records named "John, Jane"
 
-Scenario: Unicode characters in search
-  Given indexed records named "über cool, uber hot"
-  When I query for "über"
-  Then I should find records named "über cool"
+  Scenario: Query Matching Not Query
+    Given indexed records named "John Smith, John Johnson"
+    When I query for "John NOT Smith"
+    Then I should find records named "John Johnson"
 
-Scenario: Query Field Not Matching
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query "age" not matching "17"
-  Then I should find records named "John"
+  Scenario: Unicode characters in search
+    Given indexed records named "über cool, uber hot"
+    When I query for "über"
+    Then I should find records named "über cool"
 
-Scenario: Query Range of Integer
-  Given the following indexed records
-    | name | age |
-    | John | 8   |
-    | Jane | 13  |
-    | Jack | 24  |
-  When I query "age" between 8 and 15
-  Then I should find records named "John, Jane"
+  Scenario: Query Field Not Matching
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query "age" not matching "17"
+    Then I should find records named "John"
 
-Scenario: Query Partial Match on Condition
-  Given the following indexed records
-    | name | sirname  |
-    | John | Jacobson |
-    | Jane | Niel     |
-    | Jack | Striker  |
-  When I query "name" matching "Ja*"
-  Then I should find records named "Jane, Jack"
+  Scenario: Query Range of Integer
+    Given the following indexed records
+      | name | age |
+      | John | 8   |
+      | Jane | 13  |
+      | Jack | 24  |
+    When I query "age" between 8 and 15
+    Then I should find records named "John, Jane"
 
-Scenario: Query no partial match on conditions with one letter
-  Given the following indexed records
-    | name | sirname  |
-    | John | Jacobson |
-    | Jane | Niel     |
-    | Jack | Striker  |
-  When I query "name" matching " J*"
-  Then I should find 0 records
+  Scenario: Query Partial Match on Condition
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Jane | Niel     |
+      | Jack | Striker  |
+    When I query "name" matching "Ja*"
+    Then I should find records named "Jane, Jack"
 
-Scenario: Query partial match in keywords
-  Given the following indexed records
-    | name | sirname  |
-    | John | Jacobson |
-    | Bill | Niel     |
-    | Jack | Striker  |
-  When I query for "Ja*"
-  Then I should find records named "John, Jack"
+  Scenario: Query no partial match on conditions with one letter
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Jane | Niel     |
+      | Jack | Striker  |
+    When I query "name" matching " J*"
+    Then I should find 0 records
 
-Scenario: Query no partial match in keywords with one letter
-  Given the following indexed records
-    | name | sirname  |
-    | John | Jacobson |
-    | Bill | Niel     |
-    | Jack | J        |
-  When I query for " J*"
-  Then I should find records named "Jack"
+  Scenario: Query partial match in keywords
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Bill | Niel     |
+      | Jack | Striker  |
+    When I query for "Ja*"
+    Then I should find records named "John, Jack"
 
-Scenario: Query for separate OR conditions
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 18  |
-  When I query "age" matching "17" or "name" matching "Jack"
-  Then I should find records named "Jane, Jack"
+  Scenario: Query no partial match in keywords with one letter
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Bill | Niel     |
+      | Jack | J        |
+    When I query for " J*"
+    Then I should find records named "Jack"
 
-Scenario: Query for condition in keywords string
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 17  |
-  When I query for "age:17"
-  Then I should find records named "Jane, Jack"
+  Scenario: Query for separate OR conditions
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 18  |
+    When I query "age" matching "17" or "name" matching "Jack"
+    Then I should find records named "Jane, Jack"
 
-Scenario: Query for separate OR conditions and keywords
-  Given the following indexed records
-    | name | age |
-    | John | 23  |
-    | Jane | 17  |
-    | Jack | 18  |
-  When I query for "John" or "age" matching "18" ordered by "name"
-  Then I should find records named "Jack, John"
+  Scenario: Query for condition in keywords string
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query for "age:17"
+    Then I should find records named "Jane, Jack"
 
-Scenario: Query ignore punctuation in keyword
-  Given the following indexed records
-    | name | sirname    |
-    | Jack | John-son's |
-    | Bill | Johnsons   |
-    | Jane | Johnson    |
-  When I query for "Johnsons"
-  Then I should find records named "Jack, Bill"
-  When I query for "Jo-hn'sons"
-  Then I should find records named "Jack, Bill"
+  Scenario: Query for separate OR conditions and keywords
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 18  |
+    When I query for "John" or "age" matching "18" ordered by "name"
+    Then I should find records named "Jack, John"
+
+  Scenario: Query ignore punctuation in keyword
+    Given the following indexed records
+      | name | sirname    |
+      | Jack | John-son's |
+      | Bill | Johnsons   |
+      | Jane | Johnson    |
+    When I query for "Johnsons"
+    Then I should find records named "Jack, Bill"
+    When I query for "Jo-hn'sons"
+    Then I should find records named "Jack, Bill"

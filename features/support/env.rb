@@ -1,7 +1,8 @@
-require 'cucumber'
-require 'spec'
-require 'active_support'
+require 'bundler/setup'
+
+Bundler.require(:default)
+
+require 'active_support/all'
 require 'fileutils'
 
-require File.dirname(__FILE__) + '/../../lib/xapit'
-require File.dirname(__FILE__) + '/../../spec/xapit_member'
+require File.expand_path('../../../spec/xapit_member', __FILE__)
