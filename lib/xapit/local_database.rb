@@ -10,7 +10,10 @@ module Xapit
     end
 
     def add_document(document)
-      xapian_database.add_document(build_xapian_document(document))
+      xapian_database.add_document(document.xapian_document)
+      document.spellings.each do |spelling|
+        xapian_database.add_spelling(spelling)
+      end
     end
 
     def delete_document(id)
@@ -18,7 +21,7 @@ module Xapit
     end
 
     def replace_document(id, document)
-      xapian_database.replace_document(id, build_xapian_document(document))
+      xapian_database.replace_document(id, document.xapian_document)
     end
 
     def get_spelling_suggestion(term)
@@ -41,21 +44,6 @@ module Xapit
         FileUtils.cp_r(@template_path, @path)
       end
       Xapian::WritableDatabase.new(@path, Xapian::DB_CREATE_OR_OPEN)
-    end
-
-    def build_xapian_document(document)
-      xapian_doc = Xapian::Document.new
-      xapian_doc.data = "#{document.id}#{document.data}"
-      document.terms.each_with_index do |term, index|
-        xapian_doc.add_term(term, document.term_weights[index] || 1)
-      end
-      document.values.each_with_index do |value, index|
-        xapian_doc.add_value(document.value_indexes[index], value)
-      end
-      document.spellings.each do |spelling|
-        xapian_database.add_spelling(spelling)
-      end
-      xapian_doc
     end
   end
 end
