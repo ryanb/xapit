@@ -1,119 +1,69 @@
 = Xapit
 
-Xapit (pronounced "zap it") is a high level interface for working with a Xapian database.
-
-Note: This project is early in development and the API is subject to change.
+Xapit (pronounced "zap it") is a Ruby gem for doing full text searching through a Xapian database.
 
 
 == Install
 
-If you haven't already, first install Xapian and the Xapian Bindings for Ruby.
-http://wiki.github.com/ryanb/xapit/xapian-installation
+First install Xapian with Ruby bindings. The easiest way is through {Homebrew}[http://mxcl.github.com/homebrew/].
 
-To install as a Rails plugin, run this command.
+  brew install xapian --ruby
 
-  script/plugin install git://github.com/ryanb/xapit.git
+See {Installing Xapian}[http://wiki.github.com/ryanb/xapit/installing-xapian] for other methods.
 
-Or to install as a gem in Rails first add this to config/environment.rb.
+Next add Xapit to your Gemfile and run the +bundle+ command.
 
-  config.gem 'xapit'
+  gem "xapit"
 
-And then install the gem and run the generator.
+Then run the install generator.
 
-  sudo rake gems:install
-  script/generate xapit
-
-Important: only run the generator script on a gem install, not for the plugin.
-
-
-== Setup
-
-Simply call "xapit" in the model and pass a block to define the indexed attributes.
-
-  class Article < ActiveRecord::Base
-    xapit do |index|
-      index.text :name, :content
-      index.field :category_id
-      index.facet :author_name, "Author"
-      index.sortable :id, :category_id
-    end
-  end
-
-First we index "name" and "content" attributes for full text searching. The "category_id" field is indexed for :conditions searching. The "author_name" is indexed as a facet with "Author" being the display name of the facet. See the facets section below for details. Finally the "id" and "category_id" attributes are indexed as sortable attributes so they can be included in the :order option in a search.
-
-Because the indexing happens in Ruby these attributes do no have to be database columns. They can be simple Ruby methods. For example, the "author_name" attribute mentioned above can be defined like this.
-
-  def author_name
-    author.name
-  end
-
-This way you can create a completely custom facet by simply defining your own method. Multiple facet options or field values per record are supported if you return an array.
-
-  def author_names
-    authors.map(&:name) # => ["John", "Bob"]
-  end
-
-Finally, you can pass any find options to the xapit method to determine what gets indexed or improve performance with eager loading or a different batch size.
-
-  xapit(:batch_size => 100, :include => :author, :conditions => { :visible => true })
-
-You can specify a :weight option to give a text attribute more importance. This will cause search terms matching that attribute to have a higher rank. The default weight is 1. Decimal (0.5) weight values are not supported.
-
-  index.text :name, :weight => 10
+  rails g xapit:install
 
 
 == Index
 
-To perform the indexing, run the xapit:index rake task.
+To make a model searchable you must define an index through the +xapit+ method. Here is an example.
+
+  class Article < ActiveRecord::Base
+    xapit do
+      text :name, :content
+      field :category_id
+      sortable :id, :created_at
+      facet :author_name, "Author"
+    end
+  end
+
+This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[http://wiki.github.com/ryanb/xapit/indexing] wiki page for more details.
+
+The index will automatically be updated when records are added or removed. You can regenerate the index manually to fill it with any existing records.
 
   rake xapit:index
-
-It can also be triggered through Ruby code using this command.
-
-  Xapit.remove_database
-  Xapit.index_all
-
-You may want to trigger this via a cron job on a recurring schedule (i.e. every day) to update the Xapian database. However it will only take effect after the Rails application is restarted because the Xapian database is stored in memory.
-
-There are two projects in development to help improve this reindexing.
-
-* http://github.com/ryanb/xapit-sync/tree/master
-* http://github.com/ryanb/xapit-server/tree/master
 
 
 == Search
 
-You can then perform a search on the model.
+Use the +search+ class method to perform a full text search on the index. This returns a Xapit scope where additional scoping methods can be called similar to Active Record scopes.
 
-  # perform a simple full text search
+  # simple full text search
   @articles = Article.search("phone")
 
-  # add pagination if you're using will_paginate
-  @articles = Article.search("phone", :per_page => 10, :page => params[:page])
-
-  # search based on indexed fields
-  @articles = Article.search("phone", :conditions => { :category_id => params[:category_id] })
-
-  # search for multiple negative conditions (doesn't match 3, 5, or 8)
-  @articles = Article.search(:not_conditions => { :category_id => [3, 5, 8] })
-
-  # search for range of conditions by number
-  @articles = Article.search(:conditions => { :released_at => 2.years.ago..Time.now })
-
-  # manually sort based on any number of indexed fields, sort defaults to most relevant
-  @articles = Article.search("phone", :order => [:category_id, :id], :descending => true)
-
-  # basic boolean matching is supported
+  # full text search with basic boolean matching
   @articles = Article.search("phone OR fax NOT email")
 
+  # pagination similar to Kaminari
+  @articles = Article.search("phone").page(10).per(20)
 
-You can also search all indexed models through Xapit.search.
+  # search based on a specific field
+  @articles = Article.search("phone").where(:category_id => params[:category_id])
 
-  # search all indexed models
-  @records = Xapit.search("phone")
+  # search for multiple negative conditions (doesn't match 3, 5, or 8)
+  @articles = Article.search("phone").not_where(:category_id => [3, 5, 8])
 
+  # search for range of conditions by number
+  @articles = Article.search.where(:released_at => 2.years.ago..Time.now)
 
-== Results
+  # order based on sortable fields, sorting defaults to most relevant
+  @articles = Article.search("phone").order(:created_at, :descending => true)
 
 Simply iterate through the returned set to display the results.
 
@@ -124,13 +74,15 @@ Simply iterate through the returned set to display the results.
 
 The "xapit_relevance" holds a percentage (between 0 and 100) determining how relevant the given document is to the user's search query.
 
+See the {Searching}[http://wiki.github.com/ryanb/xapit/searching] wiki page for more details.
+
 
 == Spelling
 
-If the searched term isn't found, but it is similar to another term then it will show up as a spelling suggestion.
+Spelling suggestions are available when there is a simlarly indexed term.
 
   <% if @articles.spelling_suggestion %>
-    Did you mean <%= link_to h(@articles.spelling_suggestion), :overwrite_params => { :keywords => @articles.spelling_suggestion } %>?
+    Did you mean <%= link_to @articles.spelling_suggestion, :overwrite_params => { :keywords => @articles.spelling_suggestion } %>?
   <% end %>
 
 
@@ -146,9 +98,9 @@ Facets allow you to further filter the result set based on certain attributes.
     <% end %>
   <% end %>
 
-The to_param method is defined on option to return an identifier which will be passed through the URL. Use this in the search.
+The facet option is passed in through the URL which you can add to the search.
 
-  Article.search("phone", :facets => params[:facets])
+  Article.search("phone").facets(params[:facets])
 
 You can also list the applied facets along with a remove link.
 
@@ -157,22 +109,42 @@ You can also list the applied facets along with a remove link.
     <%= link_to "remove", :overwrite_params => { :facets => option } %>
   <% end %>
 
+See the {Facets}[http://wiki.github.com/ryanb/xapit/facets] wiki page for more details.
+
 
 == Config
 
-When installing Xapit as a Rails plugin, an initializer file is automatically created to setup. It looks like this.
+An initializer file is automatically created to setup. It looks like this.
 
-  Xapit.setup(:database_path => "#{Rails.root}/db/xapiandb")
+  Xapit.setup(:database => "#{Rails.root}/db/xapiandb")
 
 There are many other options you can pass into here. This is a more advanced configuration setting which changes the stemming language, disables spelling, and changes the indexer and parser to a classic variation. The classic ones use Xapian's built-in term generator and query parser instead of the ones offered by Xapit.
 
   Xapit.setup(
-    :database_path => "#{Rails.root}/db/external/xapiandb",
+    :database => "#{Rails.root}/db/external/xapiandb",
     :spelling => false,
     :stemming => "german",
     :indexer => ClassicIndexer,
     :query_parser => ClassicQueryParser
   )
+
+
+== Production
+
+The default Xapit setup works well in development because there's only one instance of the Rails app running. However in production you will need to move Xapit into a separate server so all of the instances can communicate to it. To do this, make a Rackup file that looks like this.
+
+  require "rubygems"
+  require "xapit"
+  run Xapit.server(:database => "path/to/xapiandb")
+
+Start up that rack app and point to it in the <tt>setup_xapit.rb</tt> file.
+
+  if Rails.evn.production?
+    Xapit.setup(:database => "http://localhost:9292")
+  else
+    Xapit.setup(:database => "#{Rails.root}/db/xapiandb")
+  end
+
 
 
 == Adapters
