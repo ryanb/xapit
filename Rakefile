@@ -2,13 +2,13 @@ require 'rubygems'
 require 'rake'
 require 'cucumber'
 require 'cucumber/rake/task'
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
-Dir["#{File.dirname(__FILE__)}/tasks/*.rb"].sort.each { |ext| load ext }
+require File.expand_path('../lib/xapit/rake_tasks', __FILE__)
 
-desc "Run specs"
-Spec::Rake::SpecTask.new do |t|
-  t.spec_files = Rake::FileList["spec/**/*_spec.rb"]
+desc "Run RSpec"
+RSpec::Core::RakeTask.new do |t|
+  t.verbose = false
 end
 
 desc "Run features"

@@ -1,11 +1,13 @@
 require 'rubygems'
-require 'spec'
-require 'active_support'
-require 'fileutils'
-require File.dirname(__FILE__) + '/../lib/xapit'
-require File.dirname(__FILE__) + '/xapit_member'
+require 'bundler/setup'
 
-Spec::Runner.configure do |config|
+Bundler.require(:default)
+
+require 'active_support/all'
+require 'fileutils'
+require 'xapit_member'
+
+RSpec.configure do |config|
   config.mock_with :rr
   config.before(:each) do
     Xapit.setup(:database_path => File.dirname(__FILE__) + '/tmp/testdb', :template_path => File.dirname(__FILE__) + "/fixtures/blankdb")

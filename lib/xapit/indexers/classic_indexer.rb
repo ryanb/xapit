@@ -1,7 +1,7 @@
 module Xapit
   class ClassicIndexer < AbstractIndexer
     def index_text_attributes(member, document)
-      term_generator.document = document
+      term_generator.document = Config.database.send(:build_xapian_document, document)
       @blueprint.text_attributes.each do |name, options|
         content = member.send(name)
         if options[:proc]

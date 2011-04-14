@@ -1,6 +1,8 @@
-pkg
-doc
-*.sqlite3
+*.swp
+**/*.swp
+*.gem
+Gemfile.lock
+.bundle
 tmp/**/*
 spec/tmp/**/*
-Manifest
+*.sqlite3
