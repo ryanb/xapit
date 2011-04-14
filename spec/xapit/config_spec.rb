@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe Xapit::Config do
   it "should be able to set database path and fetch writable or readable" do
-    Xapit::Config.database.writable_database.should be_kind_of(Xapian::WritableDatabase)
-    Xapit::Config.database.readable_database.should be_kind_of(Xapian::Database)
+    Xapit::Config.database.xapian_database.should be_kind_of(Xapian::WritableDatabase)
+    Xapit::Config.database.xapian_database.should be_kind_of(Xapian::Database)
   end
 
   it "should default query parser to SimpleQueryParser" do

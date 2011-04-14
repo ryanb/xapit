@@ -48,7 +48,7 @@ describe Xapit::FacetOption do
     end
 
     it "should save facet to database" do
-      Xapit::Config.database.writable_database # make sure there's a database setup in case we try to read from it
+      Xapit::Config.database.xapian_database # make sure there's a database setup in case we try to read from it
       option = Xapit::FacetOption.new(nil, nil, nil)
       option.facet = XapitMember.xapit_facet_blueprint("age")
       option.name = "23"

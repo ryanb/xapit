@@ -5,36 +5,32 @@ module Xapit
       @template_path = template_path
     end
 
-    def readable_database
-      writable_database
-    end
-
-    def writable_database
-      @writable_database ||= generate_database
+    def xapian_database
+      @xapian_database ||= generate_database
     end
 
     def add_document(document)
-      writable_database.add_document(build_xapian_document(document))
+      xapian_database.add_document(build_xapian_document(document))
     end
 
     def delete_document(id)
-      writable_database.delete_document(id)
+      xapian_database.delete_document(id)
     end
 
     def replace_document(id, document)
-      writable_database.replace_document(id, build_xapian_document(document))
+      xapian_database.replace_document(id, build_xapian_document(document))
     end
 
     def get_spelling_suggestion(term)
-      readable_database.get_spelling_suggestion(term)
+      xapian_database.get_spelling_suggestion(term)
     end
 
     def add_spelling(term)
-      writable_database.add_spelling(term)
+      xapian_database.add_spelling(term)
     end
 
     def doccount
-      readable_database.doccount
+      xapian_database.doccount
     end
 
     private
@@ -57,7 +53,7 @@ module Xapit
         xapian_doc.add_value(document.value_indexes[index], value)
       end
       document.spellings.each do |spelling|
-        writable_database.add_spelling(spelling)
+        xapian_database.add_spelling(spelling)
       end
       xapian_doc
     end

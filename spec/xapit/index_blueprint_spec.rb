@@ -51,7 +51,7 @@ describe Xapit::IndexBlueprint do
     XapitMember.new
     @index.index_all
     Xapit::Config.database.doccount.should >= 1
-    Xapit::Config.database.writable_database.flush
+    Xapit::Config.database.xapian_database.flush
   end
 
   it "should remember all blueprints and index each of them" do
@@ -91,7 +91,7 @@ describe Xapit::IndexBlueprint do
   end
 
   it "should not create record index if member isn't found" do
-    Xapit::Config.database.writable_database # make sure the database is built
+    Xapit::Config.database.xapian_database # make sure the database is built
     member = XapitMember.new(:name => "New Record!")
     stub(XapitMember).find { nil }
     @index.text :name

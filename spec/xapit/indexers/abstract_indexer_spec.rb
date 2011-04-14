@@ -28,7 +28,7 @@ describe Xapit::AbstractIndexer do
   end
 
   it "should add terms, values and options for facets" do
-    Xapit::Config.database.writable_database # force xapit to use a writable database at the beginning
+    Xapit::Config.database.xapian_database # force xapit to use a writable database at the beginning
     stub(XapitMember).xapit_index_blueprint { @index }
     member = XapitMember.new(:foo => ["ABC", "DEF"])
     ids = Xapit::FacetBlueprint.new(XapitMember, 0, :foo).identifiers_for(member)
