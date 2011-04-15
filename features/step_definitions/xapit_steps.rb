@@ -9,6 +9,14 @@ Given /^an empty database at "([^\"]*)"$/ do |path|
   GC.start
 end
 
+Given /^a remote database$/ do
+  pending
+  Xapit.setup(:database_path => "http://localhost:929292")
+  Xapit.remove_database
+  XapitMember.delete_all
+  GC.start
+end
+
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|
   records = joined_names.split(', ').map { |name| {:name => name} }
   create_records(records, indexed)

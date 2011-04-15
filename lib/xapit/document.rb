@@ -21,5 +21,17 @@ module Xapit
       end
       xapian_doc
     end
+
+    def self.from_json(json)
+      document = new
+      JSON.parse(json).each do |key, value|
+        document.send("#{key}=", value)
+      end
+      document
+    end
+
+    def to_json
+      # TODO
+    end
   end
 end
