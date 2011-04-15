@@ -33,7 +33,7 @@ To make a model searchable you must define an index through the +xapit+ method. 
     end
   end
 
-This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[http://wiki.github.com/ryanb/xapit/indexing] wiki page for more details.
+This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[http://wiki.github.com/ryanb/xapit/indexing] wiki page for details.
 
 The index will automatically be updated when records are added or removed. You can regenerate the index manually to fill it with any existing records.
 
@@ -131,13 +131,13 @@ There are many other options you can pass into here. This is a more advanced con
 
 == Production
 
-The default Xapit setup works well in development because there's only one instance of the Rails app running. However in production you will need to move Xapit into a separate server so all of the instances can communicate to it. To do this, make a Rackup file that looks like this.
+The default Xapit setup works well in development because there is only one instance of the Rails app running. However in production you will need to move Xapit to a separate process so all of the instances can communicate to it. To do this, make a Rackup file that looks like this.
 
   require "rubygems"
   require "xapit"
   run Xapit.server(:database => "path/to/xapiandb")
 
-Start up that rack app and point to it in the <tt>setup_xapit.rb</tt> file.
+Start up that Rack app and point to it in the <tt>setup_xapit.rb</tt> file.
 
   if Rails.evn.production?
     Xapit.setup(:database => "http://localhost:9292")
@@ -145,6 +145,7 @@ Start up that rack app and point to it in the <tt>setup_xapit.rb</tt> file.
     Xapit.setup(:database => "#{Rails.root}/db/xapiandb")
   end
 
+Now all Xapit commands will go through that Rack application so the database is no longer embedded into the Rails app.
 
 
 == Adapters

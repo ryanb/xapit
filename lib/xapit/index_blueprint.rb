@@ -79,20 +79,6 @@ module Xapit
       end
     end
 
-    # The Xapian value index position of a sortable attribute
-    def position_of_sortable(sortable_attribute)
-      index = sortable_attributes.map(&:to_s).index(sortable_attribute.to_s)
-      raise "Unable to find indexed sortable attribute \"#{sortable_attribute}\" in #{@member_class} sortable attributes: #{sortable_attributes.inspect}" if index.nil?
-      index + facets.size
-    end
-
-    # The Xapian value index position of a field attribute
-    def position_of_field(field_attribute)
-      index = field_attributes.map(&:to_s).index(field_attribute.to_s)
-      raise "Unable to find indexed field attribute \"#{field_attribute}\" in #{@member_class} field attributes: #{field_attributes.inspect}" if index.nil?
-      index + facets.size + sortable_attributes.size
-    end
-
     # Add a single record to the index if it matches the xapit options.
     def create_record(member_id)
       member = @member_class.xapit_adapter.find_single(member_id, *@args)

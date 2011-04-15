@@ -40,14 +40,13 @@ module Xapit
     end
 
     def sort_by_values
-      if @options[:order] && @member_class
-        index = @member_class.xapit_index_blueprint
+      if @options[:order]
         if @options[:order].kind_of? Array
           @options[:order].map do |attribute|
-            index.position_of_sortable(attribute)
+            Xapit.value_index(:sortable, attribute)
           end
         else
-          [index.position_of_sortable(@options[:order])]
+          [Xapit.value_index(:sortable, @options[:order])]
         end
       end
     end
@@ -148,8 +147,7 @@ module Xapit
 
     def condition_term(name, value)
       if value.kind_of?(Range) && @member_class
-        position = @member_class.xapit_index_blueprint.position_of_field(name)
-        Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, position, Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
+        Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, Xapit.value_index(:field, name), Xapit.serialize_value(value.begin), Xapit.serialize_value(value.end))
       elsif value.to_s.ends_with?("*") && value.to_s.strip.length > 2
         wildcard_query(value, "X#{name}-")
       else

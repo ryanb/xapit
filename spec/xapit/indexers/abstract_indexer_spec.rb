@@ -34,7 +34,7 @@ describe Xapit::AbstractIndexer do
     ids = Xapit::FacetBlueprint.new(XapitMember, 0, :foo).identifiers_for(member)
     @index.facet(:foo)
     @indexer.facet_terms(member).should == ids.map { |id| "F#{id}" }
-    @indexer.values(member).should == [ids.join('-')]
+    @indexer.values(member).should == {"facetfoo" => ids.join('-')}
     @indexer.save_facet_options_for(member)
     ids.map { |id| Xapit::FacetOption.find(id).name }.should == ["ABC", "DEF"]
   end
@@ -43,13 +43,13 @@ describe Xapit::AbstractIndexer do
     member = Object.new
     stub(member).name { "Foo" }
     @index.sortable(:name)
-    @indexer.values(member).should == ["foo"]
+    @indexer.values(member).should == {"sortablename" => "foo"}
   end
 
   it "should add terms and values to xapian document" do
     member = Object.new
     stub(member).id { 123 }
-    stub(@indexer).values.returns(%w[value list])
+    stub(@indexer).values.returns({"foo" => "value", "bar" => "list"})
     stub(@indexer).other_terms { %w[term list] }
     doc = @indexer.document_for(member)
     doc.should be_kind_of(Xapit::Document)
@@ -76,21 +76,21 @@ describe Xapit::AbstractIndexer do
     member = Object.new
     stub(member).age { 7.89 }
     @index.sortable(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(7.89)]
+    @indexer.values(member).should == {"sortableage" => Xapian.sortable_serialise(7.89)}
   end
 
   it "should only use first value if sortable attribute is an array" do
     member = Object.new
     stub(member).age { [1, 2] }
     @index.sortable(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(1)]
+    @indexer.values(member).should == {"sortableage" => Xapian.sortable_serialise(1)}
   end
 
   it "should add sortable_serialze value for numeric field" do
     member = Object.new
     stub(member).age { [1, 2] }
     @index.field(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(1)]
+    @indexer.values(member).should == {"fieldage" => Xapian.sortable_serialise(1)}
   end
 
   it "should use sortable_serialze for date field" do
@@ -98,7 +98,7 @@ describe Xapit::AbstractIndexer do
     member = Object.new
     stub(member).age { date }
     @index.field(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(date.to_time.to_i)]
+    @indexer.values(member).should == {"fieldage" => Xapian.sortable_serialise(date.to_time.to_i)}
   end
 
   it "should use sortable_serialze for time field" do
@@ -106,6 +106,6 @@ describe Xapit::AbstractIndexer do
     member = Object.new
     stub(member).age { time }
     @index.field(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(time.to_i)]
+    @indexer.values(member).should == {"fieldage" => Xapian.sortable_serialise(time.to_i)}
   end
 end

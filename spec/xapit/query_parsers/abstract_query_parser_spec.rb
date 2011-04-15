@@ -32,9 +32,16 @@ describe Xapit::AbstractQueryParser do
     parser.not_condition_terms.first.xapian_query.description.should == Xapit::Query.new(%w[Xfoo-hello Xfoo-world], :or).xapian_query.description
   end
 
+  it "should have a unique position for types of attributes" do
+    # TODO this spec doesn't really belong here
+    Xapit.value_index(:sortable, :bar).should == Xapit.value_index(:sortable, :bar)
+    Xapit.value_index(:sortable, :bar).should_not == Xapit.value_index(:sortable, :baz)
+    Xapit.value_index(:sortable, :bar).should_not == Xapit.value_index(:field, :bar)
+  end
+
   it "should allow range condition to be specified and use VALUE_RANGE xapian query." do
     XapitMember.xapit { |i| i.field :foo }
-    expected = Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, 0, Xapian.sortable_serialise(2), Xapian.sortable_serialise(5))
+    expected = Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, Xapit.value_index(:field, :foo), Xapian.sortable_serialise(2), Xapian.sortable_serialise(5))
     parser = Xapit::AbstractQueryParser.new(XapitMember, :conditions => { :foo => 2..5 })
     parser.condition_terms.first.description.should == expected.description
   end
@@ -42,7 +49,7 @@ describe Xapit::AbstractQueryParser do
   it "should allow range condition to be specified in array." do
     XapitMember.xapit { |i| i.field :foo }
     expected = Xapian::Query.new(Xapian::Query::OP_OR,
-      Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, 0, Xapian.sortable_serialise(2), Xapian.sortable_serialise(5)),
+      Xapian::Query.new(Xapian::Query::OP_VALUE_RANGE, Xapit.value_index(:field, :foo), Xapian.sortable_serialise(2), Xapian.sortable_serialise(5)),
       Xapian::Query.new(Xapian::Query::OP_AND, ["Xfoo-10"])
     )
     parser = Xapit::AbstractQueryParser.new(XapitMember, :conditions => { :foo => [2..5, 10] })

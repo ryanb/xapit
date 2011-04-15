@@ -17,9 +17,9 @@ module Xapit
       document.data = "#{member.class}-#{member.id}"
       index_text_attributes(member, document)
       index_terms(other_terms(member), document)
-      values(member).each_with_index do |value, index|
+      values(member).each do |identifier, value|
         document.values << value
-        document.value_indexes << index
+        document.value_indexes << Xapit.value_index(identifier)
       end
       save_facet_options_for(member)
       document
@@ -76,29 +76,32 @@ module Xapit
     end
 
     def values(member)
-      facet_values(member) + sortable_values(member) + field_values(member)
+      facet_values(member).merge(sortable_values(member)).merge(field_values(member))
     end
 
     def sortable_values(member)
-      @blueprint.sortable_attributes.map do |sortable|
+      @blueprint.sortable_attributes.inject({}) do |hash, sortable|
         value = member.send(sortable)
         value = value.first if value.kind_of? Array
-        Xapit.serialize_value(value)
+        hash["sortable#{sortable}"] = Xapit.serialize_value(value)
+        hash
       end
     end
 
     # TODO remove duplication with sortable_values
     def field_values(member)
-      @blueprint.field_attributes.map do |sortable|
-        value = member.send(sortable)
+      @blueprint.field_attributes.inject({}) do |hash, field|
+        value = member.send(field)
         value = value.first if value.kind_of? Array
-        Xapit.serialize_value(value)
+        hash["field#{field}"] = Xapit.serialize_value(value)
+        hash
       end
     end
 
     def facet_values(member)
-      @blueprint.facets.map do |facet|
-        facet.identifiers_for(member).join("-")
+      @blueprint.facets.inject({}) do |hash, facet|
+        hash["facet#{facet.attribute}"] = facet.identifiers_for(member).join("-")
+        hash
       end
     end
 

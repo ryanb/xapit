@@ -50,6 +50,11 @@ module Xapit
       value.to_s.downcase
     end
   end
+
+  # The Xapian value index position of an attribute
+  def self.value_index(*args)
+    Zlib.crc32(["xapit", *args].join) % 99999999 # Figure out the true max of a xapian value index
+  end
 end
 
 require 'xapit/membership'
