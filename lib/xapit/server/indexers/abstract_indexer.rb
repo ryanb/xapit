@@ -6,10 +6,12 @@ module Xapit
 
     def add_member(member)
       database.add_document(document_for(member))
+      save_facet_options_for(member)
     end
 
     def update_member(member)
       database.replace_document("Q#{member.class}-#{member.id}", document_for(member))
+      save_facet_options_for(member)
     end
 
     def document_for(member)
@@ -21,7 +23,6 @@ module Xapit
         document.values << value
         document.value_indexes << Xapit.value_index(identifier)
       end
-      save_facet_options_for(member)
       document
     end
 

@@ -101,6 +101,10 @@ module Xapit
       Xapit::Config.database.delete_document("Q#{@member_class}-#{member_id}")
     end
 
+    def document_for(member)
+      @indexer.document_for(member)
+    end
+
     private
 
     # Make sure all models are loaded - without reloading any that

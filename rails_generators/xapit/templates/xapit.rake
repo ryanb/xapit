@@ -1,4 +1,4 @@
 begin
-  require 'xapit/rake_tasks'
+  require 'xapit/client/rake_tasks'
 rescue MissingSourceFile
 end

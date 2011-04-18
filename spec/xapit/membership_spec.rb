@@ -38,6 +38,11 @@ describe XapitMember do
       member.xapit_relevance.should == 123
     end
 
+    it "should have a xapit document" do
+      member = XapitMember.new(:description => "foo")
+      member.xapit_document.terms = %w[foo]
+    end
+
     it "should have an adapter" do
       XapitMember.xapit_adapter.class.should == Xapit::ActiveRecordAdapter
     end

@@ -3,7 +3,7 @@ require 'rake'
 require 'cucumber/rake/task'
 require 'rspec/core/rake_task'
 
-require File.expand_path('../lib/xapit/rake_tasks', __FILE__)
+require File.expand_path('../lib/xapit/client/rake_tasks', __FILE__)
 
 desc "Run RSpec"
 RSpec::Core::RakeTask.new do |t|

@@ -62,6 +62,10 @@ module Xapit
         Collection.search_similar(self, *args)
       end
 
+      def xapit_document
+        self.class.xapit_index_blueprint.document_for(self)
+      end
+
       module ClassMethods
         # Used to perform a search on a model.
         #
