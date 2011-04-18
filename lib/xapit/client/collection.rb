@@ -1,4 +1,33 @@
 module Xapit
+  module Client
+    class Collection
+      attr_reader :member_class, :query
+      def initialize(member_class, query = [])
+        @member_class = member_class
+        @query = query
+      end
+
+      def search(*args)
+        scope(:search, args)
+      end
+
+      def where(*args)
+        scope(:where, args)
+      end
+
+      def order(*args)
+        scope(:order, args)
+      end
+
+      private
+
+      def scope(type, args)
+        Collection.new(@member_class, @query + [{:type => type, :args => args}])
+      end
+    end
+  end
+
+
   # This is the object which is returned when performing a search. It behaves like an array, so you do not need
   # to worry about fetching the results separately. Just loop through this collection.
   #
