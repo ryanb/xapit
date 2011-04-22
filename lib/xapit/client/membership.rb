@@ -1,4 +1,37 @@
 module Xapit
+  module Client
+    module Membership
+      def self.included(base)
+        base.extend ClassMethods
+      end
+
+      module ClassMethods
+        def xapit(&block)
+          @xapit_index_builder = IndexBuilder.new
+          @xapit_index_builder.instance_eval(&block)
+          include AdditionalMethods
+        end
+      end
+
+      module AdditionalMethods
+        def self.included(base)
+          base.extend ClassMethods
+        end
+
+        module ClassMethods
+          def xapit_index_builder
+            @xapit_index_builder
+          end
+
+          def search(query)
+            Collection.new([{:include_classes => [self]}, {:search => [query]}])
+          end
+        end
+      end
+    end
+  end
+
+
   # Use "include Xapit::Membership" on a class to allow xapian searching on it. This is automatically included
   # in ActiveRecord::Base so you do not need to do anything there.
   module Membership

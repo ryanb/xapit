@@ -1,16 +1,10 @@
 require "spec_helper"
 
 describe Xapit::Client::Collection do
-  it "remembers member class and defaults query to an empty array" do
-    collection = Xapit::Client::Collection.new(String)
-    collection.member_class.should == String
-    collection.query.should == []
-  end
-
-  it "builds up query with search, where, and order calls" do
-    collection1 = Xapit::Client::Collection.new(String, [:initial])
-    collection2 = collection1.search(1).where(2).order(3)
+  it "builds up query with include_classes, search, where, order calls" do
+    collection1 = Xapit::Client::Collection.new([:initial])
+    collection2 = collection1.include_classes(String).search(1).where(2).order(3)
     collection1.query.should == [:initial]
-    collection2.query.should == [:initial, {:search => [1]}, {:where => [2]}, {:order => [3]}]
+    collection2.query.should == [:initial, {:include_classes => [String]}, {:search => [1]}, {:where => [2]}, {:order => [3]}]
   end
 end

@@ -1,3 +1,4 @@
+__END__
 if ENV["MODEL_ADAPTER"] == "data_mapper"
   require "spec_helper"
 

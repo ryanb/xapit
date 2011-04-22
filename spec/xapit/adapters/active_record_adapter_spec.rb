@@ -1,3 +1,4 @@
+__END__
 if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
   require "spec_helper"
 

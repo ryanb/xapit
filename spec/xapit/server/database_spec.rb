@@ -2,10 +2,7 @@ require "spec_helper"
 
 describe Xapit::Server::Database do
   before(:each) do
-    path = File.expand_path('../../../../tmp/testdb', __FILE__)
-    template = File.expand_path('../../../fixtures/blankdb', __FILE__)
-    FileUtils.rm_rf(path)
-    @database = Xapit::Server::Database.new(path, template)
+    @database = blank_xapit_database
   end
 
   it "has a xapian database" do
@@ -14,7 +11,7 @@ describe Xapit::Server::Database do
 
   it "adds a document to the database" do
     @database.xapian_database.doccount.should == 0
-    @database.add_document(:text => "foo bar")
+    @database.add_document(:texts => {:greeting => {:value => "hello world"}})
     @database.xapian_database.doccount.should == 1
   end
 end

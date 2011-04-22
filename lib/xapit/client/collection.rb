@@ -1,10 +1,13 @@
 module Xapit
   module Client
     class Collection
-      attr_reader :member_class, :query
-      def initialize(member_class, query = [])
-        @member_class = member_class
+      attr_reader :query
+      def initialize(query = [])
         @query = query
+      end
+
+      def include_classes(*args)
+        scope(:include_classes, args)
       end
 
       def search(*args)
@@ -22,7 +25,7 @@ module Xapit
       private
 
       def scope(type, args)
-        Collection.new(@member_class, @query + [{type => args}])
+        Collection.new(@query + [{type => args}])
       end
     end
   end

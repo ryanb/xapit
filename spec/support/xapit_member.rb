@@ -1,13 +1,7 @@
 class XapitMember
-  include Xapit::Membership
+  include Xapit::Client::Membership
 
   attr_reader :id
-
-  # Make it look like this inherits from ActiveRecord::Base
-  # so it will use the ActiveRecord adapter.
-  def self.ancestors
-    ["ActiveRecord::Base"]
-  end
 
   def self.find_each(&block)
     @@records.each(&block) if @@records

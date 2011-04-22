@@ -7,7 +7,19 @@ module Xapit
       end
 
       def data
-        {:text => @member.send(@builder.text_attributes.first).split}
+        {
+          :class => @member.class.name,
+          :id => @member.id,
+          :texts => text_data,
+        }
+      end
+
+      def text_data
+        texts = {}
+        @builder.text_attributes.each do |name, options|
+          texts[name] = {:value => @member.send(name)}.merge(options)
+        end
+        texts
       end
     end
   end

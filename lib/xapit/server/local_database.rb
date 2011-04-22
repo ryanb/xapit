@@ -7,7 +7,7 @@ module Xapit
       end
 
       def xapian_database
-        @xapian_database ||= open_database
+        @xapian_database ||= load_database
       end
 
       def add_document(data)
@@ -16,7 +16,7 @@ module Xapit
 
       private
 
-      def open_database
+      def load_database
         FileUtils.mkdir_p(File.dirname(@path)) unless File.exist?(File.dirname(@path))
         if @template_path && !File.exist?(@path)
           FileUtils.cp_r(@template_path, @path)

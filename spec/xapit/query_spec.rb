@@ -1,3 +1,4 @@
+__END__
 require "spec_helper"
 
 describe Xapit::Query do
