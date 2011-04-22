@@ -1,4 +1,32 @@
 module Xapit
+  module Server
+    class Database
+      def initialize(path, template_path)
+        @path = path
+        @template_path = template_path
+      end
+
+      def xapian_database
+        @xapian_database ||= open_database
+      end
+
+      def add_document(data)
+        xapian_database.add_document(Indexer.new(data).document)
+      end
+
+      private
+
+      def open_database
+        FileUtils.mkdir_p(File.dirname(@path)) unless File.exist?(File.dirname(@path))
+        if @template_path && !File.exist?(@path)
+          FileUtils.cp_r(@template_path, @path)
+        end
+        Xapian::WritableDatabase.new(@path, Xapian::DB_CREATE_OR_OPEN)
+      end
+    end
+  end
+
+
   class LocalDatabase
     def initialize(path, template_path)
       @path = path

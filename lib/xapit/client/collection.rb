@@ -22,7 +22,7 @@ module Xapit
       private
 
       def scope(type, args)
-        Collection.new(@member_class, @query + [{:type => type, :args => args}])
+        Collection.new(@member_class, @query + [{type => args}])
       end
     end
   end

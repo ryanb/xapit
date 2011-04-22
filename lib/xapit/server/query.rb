@@ -1,4 +1,10 @@
 module Xapit
+  module Server
+    class Query
+    end
+  end
+
+
   # This class wraps a Xapian::Query for convenience purposes. You will likely not need to use
   # this class unless you are trying to query the Xapian database directly.
   # You may be looking for Xapit::Collection instead.

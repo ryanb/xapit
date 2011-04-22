@@ -58,6 +58,8 @@ module Xapit
 end
 
 require 'xapit/client/membership'
+require 'xapit/client/index_builder'
+require 'xapit/client/index'
 require 'xapit/client/collection'
 require 'xapit/client/facet'
 require 'xapit/client/adapters/abstract_adapter'
@@ -77,3 +79,4 @@ require 'xapit/server/query_parsers/classic_query_parser'
 require 'xapit/server/indexers/abstract_indexer'
 require 'xapit/server/indexers/simple_indexer'
 require 'xapit/server/indexers/classic_indexer'
+require 'xapit/server/indexer'

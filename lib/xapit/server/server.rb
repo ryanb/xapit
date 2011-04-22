@@ -1,5 +1,5 @@
 module Xapit
-  class Server
+  class App
     def call(env)
       request = Rack::Request.new(env)
       if request.path == "/xapit/documents"

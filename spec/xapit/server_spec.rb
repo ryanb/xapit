@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe Xapit::Server do
+describe Xapit::App do
   before(:each) do
-    @app = Xapit::Server.new
+    @app = Xapit::App.new
     @request = Rack::MockRequest.new(@app)
   end
 

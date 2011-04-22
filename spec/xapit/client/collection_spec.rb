@@ -11,6 +11,6 @@ describe Xapit::Client::Collection do
     collection1 = Xapit::Client::Collection.new(String, [:initial])
     collection2 = collection1.search(1).where(2).order(3)
     collection1.query.should == [:initial]
-    collection2.query.should == [:initial, {:type => :search, :args => [1]}, {:type => :where, :args => [2]}, {:type => :order, :args => [3]}]
+    collection2.query.should == [:initial, {:search => [1]}, {:where => [2]}, {:order => [3]}]
   end
 end
