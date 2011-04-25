@@ -12,6 +12,10 @@ module Xapit
           @text_attributes[attribute] = options
         end
       end
+
+      def index(member)
+        Xapit.database.add_document(Index.new(self, member).data)
+      end
     end
   end
 end

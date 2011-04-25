@@ -24,8 +24,12 @@ module Xapit
           end
 
           def search(query)
-            Collection.new([{:search_classes => [self]}, {:search => [query]}])
+            Collection.new([{:in_classes => [self]}, {:search => [query]}])
           end
+        end
+
+        def xapit_index
+          self.class.xapit_index_builder.index(self)
         end
       end
     end

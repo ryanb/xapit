@@ -6,8 +6,8 @@ module Xapit
         @query = query
       end
 
-      def search_classes(*args)
-        scope(:search_classes, args)
+      def in_classes(*args)
+        scope(:in_classes, args)
       end
 
       def search(*args)
@@ -22,10 +22,20 @@ module Xapit
         scope(:order, args)
       end
 
+      def results
+        @results ||= fetch_results
+      end
+
       private
 
       def scope(type, args)
         Collection.new(@query + [{type => args}])
+      end
+
+      def fetch_results
+        Xapit.database.query(@query).map do |result|
+          result[:class].constantize.find(result[:id])
+        end
       end
     end
   end
