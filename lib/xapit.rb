@@ -4,6 +4,14 @@ require 'xapian'
 
 # Looking for more documentation? A good place to start is Xapit::Membership
 module Xapit
+  class << self
+    attr_accessor :database
+
+    def reset
+      @database = nil
+    end
+  end
+
   # Index all membership classes with xapit defined. Delegates to Xapit::IndexBlueprint.
   # You will likely want to call Xapit.remove_database before this.
   def self.index_all(*args, &block)

@@ -2,7 +2,8 @@ require "spec_helper"
 
 describe Xapit::Server::Database do
   before(:each) do
-    @database = blank_xapit_database
+    load_xapit_database
+    @database = Xapit.database
   end
 
   it "has a xapian database" do
@@ -13,5 +14,10 @@ describe Xapit::Server::Database do
     @database.xapian_database.doccount.should == 0
     @database.add_document(:texts => {:greeting => {:value => "hello world"}})
     @database.xapian_database.doccount.should == 1
+  end
+
+  it "queries the database for results" do
+    @database.add_document(:texts => {:greeting => {:value => "hello world"}}, :id => 123, :class => "Greeting")
+    @database.query([{:search => ["hello"]}]).should == [{:class => "Greeting", :id => "123", :relevance => 100}]
   end
 end

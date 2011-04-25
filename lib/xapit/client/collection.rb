@@ -6,8 +6,8 @@ module Xapit
         @query = query
       end
 
-      def include_classes(*args)
-        scope(:include_classes, args)
+      def search_classes(*args)
+        scope(:search_classes, args)
       end
 
       def search(*args)

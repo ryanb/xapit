@@ -1,13 +1,12 @@
 module Xapit
   module Server
     class Query
-      def initialize(database, query)
-        @database = database
+      def initialize(query)
         @query = query
       end
 
       def results
-        enquire = Xapian::Enquire.new(@database.xapian_database)
+        enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = Xapian::Query.new(Xapian::Query::OP_AND, [@query.first[:search].first])
         enquire.mset(0, 200).matches.map do |match|
           class_name, id = match.document.data.split('-')

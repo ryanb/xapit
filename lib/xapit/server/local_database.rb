@@ -14,6 +14,10 @@ module Xapit
         xapian_database.add_document(Indexer.new(data).document)
       end
 
+      def query(data)
+        Query.new(data).results
+      end
+
       private
 
       def load_database
