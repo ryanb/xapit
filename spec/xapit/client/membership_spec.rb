@@ -13,7 +13,7 @@ describe Xapit::Client::Membership do
 
   it "has a xapit method which makes an index builder" do
     @member_class.xapit { text :foo }
-    @member_class.xapit_index_builder.text_attributes.keys.should == [:foo]
+    @member_class.xapit_index_builder.attributes.keys.should == [:foo]
   end
 
   it "returns collection with query on search" do

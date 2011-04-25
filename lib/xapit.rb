@@ -67,7 +67,6 @@ end
 
 require 'xapit/client/membership'
 require 'xapit/client/index_builder'
-require 'xapit/client/index'
 require 'xapit/client/collection'
 require 'xapit/client/facet'
 require 'xapit/client/adapters/abstract_adapter'

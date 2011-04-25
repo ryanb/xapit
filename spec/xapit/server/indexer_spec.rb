@@ -2,14 +2,14 @@ require "spec_helper"
 
 describe Xapit::Server::Indexer do
   it "generates a xapian document with text data" do
-    indexer = Xapit::Server::Indexer.new(:texts => {:greeting => {:value => "hello world"}, :name => {:value => "John"}})
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "hello world", :text => {}}, :name => {:value => "John", :text => {}}})
     document = indexer.document
     document.should be_kind_of(Xapian::Document)
     document.terms.map(&:term).sort.should == %w[hello world John].sort
   end
 
   it "generates a xapian document with text weight data" do
-    indexer = Xapit::Server::Indexer.new(:texts => {:greeting => {:value => "hello", :weight => 3}})
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "hello", :text => {:weight => 3}}})
     indexer.document.terms.first.wdf.should == 3
   end
 

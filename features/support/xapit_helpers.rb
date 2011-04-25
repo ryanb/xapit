@@ -1,16 +1,15 @@
 module XapitHelpers
   def create_records(records,  perform_index = true)
-    Xapit.remove_database
     XapitMember.delete_all
-    XapitMember.xapit do |index|
+    XapitMember.xapit do
       records.first.keys.each do |attribute|
         if block_given?
-          yield(index, attribute)
+          yield(attribute)
         else
-          index.text attribute
-          index.field attribute
-          index.facet attribute
-          index.sortable attribute
+          text attribute
+          # index.field attribute
+          # index.facet attribute
+          # index.sortable attribute
         end
       end
     end
@@ -18,9 +17,9 @@ module XapitHelpers
       attributes.each do |key, value|
         attributes[key] = value.split(', ') if value.include? ', '
       end
-      XapitMember.new(attributes.symbolize_keys)
+      member = XapitMember.new(attributes.symbolize_keys)
+      member.xapit_index if perform_index
     end
-    Xapit.index_all if perform_index
   end
 end
 

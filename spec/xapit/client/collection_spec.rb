@@ -10,10 +10,9 @@ describe Xapit::Client::Collection do
 
   it "returns results for indexed records" do
     load_xapit_database
-    XapitMember.xapit { text :name }
-    member = XapitMember.new(:name => "John")
+    member = XapitMember.new
     member.xapit_index
-    collection = Xapit::Client::Collection.new([:search => ["John"]])
+    collection = Xapit::Client::Collection.new([])
     collection.results.should == [member]
   end
 end

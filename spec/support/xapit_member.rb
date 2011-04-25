@@ -1,5 +1,6 @@
 class XapitMember
   include Xapit::Client::Membership
+  xapit { } # loads Xapit member methods
 
   attr_reader :id
 

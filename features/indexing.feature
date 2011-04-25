@@ -2,7 +2,7 @@ Feature: Indexing
 
   Scenario: Save xapian database on index
     Given no file exists at "tmp/testdb"
-    And I configured the database to be saved at "tmp/testdb"
+    And an empty database at "tmp/testdb"
     And 3 records
     When I index the database
     Then I should find a directory at "tmp/testdb"

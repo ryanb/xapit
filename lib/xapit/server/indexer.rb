@@ -8,10 +8,12 @@ module Xapit
       def document
         document = Xapian::Document.new
         document.data = "#{@data[:class]}-#{@data[:id]}"
-        if @data[:texts]
-          @data[:texts].each do |name, attributes|
-            attributes[:value].split.each do |term|
-              document.add_term(term, attributes[:weight] || 1)
+        if @data[:attributes]
+          @data[:attributes].each do |name, options|
+            if options[:text]
+              options[:value].split.each do |term|
+                document.add_term(term, options[:text][:weight] || 1)
+              end
             end
           end
         end

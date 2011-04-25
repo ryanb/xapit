@@ -1,10 +1,8 @@
-Given /^I configured the database to be saved at "([^\"]*)"$/ do |path|
-  Xapit.setup(:database_path => File.expand_path("../../../#{path}", __FILE__), :template_path => File.expand_path("../../../spec/fixtures/blankdb", __FILE__))
-end
-
 Given /^an empty database at "([^\"]*)"$/ do |path|
-  Xapit.setup(:database_path => File.dirname(__FILE__) + "/../../#{path}")
-  Xapit.remove_database
+  path = File.expand_path("../../../#{path}", __FILE__)
+  template = File.expand_path("../../../spec/fixtures/blankdb", __FILE__)
+  FileUtils.rm_rf(path)
+  Xapit.database = Xapit::Server::Database.new(path, template)
   XapitMember.delete_all
   GC.start
 end
@@ -41,7 +39,10 @@ Given /^the following indexed records with "([^\"]*)" weighted by "([^\"]*)"$/ d
 end
 
 When /^I index the database$/ do
-  Xapit.index_all
+  # Xapit.index_all
+  XapitMember.find_each do |member|
+    member.xapit_index
+  end
 end
 
 When /^I index the database splitting name by "([^\"]*)"$/ do |divider|
@@ -68,7 +69,7 @@ Then /^I should find records? named "([^\"]*)"$/ do |joined_names|
 end
 
 Then /^I should find ([0-9]+) records?$/ do |num|
-  @records.should have(num.to_i).records
+  @records.results.size.should == num.to_i
 end
 
 Then /^I should have ([0-9]+) records? total$/ do |num|
