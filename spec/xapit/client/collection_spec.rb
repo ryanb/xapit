@@ -8,11 +8,13 @@ describe Xapit::Client::Collection do
     collection2.query.should == [:initial, {:in_classes => [0]}, {:search => [1]}, {:where => [2]}, {:order => [3]}]
   end
 
-  it "returns results for indexed records" do
+  it "returns indexed records and delegates array methods to it" do
     load_xapit_database
     member = XapitMember.new
     member.xapit_index
     collection = Xapit::Client::Collection.new([])
-    collection.results.should == [member]
+    collection.records.should == [member]
+    collection.should respond_to(:flatten)
+    collection.flatten.should == [member]
   end
 end

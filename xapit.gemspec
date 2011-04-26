@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec', '~> 2.5.0'
   s.add_development_dependency 'cucumber', '~> 0.10.2'
-  s.add_development_dependency 'rails', '~> 3.0.6'
 
   s.rubyforge_project = s.name
   s.required_rubygems_version = ">= 1.3.4"
