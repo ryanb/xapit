@@ -17,7 +17,7 @@ module XapitHelpers
       attributes.each do |key, value|
         attributes[key] = value.split(', ') if value.include? ', '
       end
-      member = XapitMember.new(attributes.symbolize_keys)
+      member = XapitMember.new(attributes)
       member.xapit_index if perform_index
     end
   end

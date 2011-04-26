@@ -24,7 +24,7 @@ module Xapit
           end
 
           def search(query)
-            Collection.new([{:in_classes => [self]}, {:search => [query]}])
+            Collection.new([{:in_classes => [self]}, {:search => query}])
           end
         end
 

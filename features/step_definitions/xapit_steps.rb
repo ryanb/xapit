@@ -4,7 +4,6 @@ Given /^an empty database at "([^\"]*)"$/ do |path|
   FileUtils.rm_rf(path)
   Xapit.database = Xapit::Server::Database.new(path, template)
   XapitMember.delete_all
-  GC.start
 end
 
 Given /^a remote database$/ do
@@ -12,7 +11,6 @@ Given /^a remote database$/ do
   Xapit.setup(:database_path => "http://localhost:929292")
   Xapit.remove_database
   XapitMember.delete_all
-  GC.start
 end
 
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|

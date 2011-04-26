@@ -6,16 +6,16 @@ module Xapit
         @query = query
       end
 
-      def in_classes(*args)
-        scope(:in_classes, args)
+      def in_classes(*classes)
+        scope(:in_classes, classes)
       end
 
-      def search(*args)
-        scope(:search, args)
+      def search(phrase)
+        scope(:search, phrase)
       end
 
-      def where(*args)
-        scope(:where, args)
+      def where(conditions)
+        scope(:where, conditions)
       end
 
       def order(*args)

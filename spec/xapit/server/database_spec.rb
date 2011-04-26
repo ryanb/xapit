@@ -18,6 +18,6 @@ describe Xapit::Server::Database do
 
   it "queries the database for results" do
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
-    @database.query([{:search => ["hello"]}]).should == [{:class => "Greeting", :id => "123", :relevance => 100}]
+    @database.query([{:search => "hello"}]).should == [{:class => "Greeting", :id => "123", :relevance => 100}]
   end
 end

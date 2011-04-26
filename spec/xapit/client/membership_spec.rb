@@ -18,6 +18,6 @@ describe Xapit::Client::Membership do
 
   it "returns collection with query on search" do
     @member_class.xapit { text :foo }
-    @member_class.search("hello").query.should == [{:in_classes => [@member_class]}, {:search => ["hello"]}]
+    @member_class.search("hello").query.should == [{:in_classes => [@member_class]}, {:search => "hello"}]
   end
 end

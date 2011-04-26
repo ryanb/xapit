@@ -28,7 +28,10 @@ class XapitMember
   def initialize(attributes = {})
     @@records ||= []
     @id = @@records.size + 1
-    @attributes = attributes
+    @attributes = {}
+    attributes.each do |key, value|
+      @attributes[key.to_sym] = value
+    end
     @@records << self
   end
 
