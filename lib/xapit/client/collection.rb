@@ -10,12 +10,24 @@ module Xapit
         scope(:in_classes, classes)
       end
 
-      def search(phrase)
-        scope(:search, phrase)
+      def search(phrase = nil)
+        if phrase && !phrase.empty?
+          scope(:search, phrase)
+        else
+          self
+        end
       end
 
       def where(conditions)
         scope(:where, conditions)
+      end
+
+      def not_where(conditions)
+        scope(:not_where, conditions)
+      end
+
+      def or_where(conditions)
+        scope(:or_where, conditions)
       end
 
       def order(*args)

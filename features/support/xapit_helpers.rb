@@ -7,7 +7,7 @@ module XapitHelpers
           yield(attribute)
         else
           text attribute
-          # index.field attribute
+          field attribute
           # index.facet attribute
           # index.sortable attribute
         end

@@ -11,6 +11,10 @@ module Xapit
     def value_index(*args)
       Zlib.crc32(["xapit", *args].join) % 99999999 # TODO: Figure out the true max of a xapian value index
     end
+
+    def search(*args)
+      Xapit::Client::Collection.new.search(*args)
+    end
   end
 end
 

@@ -20,4 +20,10 @@ describe Xapit::Client::Membership do
     @member_class.xapit { text :foo }
     @member_class.search("hello").query.should == [{:in_classes => [@member_class]}, {:search => "hello"}]
   end
+
+  it "returns collection with no search query" do
+    @member_class.xapit { text :foo }
+    @member_class.search.query.should == [{:in_classes => [@member_class]}]
+    @member_class.search("").query.should == [{:in_classes => [@member_class]}]
+  end
 end

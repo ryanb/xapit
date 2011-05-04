@@ -37,7 +37,7 @@ module Xapit
 
       def text_terms
         each_attribute(:text) do |name, value, options|
-          value.to_s.split.map do |term|
+          value.to_s.downcase.split.map do |term|
             [term, options[:weight] || 1]
           end
         end.flatten(1)

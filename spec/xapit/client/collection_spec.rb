@@ -8,11 +8,18 @@ describe Xapit::Client::Collection do
     collection2.query.should == [:initial, {:in_classes => [String]}, {:search => "hello"}, {:where => {:foo => "bar"}}, {:order => [1, 2, 3]}]
   end
 
+  it "returns same collection when searching nil or empty string" do
+    collection1 = Xapit::Client::Collection.new
+    collection1.search("").should == collection1
+    collection1.search(nil).should == collection1
+    collection1.search.should == collection1
+  end
+
   it "returns indexed records and delegates array methods to it" do
     load_xapit_database
     member = XapitMember.new
     member.xapit_index
-    collection = Xapit::Client::Collection.new([{:search => ""}])
+    collection = Xapit::Client::Collection.new
     collection.records.should == [member]
     collection.should respond_to(:flatten)
     collection.flatten.should == [member]
