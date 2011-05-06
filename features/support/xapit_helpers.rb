@@ -4,7 +4,7 @@ module XapitHelpers
     XapitMember.xapit do
       records.first.keys.each do |attribute|
         if block_given?
-          yield(attribute)
+          yield(self, attribute)
         else
           text attribute
           field attribute
