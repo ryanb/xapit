@@ -30,8 +30,8 @@ module Xapit
         scope(:or_where, conditions)
       end
 
-      def order(*args)
-        scope(:order, args)
+      def order(column, direction = :asc)
+        scope(:order, [column, direction])
       end
 
       def records

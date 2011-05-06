@@ -9,6 +9,7 @@ module Xapit
       def results
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
+        enquire.set_sort_by_key_then_relevance(sorter, false) if sorter
         enquire.mset(0, 200).matches.map do |match|
           class_name, id = match.document.data.split('-')
           {:class => class_name, :id => id, :relevance => match.percent}
@@ -16,6 +17,19 @@ module Xapit
       end
 
       private
+
+      def sorter
+        if @clauses.any? { |c| c[:order] }
+          sorter = Xapian::MultiValueKeyMaker.new
+          @clauses.each do |clause|
+            if clause[:order]
+              attribute, direction = clause[:order]
+              sorter.add_value(Xapit.value_index(:sortable, attribute), direction.to_sym == :desc)
+            end
+          end
+          sorter
+        end
+      end
 
       def xapian_query
         build_xapian_query if @query.nil?

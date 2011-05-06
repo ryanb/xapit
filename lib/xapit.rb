@@ -15,6 +15,16 @@ module Xapit
     def search(*args)
       Xapit::Client::Collection.new.search(*args)
     end
+  
+    def serialize_value(value)
+      if value.kind_of?(Time)
+        Xapian.sortable_serialise(value.to_i)
+      elsif value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
+        Xapian.sortable_serialise(value.to_f)
+      else
+        value.to_s.downcase
+      end
+    end
   end
 end
 

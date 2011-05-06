@@ -24,7 +24,7 @@ module Xapit
       def values
         values = {}
         each_value do |type, name, value, options|
-          values[Xapit.value_index(type, name)] = value
+          values[Xapit.value_index(type, name)] = Xapit.serialize_value(value)
         end
         values
       end

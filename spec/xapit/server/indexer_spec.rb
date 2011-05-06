@@ -6,12 +6,19 @@ describe Xapit::Server::Indexer do
     document = indexer.document
     document.should be_kind_of(Xapian::Document)
     document.terms.map(&:term).should include(*%w[hello world])
-    document.values.map(&:value).should == ["John"]
+    document.values.map(&:value).should == [Xapit.serialize_value("John")]
   end
 
   it "generates a xapian document with text weight data" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "hello", :text => {:weight => 3}}})
     indexer.document.terms.map(&:wdf).should include(3)
+  end
+
+  it "stores sortable attributes as serialized values" do
+    time = Time.now
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => time, :sortable => {}}})
+    document = indexer.document
+    document.values.map(&:value).should == [Xapit.serialize_value(time)]
   end
 
   it "adds the id and class to xapian document data" do
@@ -57,7 +64,7 @@ describe Xapit::Server::Indexer do
 
   it "includes field and sortable values" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "Hello", :field => {}, :sortable => {}}})
-    indexer.values[Xapit.value_index(:field, "greeting")].should == "Hello"
-    indexer.values[Xapit.value_index(:sortable, "greeting")].should == "Hello"
+    indexer.values[Xapit.value_index(:field, "greeting")].should == Xapit.serialize_value("Hello")
+    indexer.values[Xapit.value_index(:sortable, "greeting")].should == Xapit.serialize_value("Hello")
   end
 end

@@ -9,7 +9,7 @@ module XapitHelpers
           text attribute
           field attribute
           # index.facet attribute
-          # index.sortable attribute
+          sortable attribute
         end
       end
     end

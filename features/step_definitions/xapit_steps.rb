@@ -108,7 +108,10 @@ When /^I query facets "([^\"]*)"$/ do |facets|
 end
 
 When /^I query "([^\"]*)" sorted by (.*?)( descending)?$/ do |keywords, sort, descending|
-  @records = XapitMember.search.order(sort.split(', '), descending)
+  @records = XapitMember.search
+  sort.split(', ').each do |sort|
+    @records = @records.order(sort, (descending ? :desc : :asc))
+  end
 end
 
 When /^I query for similar records for "([^\"]*)"$/ do |keywords|
