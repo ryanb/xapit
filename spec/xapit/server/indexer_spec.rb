@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe Xapit::Server::Indexer do
+  before(:each) do
+    load_xapit_database
+  end
+
   it "generates a xapian document with terms and values" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "hello world", :text => {}}, :name => {:value => "John", :field => {}}})
     document = indexer.document

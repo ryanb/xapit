@@ -16,7 +16,24 @@ module Xapit
         end
       end
 
+      def spelling_suggestion
+        text = @clauses.map { |clause| clause[:search] }.compact.join(" ")
+        if [text, *text.scan(/\w+/)].all? { |term| term_suggestion(term).nil? }
+          nil
+        else
+          return term_suggestion(text) unless term_suggestion(text).to_s.empty?
+          text.downcase.gsub(/\w+/) do |term|
+            term_suggestion(term) || term
+          end
+        end
+      end
+
       private
+
+      def term_suggestion(term)
+        suggestion = Xapit.database.xapian_database.get_spelling_suggestion(term.downcase)
+        suggestion.to_s.empty? ? nil : suggestion
+      end
 
       def sorter
         if @clauses.any? { |c| c[:order] }
@@ -55,7 +72,16 @@ module Xapit
           merge(:or, where_terms(value))
         when :not_where
           merge(:not, where_terms(value))
+        when :similar_to
+          similar_to(value)
         end
+      end
+
+      def similar_to(data)
+        indexer = Indexer.new(data)
+        terms = (indexer.text_terms + indexer.field_terms).map { |a| a.first }
+        merge(:and, Xapian::Query.new(xapian_operator(:or), terms))
+        merge(:not, ["Q#{data[:class]}-#{data[:id]}"])
       end
 
       def where_terms(conditions)

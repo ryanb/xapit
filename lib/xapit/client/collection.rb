@@ -34,8 +34,16 @@ module Xapit
         scope(:order, [column, direction])
       end
 
+      def similar_to(member)
+        scope(:similar_to, member.class.xapit_index_builder.index_data(member))
+      end
+
       def records
         @records ||= fetch_records
+      end
+
+      def spelling_suggestion
+        @spelling_suggestion ||= Xapit.database.spelling_suggestion(@query)
       end
 
       def respond_to?(method, include_private = false)

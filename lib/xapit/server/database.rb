@@ -18,6 +18,10 @@ module Xapit
         Query.new(data).results
       end
 
+      def spelling_suggestion(data)
+        Query.new(data).spelling_suggestion
+      end
+
       private
 
       def load_database

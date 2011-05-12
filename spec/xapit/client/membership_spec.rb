@@ -3,7 +3,6 @@ require "spec_helper"
 describe Xapit::Client::Membership do
   before(:each) do
     @member_class = Class.new
-    @member = @member_class.new
     @member_class.send(:include, Xapit::Client::Membership)
   end
 

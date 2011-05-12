@@ -31,6 +31,10 @@ module Xapit
         def xapit_index
           self.class.xapit_index_builder.index(self)
         end
+
+        def search_similar(*args)
+          self.class.search(*args).similar_to(self)
+        end
       end
     end
   end

@@ -10,6 +10,7 @@ module Xapit
         document.data = "#{@data[:class]}-#{@data[:id]}"
         terms.each do |term, weight|
           document.add_term(term, weight)
+          Xapit.database.xapian_database.add_spelling(term, weight)
         end
         values.each do |index, value|
           document.add_value(index, value)
@@ -29,12 +30,6 @@ module Xapit
         values
       end
 
-      private
-
-      def base_terms
-        [["C#{@data[:class]}", 1], ["Q#{@data[:class]}-#{@data[:id]}", 1]]
-      end
-
       def text_terms
         each_attribute(:text) do |name, value, options|
           value.to_s.downcase.split.map do |term|
@@ -47,6 +42,12 @@ module Xapit
         each_attribute(:field) do |name, value, options|
           ["X#{name}-#{parse_field(value)}", 1]
         end
+      end
+
+      private
+
+      def base_terms
+        [["C#{@data[:class]}", 1], ["Q#{@data[:class]}-#{@data[:id]}", 1]]
       end
 
       def parse_field(value)
