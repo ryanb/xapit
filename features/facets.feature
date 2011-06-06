@@ -1,22 +1,23 @@
+@focus
 Feature: Facets
 
-  # Background:
-  #   Given an empty database at "tmp/testdb"
-  # 
-  # Scenario: List All Facets
-  #   Given the following indexed records
-  #     | name | age |
-  #     | John | 23  |
-  #     | John | 17  |
-  #     | Jack | 17  |
-  #   When I query for ""
-  #   Then I should have the following facets
-  #     | facet | option | count |
-  #     | Name  | Jack   | 1     |
-  #     | Name  | John   | 2     |
-  #     | Age   | 17     | 2     |
-  #     | Age   | 23     | 1     |
-  # 
+  Background:
+    Given an empty database at "tmp/testdb"
+
+  Scenario: List All Facets
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | John | 17  |
+      | Jack | 17  |
+    When I query for ""
+    Then I should have the following facets
+      | facet | option | count |
+      | Name  | Jack   | 1     |
+      | Name  | John   | 2     |
+      | Age   | 17     | 2     |
+      | Age   | 23     | 1     |
+
   # Scenario: List Matching Facets
   #   Given the following indexed records
   #     | name | age |
@@ -28,7 +29,7 @@ Feature: Facets
   #     | facet | option | count |
   #     | Age   | 17     | 1     |
   #     | Age   | 23     | 1     |
-  # 
+  #
   # Scenario: List Applied Facets
   #   Given the following indexed records
   #     | name | age |
@@ -40,7 +41,7 @@ Feature: Facets
   #     | facet | option |
   #     | Age   | 17     |
   #     | Name  | Jane   |
-  # 
+  #
   # Scenario: List Multiple Facets Applied to One Record
   #   Given the following indexed records
   #     | name       |
@@ -53,7 +54,7 @@ Feature: Facets
   #     | Name  | Jack   | 2     |
   #     | Name  | Joe    | 1     |
   #     | Name  | John   | 2     |
-  # 
+  #
   # Scenario: Ignore Facets That Do Not Narrow Down List
   #   Given the following indexed records
   #     | name       |
@@ -63,7 +64,7 @@ Feature: Facets
   #   Then I should have the following facets
   #     | facet | option | count |
   #     | Name  | Jack   | 1     |
-  # 
+  #
   # Scenario: Query for One Facet
   #   Given the following indexed records
   #     | name | age |
@@ -72,7 +73,7 @@ Feature: Facets
   #     | Jack | 17  |
   #   When I query facets "0c93ee1"
   #   Then I should find records named "Jane, Jack"
-  # 
+  #
   # Scenario: Query for Two Facets
   #   Given the following indexed records
   #     | name | age |
@@ -81,7 +82,7 @@ Feature: Facets
   #     | Jack | 17  |
   #   When I query facets "0c93ee1-078661c"
   #   Then I should find records named "Jane"
-  # 
+  #
   # Scenario: Query for Facets with Keywords
   #   Given the following indexed records
   #     | name | age |

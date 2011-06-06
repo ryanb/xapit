@@ -36,6 +36,12 @@ module Xapit
         data
       end
 
+      def facets
+        attributes.keys.select do |attribute|
+          attributes[attribute][:facet]
+        end
+      end
+
       private
 
       def add_attribute(type, *args)

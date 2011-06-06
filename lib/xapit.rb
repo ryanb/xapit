@@ -1,4 +1,5 @@
 require 'xapian'
+require 'digest/sha1'
 
 module Xapit
   class << self
@@ -8,14 +9,18 @@ module Xapit
       @database = nil
     end
 
-    def value_index(*args)
-      Zlib.crc32(["xapit", *args].join) % 99999999 # TODO: Figure out the true max of a xapian value index
+    def value_index(type, attribute)
+      Zlib.crc32(["xapit", type, attribute].join) % 99999999 # TODO: Figure out the true max of a xapian value index
+    end
+
+    def facet_identifier(attribute, value)
+      Digest::SHA1.hexdigest(["xapit", attribute, value].join)[0..6]
     end
 
     def search(*args)
       Xapit::Client::Collection.new.search(*args)
     end
-  
+
     def serialize_value(value)
       if value.kind_of?(Time)
         Xapian.sortable_serialise(value.to_i)
@@ -31,6 +36,8 @@ end
 require 'xapit/client/membership'
 require 'xapit/client/index_builder'
 require 'xapit/client/collection'
+require 'xapit/client/facet'
+require 'xapit/client/facet_option'
 require 'xapit/server/database'
 require 'xapit/server/query'
 require 'xapit/server/indexer'

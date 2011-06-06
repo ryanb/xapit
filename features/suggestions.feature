@@ -1,4 +1,3 @@
-@focus
 Feature: Suggestions
 
   Background:

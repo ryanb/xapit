@@ -36,6 +36,14 @@ describe Xapit::Client::IndexBuilder do
     builder.attributes[:bar].should == {:facet => {:name => "Zap"}}
   end
 
+  it "fetches facets back" do
+    builder = Xapit::Client::IndexBuilder.new
+    builder.text :test
+    builder.facet :foo
+    builder.facet :bar
+    builder.facets.should == [:foo, :bar]
+  end
+
   it "merges member values with attributes for index data" do
     builder = Xapit::Client::IndexBuilder.new
     builder.text :greeting, :weight => 3

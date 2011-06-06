@@ -105,13 +105,13 @@ Feature: Finding
   #   Given 3 indexed records
   #   When I query page 1 at 2 per page
   #   Then I should find 2 records
-  # 
+  #
   # Scenario: Query for Page 2
   #   Given 3 indexed records
   #   When I query page 2 at 2 per page
   #   Then I should find 1 record
   #   And I should have 3 records total
-  # 
+  #
   # Scenario: Query Range of Integer
   #   Given the following indexed records
   #     | name | age |
@@ -120,7 +120,7 @@ Feature: Finding
   #     | Jack | 24  |
   #   When I query "age" between 8 and 15
   #   Then I should find records named "John, Jane"
-  # 
+  #
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
   #     | name | sirname  |
@@ -129,7 +129,7 @@ Feature: Finding
   #     | Jack | Striker  |
   #   When I query "name" matching "Ja*"
   #   Then I should find records named "Jane, Jack"
-  # 
+  #
   # Scenario: Query no partial match on conditions with one letter
   #   Given the following indexed records
   #     | name | sirname  |
@@ -138,7 +138,7 @@ Feature: Finding
   #     | Jack | Striker  |
   #   When I query "name" matching " J*"
   #   Then I should find 0 records
-  # 
+  #
   # Scenario: Query partial match in keywords
   #   Given the following indexed records
   #     | name | sirname  |
@@ -147,7 +147,7 @@ Feature: Finding
   #     | Jack | Striker  |
   #   When I query for "Ja*"
   #   Then I should find records named "John, Jack"
-  # 
+  #
   # Scenario: Query no partial match in keywords with one letter
   #   Given the following indexed records
   #     | name | sirname  |
@@ -156,7 +156,7 @@ Feature: Finding
   #     | Jack | J        |
   #   When I query for " J*"
   #   Then I should find records named "Jack"
-  # 
+  #
   # Scenario: Query for condition in keywords string
   #   Given the following indexed records
   #     | name | age |
@@ -165,7 +165,7 @@ Feature: Finding
   #     | Jack | 17  |
   #   When I query for "age:17"
   #   Then I should find records named "Jane, Jack"
-  # 
+  #
   # Scenario: Query for separate OR conditions and keywords
   #   Given the following indexed records
   #     | name | age |
@@ -174,7 +174,7 @@ Feature: Finding
   #     | Jack | 18  |
   #   When I query for "John" or "age" matching "18" ordered by "name"
   #   Then I should find records named "Jack, John"
-  # 
+  #
   # Scenario: Query ignore punctuation in keyword
   #   Given the following indexed records
   #     | name | sirname    |

@@ -25,7 +25,7 @@ module Xapit
       def values
         values = {}
         each_value do |type, name, value, options|
-          values[Xapit.value_index(type, name)] = Xapit.serialize_value(value)
+          values[Xapit.value_index(type, name)] = value
         end
         values
       end
@@ -60,10 +60,13 @@ module Xapit
 
       def each_value
         each_attribute(:field) do |name, value, options|
-          yield(:field, name, value, options)
+          yield(:field, name, Xapit.serialize_value(value), options)
         end
         each_attribute(:sortable) do |name, value, options|
-          yield(:sortable, name, value, options)
+          yield(:sortable, name, Xapit.serialize_value(value), options)
+        end
+        each_attribute(:facet) do |name, value, options|
+          yield(:facet, name, value, options)
         end
       end
 

@@ -1,11 +1,11 @@
 require "spec_helper"
 
 describe Xapit::Client::Collection do
-  it "builds up query with in_classes, search, where, order calls" do
+  it "builds up clauses with in_classes, search, where, order calls" do
     collection1 = Xapit::Client::Collection.new([:initial])
     collection2 = collection1.in_classes(String).search("hello").where(:foo => "bar").order(:bar)
-    collection1.query.should == [:initial]
-    collection2.query.should == [:initial, {:in_classes => [String]}, {:search => "hello"}, {:where => {:foo => "bar"}}, {:order => [:bar, :asc]}]
+    collection1.clauses.should == [:initial]
+    collection2.clauses.should == [:initial, {:in_classes => [String]}, {:search => "hello"}, {:where => {:foo => "bar"}}, {:order => [:bar, :asc]}]
   end
 
   it "returns same collection when searching nil or empty string" do

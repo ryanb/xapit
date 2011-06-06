@@ -24,7 +24,7 @@ module Xapit
           end
 
           def search(*args)
-            Collection.new.in_classes(self).search(*args)
+            Collection.new.in_classes(self).include_facets(*xapit_index_builder.facets).search(*args)
           end
         end
 

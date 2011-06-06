@@ -42,6 +42,12 @@ describe Xapit::Server::Indexer do
     indexer.terms.should include(["Xgreeting-hello", 1])
   end
 
+  it "adds facets to values" do
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "Hello", :facet => {}}})
+    document = indexer.document
+    document.values.map(&:value).should == ["Hello"]
+  end
+
   it "indexes array values separately" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => ["Hello", "world"], :field => {}}})
     indexer.terms.should include(["Xgreeting-hello", 1], ["Xgreeting-world", 1])

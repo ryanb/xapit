@@ -17,12 +17,17 @@ describe Xapit::Client::Membership do
 
   it "returns collection with query on search" do
     @member_class.xapit { text :foo }
-    @member_class.search("hello").query.should == [{:in_classes => [@member_class]}, {:search => "hello"}]
+    @member_class.search("hello").clauses.should == [{:in_classes => [@member_class]}, {:search => "hello"}]
   end
 
   it "returns collection with no search query" do
     @member_class.xapit { text :foo }
-    @member_class.search.query.should == [{:in_classes => [@member_class]}]
-    @member_class.search("").query.should == [{:in_classes => [@member_class]}]
+    @member_class.search.clauses.should == [{:in_classes => [@member_class]}]
+    @member_class.search("").clauses.should == [{:in_classes => [@member_class]}]
+  end
+
+  it "includes facets" do
+    @member_class.xapit { facet :foo }
+    @member_class.search.clauses.should == [{:in_classes => [@member_class]}, {:include_facets => [:foo]}]
   end
 end

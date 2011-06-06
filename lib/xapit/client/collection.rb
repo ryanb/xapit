@@ -1,9 +1,9 @@
 module Xapit
   module Client
     class Collection
-      attr_reader :query
-      def initialize(query = [])
-        @query = query
+      attr_reader :clauses
+      def initialize(clauses = [])
+        @clauses = clauses
       end
 
       def in_classes(*classes)
@@ -38,12 +38,20 @@ module Xapit
         scope(:similar_to, member.class.xapit_index_builder.index_data(member))
       end
 
+      def include_facets(*facets)
+        facets.empty? ? self : scope(:include_facets, facets)
+      end
+
       def records
-        @records ||= fetch_records
+        @records ||= query[:records].map { |record| Kernel.const_get(record[:class]).find(record[:id]) }
+      end
+
+      def facets
+        @facets ||= query[:facets].map { |name, options| Facet.new(name, options) }
       end
 
       def spelling_suggestion
-        @spelling_suggestion ||= Xapit.database.spelling_suggestion(@query)
+        @spelling_suggestion ||= Xapit.database.spelling_suggestion(@clauses)
       end
 
       def respond_to?(method, include_private = false)
@@ -52,14 +60,12 @@ module Xapit
 
       private
 
-      def scope(type, args)
-        Collection.new(@query + [{type => args}])
+      def query
+        @query ||= Xapit.database.query(@clauses)
       end
 
-      def fetch_records
-        Xapit.database.query(@query).map do |result|
-          Kernel.const_get(result[:class]).find(result[:id])
-        end
+      def scope(type, args)
+        Collection.new(@clauses + [{type => args}])
       end
 
       def method_missing(method, *args, &block)

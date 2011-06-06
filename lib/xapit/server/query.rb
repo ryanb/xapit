@@ -6,7 +6,7 @@ module Xapit
         @xapian_query = nil
       end
 
-      def results
+      def records
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
         enquire.set_sort_by_key_then_relevance(sorter, false) if sorter
@@ -28,6 +28,25 @@ module Xapit
         end
       end
 
+      def facets
+        facets = {}
+        enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
+        enquire.query = xapian_query
+        spies = facet_spies
+        spies.values.each do |spy|
+          enquire.add_matchspy(spy)
+        end
+        enquire.mset(0, 200)
+        spies.each do |attribute, spy|
+          facets[attribute] = spy.values.map { |value| {:value => value.term, :count => value.termfreq} }
+        end
+        facets
+      end
+
+      def data
+        {:records => records, :facets => facets}
+      end
+
       private
 
       def term_suggestion(term)
@@ -46,6 +65,18 @@ module Xapit
           end
           sorter
         end
+      end
+
+      def facet_spies
+        spies = {}
+        @clauses.each do |clause|
+          if clause[:include_facets]
+            clause[:include_facets].each do |facet|
+              spies[facet] = Xapian::ValueCountMatchSpy.new(Xapit.value_index(:facet, facet))
+            end
+          end
+        end
+        spies
       end
 
       def xapian_query

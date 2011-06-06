@@ -8,7 +8,7 @@ module XapitHelpers
         else
           text attribute
           field attribute
-          # index.facet attribute
+          facet attribute
           sortable attribute
         end
       end
