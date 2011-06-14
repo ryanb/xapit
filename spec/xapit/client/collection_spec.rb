@@ -24,4 +24,9 @@ describe Xapit::Client::Collection do
     collection.should respond_to(:flatten)
     collection.flatten.should == [member]
   end
+
+  it "should split up matching facets into an array" do
+    collection = Xapit::Client::Collection.new([]).match_facets("foo-bar")
+    collection.clauses.should == [{:match_facets => %w[foo bar]}]
+  end
 end

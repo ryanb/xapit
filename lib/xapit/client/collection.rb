@@ -38,6 +38,10 @@ module Xapit
         scope(:similar_to, member.class.xapit_index_builder.index_data(member))
       end
 
+      def match_facets(facets)
+        scope(:match_facets, facets.split("-"))
+      end
+
       def include_facets(*facets)
         facets.empty? ? self : scope(:include_facets, facets)
       end
@@ -47,7 +51,7 @@ module Xapit
       end
 
       def facets
-        @facets ||= query[:facets].map { |name, options| Facet.new(name, options) }
+        @facets ||= fetch_facets.select { |f| f.options.size > 1 }
       end
 
       def spelling_suggestion
@@ -59,6 +63,10 @@ module Xapit
       end
 
       private
+
+      def fetch_facets
+        query[:facets].map { |attribute, options| Facet.new(attribute, options) }
+      end
 
       def query
         @query ||= Xapit.database.query(@clauses)

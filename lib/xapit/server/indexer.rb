@@ -19,7 +19,7 @@ module Xapit
       end
 
       def terms
-        base_terms + text_terms + field_terms
+        base_terms + text_terms + field_terms + facet_terms
       end
 
       def values
@@ -41,6 +41,12 @@ module Xapit
       def field_terms
         each_attribute(:field) do |name, value, options|
           ["X#{name}-#{parse_field(value)}", 1]
+        end
+      end
+
+      def facet_terms
+        each_attribute(:facet) do |name, value, options|
+          ["F#{Xapit.facet_identifier(name, value)}", 1]
         end
       end
 

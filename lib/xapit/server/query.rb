@@ -105,6 +105,8 @@ module Xapit
           merge(:not, where_terms(value))
         when :similar_to
           similar_to(value)
+        when :match_facets
+          merge(:and, facet_terms(value))
         end
       end
 
@@ -119,6 +121,10 @@ module Xapit
         conditions.map do |name, value|
           "X#{name}-#{value.to_s.downcase}"
         end
+      end
+
+      def facet_terms(facets)
+        facets.map { |facet| "F#{facet}" }
       end
 
       def search_query(text)

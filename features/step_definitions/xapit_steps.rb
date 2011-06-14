@@ -60,7 +60,7 @@ When /^I query for "([^\"]*)" on Xapit$/ do |query|
 end
 
 When /^I query "([^\"]*)" with facets "([^\"]*)"$/ do |keywords, facets|
-  @records = XapitMember.search(keywords).in_facets(facets)
+  @records = XapitMember.search(keywords).match_facets(facets)
 end
 
 Then /^I should find records? named "([^\"]*)"$/ do |joined_names|
@@ -104,7 +104,7 @@ When /^I query page ([0-9]+) at ([0-9]+) per page$/ do |page, per_page|
 end
 
 When /^I query facets "([^\"]*)"$/ do |facets|
-  @records = XapitMember.search.in_facets(facets)
+  @records = XapitMember.search.match_facets(facets)
 end
 
 When /^I query "([^\"]*)" sorted by (.*?)( descending)?$/ do |keywords, sort, descending|
