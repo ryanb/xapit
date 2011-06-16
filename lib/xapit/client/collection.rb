@@ -34,6 +34,14 @@ module Xapit
         scope(:order, [column, direction])
       end
 
+      def page(page_num)
+        scope(:page, page_num)
+      end
+
+      def per(per_page)
+        scope(:per_page, per_page)
+      end
+
       def similar_to(member)
         scope(:similar_to, member.class.xapit_index_builder.index_data(member))
       end
@@ -48,6 +56,10 @@ module Xapit
 
       def records
         @records ||= query[:records].map { |record| Kernel.const_get(record[:class]).find(record[:id]) }
+      end
+
+      def total_entries
+        query[:total].to_i
       end
 
       def facets

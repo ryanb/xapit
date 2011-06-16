@@ -101,17 +101,17 @@ Feature: Finding
     When I query "" sorted by age, name
     Then I should find records named "Banana, Zebra"
 
-  # Scenario: Query for Page 1
-  #   Given 3 indexed records
-  #   When I query page 1 at 2 per page
-  #   Then I should find 2 records
-  #
-  # Scenario: Query for Page 2
-  #   Given 3 indexed records
-  #   When I query page 2 at 2 per page
-  #   Then I should find 1 record
-  #   And I should have 3 records total
-  #
+  Scenario: Query for Page 1
+    Given 3 indexed records
+    When I query page 1 at 2 per page
+    Then I should find 2 records
+
+  Scenario: Query for Page 2
+    Given 3 indexed records
+    When I query page 2 at 2 per page
+    Then I should find 1 record
+    And I should have 3 records total
+
   # Scenario: Query Range of Integer
   #   Given the following indexed records
   #     | name | age |

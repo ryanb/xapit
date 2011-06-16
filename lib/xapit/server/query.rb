@@ -10,7 +10,7 @@ module Xapit
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
         enquire.set_sort_by_key_then_relevance(sorter, false) if sorter
-        enquire.mset(0, 200).matches.map do |match|
+        enquire.mset((page.to_i-1)*per_page.to_i, per_page.to_i).matches.map do |match|
           class_name, id = match.document.data.split('-')
           {:class => class_name, :id => id, :relevance => match.percent}
         end
@@ -50,11 +50,25 @@ module Xapit
         facets
       end
 
+      def total
+        enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
+        enquire.query = xapian_query
+        enquire.mset(0, Xapit.database.xapian_database.doccount).matches_estimated
+      end
+
       def data
-        {:records => records, :facets => facets}
+        {:records => records, :facets => facets, :total => total}
       end
 
       private
+
+      def page
+        @clauses.map { |clause| clause[:page] }.compact.last || 1
+      end
+
+      def per_page
+        @clauses.map { |clause| clause[:per_page] }.compact.last || 20
+      end
 
       def term_suggestion(term)
         suggestion = Xapit.database.xapian_database.get_spelling_suggestion(term.downcase)
