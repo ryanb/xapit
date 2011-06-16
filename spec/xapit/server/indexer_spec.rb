@@ -43,10 +43,11 @@ describe Xapit::Server::Indexer do
   end
 
   it "adds facets to values and terms" do
-    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "Hello", :facet => {}}})
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => ["Hello", "Hey"], :facet => {}}})
     document = indexer.document
-    document.values.map(&:value).should == ["Hello"]
+    document.values.map(&:value).should == ["Hello\3Hey"]
     indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "Hello")}", 1])
+    indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "Hey")}", 1])
   end
 
   it "indexes array values separately" do

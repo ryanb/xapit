@@ -38,7 +38,14 @@ module Xapit
         end
         enquire.mset(0, 200)
         spies.each do |attribute, spy|
-          facets[attribute] = spy.values.map { |value| {:value => value.term, :count => value.termfreq} }
+          values = {}
+          spy.values.map do |spy_value|
+            spy_value.term.split("\3").each do |term| # used to support multiple facet values
+              values[term] ||= 0
+              values[term] += spy_value.termfreq.to_i
+            end
+          end
+          facets[attribute] = values.map { |value, count| {:value => value, :count => count} }
         end
         facets
       end

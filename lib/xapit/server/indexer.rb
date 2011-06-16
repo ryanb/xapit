@@ -24,8 +24,12 @@ module Xapit
 
       def values
         values = {}
-        each_value do |type, name, value, options|
-          values[Xapit.value_index(type, name)] = value
+        each_value do |index, value|
+          if values[index]
+            values[index] += "\3#{value}" # multiple values are split back out on the query side
+          else
+            values[index] = value
+          end
         end
         values
       end
@@ -66,13 +70,13 @@ module Xapit
 
       def each_value
         each_attribute(:field) do |name, value, options|
-          yield(:field, name, Xapit.serialize_value(value), options)
+          yield(Xapit.value_index(:field, name), Xapit.serialize_value(value))
         end
         each_attribute(:sortable) do |name, value, options|
-          yield(:sortable, name, Xapit.serialize_value(value), options)
+          yield(Xapit.value_index(:sortable, name), Xapit.serialize_value(value))
         end
         each_attribute(:facet) do |name, value, options|
-          yield(:facet, name, value, options)
+          yield(Xapit.value_index(:facet, name), value)
         end
       end
 

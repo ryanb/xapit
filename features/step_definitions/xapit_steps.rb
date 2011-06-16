@@ -129,7 +129,7 @@ Then /^I should have the following facets$/ do |facets_table|
       }
     end
   end
-  result.should == facets_table.hashes # this is somewhat fragile because it depends on order of hash result
+  result.map(&:inspect).sort.should == facets_table.hashes.map(&:inspect).sort
 end
 
 Then /^I should have the following applied facets$/ do |facets_table|
@@ -140,7 +140,7 @@ Then /^I should have the following applied facets$/ do |facets_table|
       "option" => option.name
     }
   end
-  result.should == facets_table.hashes # this is somewhat fragile because it depends on order of hash result
+  result.map(&:inspect).sort.should == facets_table.hashes.map(&:inspect).sort
 end
 
 Then /^I should have "([^\"]*)" as a spelling suggestion$/ do |term|
