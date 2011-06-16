@@ -54,15 +54,15 @@ Feature: Facets
       | Name  | Joe    | 1     |
       | Name  | John   | 2     |
 
-  # Scenario: Ignore Facets That Do Not Narrow Down List
-  #   Given the following indexed records
-  #     | name       |
-  #     | John, Jack |
-  #     | John       |
-  #   When I query for ""
-  #   Then I should have the following facets
-  #     | facet | option | count |
-  #     | Name  | Jack   | 1     |
+  Scenario: Ignore Facets That Do Not Narrow Down List
+    Given the following indexed records
+      | name       |
+      | John, Jack |
+      | John       |
+    When I query for ""
+    Then I should have the following facets
+      | facet | option | count |
+      | Name  | Jack   | 1     |
 
   Scenario: Query for One Facet
     Given the following indexed records

@@ -63,7 +63,7 @@ module Xapit
       end
 
       def facets
-        @facets ||= fetch_facets.select { |f| f.options.size > 1 }
+        @facets ||= fetch_facets.select { |f| f.options.size > 0 }
       end
 
       def spelling_suggestion
@@ -77,7 +77,13 @@ module Xapit
       private
 
       def fetch_facets
-        query[:facets].map { |attribute, options| Facet.new(attribute, options) }
+        query[:facets].map { |attribute, options| Facet.new(attribute, filter_facet_options(options)) }
+      end
+
+      def filter_facet_options(options)
+        options.select do |option|
+          option[:count].to_i < total_entries
+        end
       end
 
       def query
