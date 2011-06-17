@@ -194,11 +194,13 @@ module Xapit
         # parser.stemmer = Xapian::Stem.new(Config.stemming)
         # parser.stemming_strategy = Xapian::QueryParser::STEM_SOME
         parser.default_op = xapian_operator(:and)
-        # if @member_class
-        #   @member_class.xapit_index_blueprint.field_attributes.each do |field|
-        #     parser.add_prefix(field.to_s, "X#{field}-")
-        #   end
-        # end
+        @clauses.each do |clause|
+          if clause[:search]
+            clause[:search].scan(/([a-z0-9_]+)\:/i).each do
+              parser.add_prefix($1, "X#{$1}-")
+            end
+          end
+        end
         parser
       end
     end

@@ -112,7 +112,6 @@ Feature: Finding
     Then I should find 1 record
     And I should have 3 records total
 
-  @focus
   Scenario: Query Range of Integer
     Given the following indexed records
       | name | age |
@@ -121,6 +120,24 @@ Feature: Finding
       | Jack | 24  |
     When I query "age" between 8 and 15
     Then I should find records named "John, Jane"
+
+  Scenario: Query for condition in keywords string
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query for "age:17"
+    Then I should find records named "Jane, Jack"
+
+  Scenario: Query for separate OR conditions and keywords
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 18  |
+    When I query for "John" or "age" matching "18" ordered by "name"
+    Then I should find records named "Jack, John"
 
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
@@ -157,24 +174,6 @@ Feature: Finding
   #     | Jack | J        |
   #   When I query for " J*"
   #   Then I should find records named "Jack"
-  #
-  # Scenario: Query for condition in keywords string
-  #   Given the following indexed records
-  #     | name | age |
-  #     | John | 23  |
-  #     | Jane | 17  |
-  #     | Jack | 17  |
-  #   When I query for "age:17"
-  #   Then I should find records named "Jane, Jack"
-  #
-  # Scenario: Query for separate OR conditions and keywords
-  #   Given the following indexed records
-  #     | name | age |
-  #     | John | 23  |
-  #     | Jane | 17  |
-  #     | Jack | 18  |
-  #   When I query for "John" or "age" matching "18" ordered by "name"
-  #   Then I should find records named "Jack, John"
   #
   # Scenario: Query ignore punctuation in keyword
   #   Given the following indexed records
