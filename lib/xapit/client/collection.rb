@@ -19,15 +19,15 @@ module Xapit
       end
 
       def where(conditions)
-        scope(:where, conditions)
+        scope(:where, where_conditions(conditions))
       end
 
       def not_where(conditions)
-        scope(:not_where, conditions)
+        scope(:not_where, where_conditions(conditions))
       end
 
       def or_where(conditions)
-        scope(:or_where, conditions)
+        scope(:or_where, where_conditions(conditions))
       end
 
       def order(column, direction = :asc)
@@ -75,6 +75,15 @@ module Xapit
       end
 
       private
+
+      def where_conditions(conditions)
+        conditions.keys.each do |key|
+          if conditions[key].kind_of? Range
+            conditions[key] = {:from => conditions[key].begin, :to => conditions[key].end}
+          end
+        end
+        conditions
+      end
 
       def fetch_facets
         query[:facets].map { |attribute, options| Facet.new(attribute, filter_facet_options(options)) }

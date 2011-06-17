@@ -112,15 +112,16 @@ Feature: Finding
     Then I should find 1 record
     And I should have 3 records total
 
-  # Scenario: Query Range of Integer
-  #   Given the following indexed records
-  #     | name | age |
-  #     | John | 8   |
-  #     | Jane | 13  |
-  #     | Jack | 24  |
-  #   When I query "age" between 8 and 15
-  #   Then I should find records named "John, Jane"
-  #
+  @focus
+  Scenario: Query Range of Integer
+    Given the following indexed records
+      | name | age |
+      | John | 8   |
+      | Jane | 13  |
+      | Jack | 24  |
+    When I query "age" between 8 and 15
+    Then I should find records named "John, Jane"
+
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
   #     | name | sirname  |

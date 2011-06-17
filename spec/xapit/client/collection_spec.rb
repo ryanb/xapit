@@ -25,8 +25,13 @@ describe Xapit::Client::Collection do
     collection.flatten.should == [member]
   end
 
-  it "should split up matching facets into an array" do
+  it "splits up matching facets into an array" do
     collection = Xapit::Client::Collection.new([]).match_facets("foo-bar")
     collection.clauses.should == [{:match_facets => %w[foo bar]}]
+  end
+
+  it "splits range into from/to hash" do
+    collection = Xapit::Client::Collection.new([]).where(:priority => 3..5)
+    collection.clauses.should == [{:where => {:priority => {:from => 3, :to => 5}}}]
   end
 end

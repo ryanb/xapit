@@ -119,11 +119,11 @@ module Xapit
         when :search
           merge(:and, search_query(value))
         when :where
-          merge(:and, where_terms(value))
+          merge(:and, where_query(value))
         when :or_where
-          merge(:or, where_terms(value))
+          merge(:or, where_query(value))
         when :not_where
-          merge(:not, where_terms(value))
+          merge(:not, where_query(value))
         when :similar_to
           similar_to(value)
         when :match_facets
@@ -136,6 +136,22 @@ module Xapit
         terms = (indexer.text_terms + indexer.field_terms).map { |a| a.first }
         merge(:and, Xapian::Query.new(xapian_operator(:or), terms))
         merge(:not, ["Q#{data[:class]}-#{data[:id]}"])
+      end
+
+      def where_query(conditions)
+        queries = []
+        terms = []
+        conditions.each do |name, value|
+          if value.kind_of?(Hash) && value[:from] && value[:to]
+            queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+          else
+            terms << "X#{name}-#{value.to_s.downcase}"
+          end
+        end
+        queries << Xapian::Query.new(xapian_operator(:and), terms) unless terms.empty?
+        queries.inject(queries.shift) do |merged_query, query|
+          Xapian::Query.new(xapian_operator(:and), merged_query, query)
+        end
       end
 
       def where_terms(conditions)
@@ -163,6 +179,7 @@ module Xapit
         when :and then Xapian::Query::OP_AND
         when :or then Xapian::Query::OP_OR
         when :not then Xapian::Query::OP_AND_NOT
+        when :range then Xapian::Query::OP_VALUE_RANGE
         else raise "Unknown Xapian operator #{operator}"
         end
       end
