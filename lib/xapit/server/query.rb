@@ -166,7 +166,7 @@ module Xapit
 
       def search_query(text)
         # xapian_parser.parse_query(text, Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN | Xapian::QueryParser::FLAG_LOVEHATE)
-        xapian_parser.parse_query(text, Xapian::QueryParser::FLAG_BOOLEAN)
+        xapian_parser.parse_query(text.gsub(/\b([a-z])\*/i, "\\1"), Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN)
       end
 
       def merge(operator, query)

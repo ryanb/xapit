@@ -29,18 +29,6 @@ Feature: Facets
       | Age   | 17     | 1     |
       | Age   | 23     | 1     |
 
-# Scenario: List Applied Facets
-#   Given the following indexed records
-#     | name | age |
-#     | John | 23  |
-#     | Jane | 17  |
-#     | Jack | 17  |
-#   When I query facets "0c93ee1-078661c"
-#   Then I should have the following applied facets
-#     | facet | option |
-#     | Age   | 17     |
-#     | Name  | Jane   |
-
   Scenario: List Multiple Facets Applied to One Record
     Given the following indexed records
       | name       |
@@ -90,3 +78,15 @@ Feature: Facets
       | Jack | 17  |
     When I query "Jane" with facets "9f33345"
     Then I should find record named "Jane"
+
+# Scenario: List Applied Facets
+#   Given the following indexed records
+#     | name | age |
+#     | John | 23  |
+#     | Jane | 17  |
+#     | Jack | 17  |
+#   When I query facets "0c93ee1-078661c"
+#   Then I should have the following applied facets
+#     | facet | option |
+#     | Age   | 17     |
+#     | Name  | Jane   |

@@ -139,6 +139,25 @@ Feature: Finding
     When I query for "John" or "age" matching "18" ordered by "name"
     Then I should find records named "Jack, John"
 
+
+  Scenario: Query partial match in keywords
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Bill | Niel     |
+      | Jack | Striker  |
+    When I query for "Ja*"
+    Then I should find records named "John, Jack"
+
+  Scenario: Query no partial match in keywords with one letter
+    Given the following indexed records
+      | name | sirname  |
+      | John | Jacobson |
+      | Bill | Niel     |
+      | Jack | J        |
+    When I query for " J*"
+    Then I should find records named "Jack"
+
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
   #     | name | sirname  |
@@ -156,24 +175,6 @@ Feature: Finding
   #     | Jack | Striker  |
   #   When I query "name" matching " J*"
   #   Then I should find 0 records
-  #
-  # Scenario: Query partial match in keywords
-  #   Given the following indexed records
-  #     | name | sirname  |
-  #     | John | Jacobson |
-  #     | Bill | Niel     |
-  #     | Jack | Striker  |
-  #   When I query for "Ja*"
-  #   Then I should find records named "John, Jack"
-  #
-  # Scenario: Query no partial match in keywords with one letter
-  #   Given the following indexed records
-  #     | name | sirname  |
-  #     | John | Jacobson |
-  #     | Bill | Niel     |
-  #     | Jack | J        |
-  #   When I query for " J*"
-  #   Then I should find records named "Jack"
   #
   # Scenario: Query ignore punctuation in keyword
   #   Given the following indexed records
