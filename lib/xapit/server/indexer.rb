@@ -5,16 +5,21 @@ module Xapit
         @data = data
       end
 
+      def database
+        Xapit.database.xapian_database
+      end
+
       def document
         document = Xapian::Document.new
         document.data = "#{@data[:class]}-#{@data[:id]}"
         terms.each do |term, weight|
           document.add_term(term, weight)
-          Xapit.database.xapian_database.add_spelling(term, weight)
+          database.add_spelling(term, weight)
         end
         values.each do |index, value|
           document.add_value(index, value)
         end
+        save_facets
         document
       end
 
@@ -51,6 +56,19 @@ module Xapit
       def facet_terms
         each_attribute(:facet) do |name, value, options|
           ["F#{Xapit.facet_identifier(name, value)}", 1]
+        end
+      end
+
+      def save_facets
+        each_attribute(:facet) do |name, value, options|
+          id = Xapit.facet_identifier(name, value)
+          unless database.term_exists("QFacetOption-#{id}")
+            document = Xapian::Document.new
+            document.data = "#{name}|||#{value}"
+            document.add_term("CFacetOption")
+            document.add_term("Xid-#{id}")
+            database.add_document(document)
+          end
         end
       end
 

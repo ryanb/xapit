@@ -62,6 +62,10 @@ module Xapit
         query[:total].to_i
       end
 
+      def applied_facet_options
+        query[:applied_facet_options]
+      end
+
       def facets
         @facets ||= fetch_facets.select { |f| f.options.size > 0 }
       end

@@ -6,11 +6,15 @@ module Xapit
         @xapian_query = nil
       end
 
-      def records
+      def matches
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
         enquire.set_sort_by_key_then_relevance(sorter, false) if sorter
-        enquire.mset((page.to_i-1)*per_page.to_i, per_page.to_i).matches.map do |match|
+        enquire.mset((page.to_i-1)*per_page.to_i, per_page.to_i).matches
+      end
+
+      def records
+        matches.map do |match|
           class_name, id = match.document.data.split('-')
           {:class => class_name, :id => id, :relevance => match.percent}
         end
@@ -48,6 +52,28 @@ module Xapit
           facets[attribute] = values.map { |value, count| {:value => value, :count => count} }
         end
         facets
+      end
+
+      def applied_facet_options
+        facet_options = []
+        @clauses.each do |clause|
+          if clause[:match_facets]
+            clause[:match_facets].each do |identifier|
+              facet_options << facet_option(identifier)
+            end
+          end
+        end
+        facet_options
+      end
+
+      def facet_option(identifier)
+        match = self.class.new([{:in_classes => ["FacetOption"]}, {:where => {:id => identifier}}]).matches.first
+        if match.nil?
+          raise "Unable to find facet option for #{identifier}."
+        else
+          name, value = match.document.data.split('|||')
+          {:name => name, :value => value}
+        end
       end
 
       def total
@@ -165,8 +191,7 @@ module Xapit
       end
 
       def search_query(text)
-        # xapian_parser.parse_query(text, Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN | Xapian::QueryParser::FLAG_LOVEHATE)
-        xapian_parser.parse_query(text.gsub(/\b([a-z])\*/i, "\\1"), Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN)
+        xapian_parser.parse_query(text.gsub(/\b([a-z])\*/i, "\\1"), Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN) # Xapian::QueryParser::FLAG_LOVEHATE
       end
 
       def merge(operator, query)
