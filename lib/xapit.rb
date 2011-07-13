@@ -3,10 +3,24 @@ require 'digest/sha1'
 
 module Xapit
   class << self
-    attr_accessor :database
+    attr_reader :config
 
-    def reset
+    def reset_config
       @database = nil
+      @config = {
+        :spelling => true,
+        :stemming => "english"
+      }
+    end
+
+    def database
+      @database ||= Xapit::Server::Database.new(config[:database_path], config[:template_path])
+    end
+
+    def load_config(filename, environment)
+      yaml = YAML.load_file(filename)[environment.to_s]
+      raise ArgumentError, "The #{environment} environment does not exist in #{filename}" if yaml.nil?
+      yaml.each { |k, v| config[k.to_sym] = v }
     end
 
     def value_index(type, attribute)
@@ -31,6 +45,8 @@ module Xapit
       end
     end
   end
+
+  reset_config
 end
 
 require 'xapit/client/membership'

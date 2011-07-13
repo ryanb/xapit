@@ -2,7 +2,9 @@ Given /^an empty database at "([^\"]*)"$/ do |path|
   path = File.expand_path("../../../#{path}", __FILE__)
   template = File.expand_path("../../../spec/fixtures/blankdb", __FILE__)
   FileUtils.rm_rf(path)
-  Xapit.database = Xapit::Server::Database.new(path, template)
+  Xapit.reset_config
+  Xapit.config[:database_path] = path
+  Xapit.config[:template_path] = template
   XapitMember.delete_all
   GC.start
 end
@@ -12,6 +14,10 @@ Given /^a remote database$/ do
   Xapit.setup(:database_path => "http://localhost:929292")
   Xapit.remove_database
   XapitMember.delete_all
+end
+
+Given /^no stemming$/ do
+  Xapit.config[:stemming] = nil
 end
 
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|

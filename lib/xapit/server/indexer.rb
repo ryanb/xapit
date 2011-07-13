@@ -24,7 +24,7 @@ module Xapit
       end
 
       def terms
-        base_terms + text_terms + field_terms + facet_terms
+        base_terms + text_terms + stemmed_text_terms + field_terms + facet_terms
       end
 
       def values
@@ -45,6 +45,18 @@ module Xapit
             [term, options[:weight] || 1]
           end
         end.flatten(1)
+      end
+
+      def stemmed_text_terms
+        if stemmer
+          each_attribute(:text) do |name, value, options|
+            value.to_s.downcase.split.map do |term|
+              ["Z#{stemmer.call(term)}", options[:weight] || 1]
+            end
+          end.flatten(1)
+        else
+          []
+        end
       end
 
       def field_terms
@@ -73,6 +85,10 @@ module Xapit
       end
 
       private
+
+      def stemmer
+        @stemmer ||= Xapian::Stem.new(Xapit.config[:stemming]) if Xapit.config[:stemming]
+      end
 
       def base_terms
         [["C#{@data[:class]}", 1], ["Q#{@data[:class]}-#{@data[:id]}", 1]]

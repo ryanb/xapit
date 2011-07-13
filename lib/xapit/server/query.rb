@@ -216,8 +216,10 @@ module Xapit
       def build_xapian_parser
         parser = Xapian::QueryParser.new
         parser.database = Xapit.database.xapian_database
-        # parser.stemmer = Xapian::Stem.new(Config.stemming)
-        # parser.stemming_strategy = Xapian::QueryParser::STEM_SOME
+        if Xapit.config[:stemming]
+          parser.stemmer = Xapian::Stem.new(Xapit.config[:stemming])
+          parser.stemming_strategy = Xapian::QueryParser::STEM_SOME
+        end
         parser.default_op = xapian_operator(:and)
         @clauses.each do |clause|
           if clause[:search]

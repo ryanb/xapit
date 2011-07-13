@@ -155,8 +155,21 @@ Feature: Finding
       | John | Jacobson |
       | Bill | Niel     |
       | Jack | J        |
-    When I query for " J*"
+    When I query for "J*"
     Then I should find records named "Jack"
+
+  @focus
+  Scenario: Query no stemming
+    Given indexed records named "runs, sat, sits"
+    And no stemming
+    When I query for "run"
+    Then I should find 0 records
+
+  @focus
+  Scenario: Query with stemming by default
+    Given indexed records named "runs, sat, sits"
+    When I query for "run"
+    Then I should find records named "runs"
 
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
