@@ -158,14 +158,12 @@ Feature: Finding
     When I query for "J*"
     Then I should find records named "Jack"
 
-  @focus
   Scenario: Query no stemming
     Given indexed records named "runs, sat, sits"
     And no stemming
     When I query for "run"
     Then I should find 0 records
 
-  @focus
   Scenario: Query with stemming by default
     Given indexed records named "runs, sat, sits"
     When I query for "run"

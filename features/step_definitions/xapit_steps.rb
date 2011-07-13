@@ -20,6 +20,10 @@ Given /^no stemming$/ do
   Xapit.config[:stemming] = nil
 end
 
+Given /^no spelling$/ do
+  Xapit.config[:spelling] = false
+end
+
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|
   records = joined_names.split(', ').map { |name| {:name => name} }
   create_records(records, indexed)
@@ -150,6 +154,6 @@ Then /^I should have the following applied facets$/ do |facets_table|
 end
 
 Then /^I should have "([^\"]*)" as a spelling suggestion$/ do |term|
-  @records.spelling_suggestion.should == term
+  @records.spelling_suggestion.to_s.should == term
 end
 

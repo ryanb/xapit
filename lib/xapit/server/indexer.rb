@@ -12,13 +12,9 @@ module Xapit
       def document
         document = Xapian::Document.new
         document.data = "#{@data[:class]}-#{@data[:id]}"
-        terms.each do |term, weight|
-          document.add_term(term, weight)
-          database.add_spelling(term, weight)
-        end
-        values.each do |index, value|
-          document.add_value(index, value)
-        end
+        terms.each { |term, weight| document.add_term(term, weight) }
+        text_terms.each { |term, weight| database.add_spelling(term, weight) } if Xapit.config[:spelling]
+        values.each { |index, value| document.add_value(index, value) }
         save_facets
         document
       end

@@ -8,6 +8,12 @@ Feature: Suggestions
     When I query for "zerba bike aple"
     Then I should have "zebra bike apple" as a spelling suggestion
 
+  Scenario: No spelling suggestion
+    Given no spelling
+    And indexed records named "Zebra, Apple, Bike"
+    When I query for "zerba bike aple"
+    Then I should have "" as a spelling suggestion
+
   Scenario: Find similar records
     Given indexed records named "Jason John Smith, John Doe, Jason Smith, Jacob Johnson"
     When I query for similar records for "Jason John Smith"
