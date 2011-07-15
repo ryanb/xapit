@@ -10,6 +10,10 @@ module Xapit
         scope(:in_classes, classes)
       end
 
+      def not_in_classes(*classes)
+        scope(:not_in_classes, classes)
+      end
+
       def search(phrase = nil)
         if phrase && !phrase.empty?
           scope(:search, phrase)

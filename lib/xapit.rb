@@ -32,7 +32,7 @@ module Xapit
     end
 
     def search(*args)
-      Xapit::Client::Collection.new.search(*args)
+      Xapit::Client::Collection.new.not_in_classes("FacetOption").search(*args)
     end
 
     def serialize_value(value)

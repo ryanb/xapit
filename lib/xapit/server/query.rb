@@ -83,7 +83,7 @@ module Xapit
       end
 
       def data
-        {:records => records, :facets => facets, :total => total}
+        {:records => records, :facets => facets, :applied_facet_options => applied_facet_options, :total => total}
       end
 
       private
@@ -150,6 +150,10 @@ module Xapit
           merge(:or, where_query(value))
         when :not_where
           merge(:not, where_query(value))
+        when :in_classes
+          merge(:and, value.map { |c| "C#{c}" })
+        when :not_in_classes
+          merge(:not, value.map { |c| "C#{c}" })
         when :similar_to
           similar_to(value)
         when :match_facets

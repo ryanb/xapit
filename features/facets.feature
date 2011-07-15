@@ -79,13 +79,14 @@ Feature: Facets
     When I query "Jane" with facets "9f33345"
     Then I should find record named "Jane"
 
+  @focus
   Scenario: List Applied Facets
     Given the following indexed records
       | name | age |
       | John | 23  |
       | Jane | 17  |
       | Jack | 17  |
-    When I query facets "0c93ee1-078661c"
+    When I query facets "9f33345-9a10ff2"
     Then I should have the following applied facets
       | facet | option |
       | Age   | 17     |

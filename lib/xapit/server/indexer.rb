@@ -70,7 +70,7 @@ module Xapit
       def save_facets
         each_attribute(:facet) do |name, value, options|
           id = Xapit.facet_identifier(name, value)
-          unless database.term_exists("QFacetOption-#{id}")
+          unless database.term_exists("Xid-#{id}")
             document = Xapian::Document.new
             document.data = "#{name}|||#{value}"
             document.add_term("CFacetOption")
