@@ -35,9 +35,9 @@ Feature: Indexing
     When I query for "foo"
     Then I should find records named "foo, bar"
 
-  # Scenario: Split indexed text fields differently
-  #   Given an empty database at "tmp/testdb"
-  #   And records named "JohnXSmith, JaneXSmith, JoeXBlack"
-  #   When I index the database splitting name by "X"
-  #   And I query for "Smith"
-  #   Then I should find records named "JohnXSmith, JaneXSmith"
+  Scenario: Split indexed text fields differently
+    Given an empty database at "tmp/testdb"
+    And records named "JohnXSmith, JaneXSmith, JoeXBlack"
+    When I index the database splitting name by "X"
+    And I query for "Smith"
+    Then I should find records named "JohnXSmith, JaneXSmith"

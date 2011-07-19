@@ -79,7 +79,6 @@ Feature: Facets
     When I query "Jane" with facets "9f33345"
     Then I should find record named "Jane"
 
-  @focus
   Scenario: List Applied Facets
     Given the following indexed records
       | name | age |

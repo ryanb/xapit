@@ -48,7 +48,6 @@ Given /^the following indexed records with "([^\"]*)" weighted by "([^\"]*)"$/ d
 end
 
 When /^I index the database$/ do
-  # Xapit.index_all
   XapitMember.find_each do |member|
     member.xapit_index
   end
@@ -58,7 +57,9 @@ When /^I index the database splitting name by "([^\"]*)"$/ do |divider|
   XapitMember.xapit do |index|
     index.text(:name) { |name| name.split(divider) }
   end
-  Xapit.index_all
+  XapitMember.find_each do |member|
+    member.xapit_index
+  end
 end
 
 When /^I query for "([^\"]*)"$/ do |query|

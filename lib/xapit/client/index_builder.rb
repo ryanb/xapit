@@ -6,22 +6,22 @@ module Xapit
         @attributes = {}
       end
 
-      def text(*args)
-        add_attribute(:text, *args)
+      def text(*args, &block)
+        add_attribute(:text, *args, &block)
       end
 
-      def field(*args)
-        add_attribute(:field, *args)
+      def field(*args, &block)
+        add_attribute(:field, *args, &block)
       end
 
-      def sortable(*args)
-        add_attribute(:sortable, *args)
+      def sortable(*args, &block)
+        add_attribute(:sortable, *args, &block)
       end
 
-      def facet(name, custom_name = nil)
+      def facet(name, custom_name = nil, &block)
         options = {}
         options[:name] = custom_name if custom_name
-        add_attribute(:facet, name, options)
+        add_attribute(:facet, name, options, &block)
       end
 
       def index(member)
@@ -31,7 +31,9 @@ module Xapit
       def index_data(member)
         data = {:class => member.class.name, :id => member.id, :attributes => {}}
         attributes.each do |name, options|
-          data[:attributes][name] = options.merge(:value => member.send(name))
+          value = member.send(name)
+          value = options[:_block].call(value) if options[:_block]
+          data[:attributes][name] = options.merge(:value => value)
         end
         data
       end
@@ -44,11 +46,12 @@ module Xapit
 
       private
 
-      def add_attribute(type, *args)
+      def add_attribute(type, *args, &block)
         options = args.last.kind_of?(Hash) ? args.pop : {}
         args.each do |attribute|
           @attributes[attribute] ||= {}
           @attributes[attribute][type] = options
+          @attributes[attribute][:_block] = block if block
         end
       end
     end
