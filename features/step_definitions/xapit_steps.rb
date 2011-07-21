@@ -10,9 +10,8 @@ Given /^an empty database at "([^\"]*)"$/ do |path|
 end
 
 Given /^a remote database$/ do
-  pending
-  Xapit.setup(:database_path => "http://localhost:929292")
-  Xapit.remove_database
+  Xapit.reset_config
+  Xapit.config[:remote] = "http://localhost:929292"
   XapitMember.delete_all
 end
 

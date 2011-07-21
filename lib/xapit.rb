@@ -1,5 +1,7 @@
 require 'xapian'
 require 'digest/sha1'
+require 'rack'
+require 'json'
 
 module Xapit
   class << self
@@ -57,3 +59,4 @@ require 'xapit/client/facet_option'
 require 'xapit/server/database'
 require 'xapit/server/query'
 require 'xapit/server/indexer'
+require 'xapit/server/app'
