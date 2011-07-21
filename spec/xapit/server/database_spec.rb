@@ -11,13 +11,13 @@ describe Xapit::Server::Database do
   end
 
   it "adds a document to the database" do
-    @database.xapian_database.doccount.should == 0
+    @database.xapian_database.doccount.should eq(0)
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}})
-    @database.xapian_database.doccount.should == 1
+    @database.xapian_database.doccount.should eq(1)
   end
 
   it "queries the database for results" do
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
-    @database.query([{:search => "hello"}])[:records].should == [{:class => "Greeting", :id => "123", :relevance => 100}]
+    @database.query([{:search => "hello"}])[:records].should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
   end
 end

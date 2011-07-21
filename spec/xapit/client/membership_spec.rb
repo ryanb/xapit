@@ -12,22 +12,22 @@ describe Xapit::Client::Membership do
 
   it "has a xapit method which makes an index builder" do
     @member_class.xapit { text :foo }
-    @member_class.xapit_index_builder.attributes.keys.should == [:foo]
+    @member_class.xapit_index_builder.attributes.keys.should eq([:foo])
   end
 
   it "returns collection with query on search" do
     @member_class.xapit { text :foo }
-    @member_class.search("hello").clauses.should == [{:in_classes => [@member_class]}, {:search => "hello"}]
+    @member_class.search("hello").clauses.should eq([{:in_classes => [@member_class]}, {:search => "hello"}])
   end
 
   it "returns collection with no search query" do
     @member_class.xapit { text :foo }
-    @member_class.search.clauses.should == [{:in_classes => [@member_class]}]
-    @member_class.search("").clauses.should == [{:in_classes => [@member_class]}]
+    @member_class.search.clauses.should eq([{:in_classes => [@member_class]}])
+    @member_class.search("").clauses.should eq([{:in_classes => [@member_class]}])
   end
 
   it "includes facets" do
     @member_class.xapit { facet :foo }
-    @member_class.search.clauses.should == [{:in_classes => [@member_class]}, {:include_facets => [:foo]}]
+    @member_class.search.clauses.should eq([{:in_classes => [@member_class]}, {:include_facets => [:foo]}])
   end
 end

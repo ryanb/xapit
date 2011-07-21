@@ -5,35 +5,35 @@ describe Xapit::Client::IndexBuilder do
     builder = Xapit::Client::IndexBuilder.new
     builder.text :foo, :weight => 3
     builder.text :bar, :blah
-    builder.attributes[:foo].should == {:text => {:weight => 3}}
-    builder.attributes[:bar].should == {:text => {}}
-    builder.attributes[:blah].should == {:text => {}}
+    builder.attributes[:foo].should eq(:text => {:weight => 3})
+    builder.attributes[:bar].should eq(:text => {})
+    builder.attributes[:blah].should eq(:text => {})
   end
 
   it "stores field attribute with option" do
     builder = Xapit::Client::IndexBuilder.new
     builder.field :foo, :weight => 3
     builder.field :bar, :blah
-    builder.attributes[:foo].should == {:field => {:weight => 3}}
-    builder.attributes[:bar].should == {:field => {}}
-    builder.attributes[:blah].should == {:field => {}}
+    builder.attributes[:foo].should eq(:field => {:weight => 3})
+    builder.attributes[:bar].should eq(:field => {})
+    builder.attributes[:blah].should eq(:field => {})
   end
 
   it "stores sortable attribute with option" do
     builder = Xapit::Client::IndexBuilder.new
     builder.sortable :foo, :weight => 3
     builder.sortable :bar, :blah
-    builder.attributes[:foo].should == {:sortable => {:weight => 3}}
-    builder.attributes[:bar].should == {:sortable => {}}
-    builder.attributes[:blah].should == {:sortable => {}}
+    builder.attributes[:foo].should eq(:sortable => {:weight => 3})
+    builder.attributes[:bar].should eq(:sortable => {})
+    builder.attributes[:blah].should eq(:sortable => {})
   end
 
   it "stores facet attribute with options" do
     builder = Xapit::Client::IndexBuilder.new
     builder.facet :foo
     builder.facet :bar, "Zap"
-    builder.attributes[:foo].should == {:facet => {}}
-    builder.attributes[:bar].should == {:facet => {:name => "Zap"}}
+    builder.attributes[:foo].should eq(:facet => {})
+    builder.attributes[:bar].should eq(:facet => {:name => "Zap"})
   end
 
   it "fetches facets back" do
@@ -41,7 +41,7 @@ describe Xapit::Client::IndexBuilder do
     builder.text :test
     builder.facet :foo
     builder.facet :bar
-    builder.facets.should == [:foo, :bar]
+    builder.facets.should eq([:foo, :bar])
   end
 
   it "merges member values with attributes for index data" do
@@ -50,17 +50,17 @@ describe Xapit::Client::IndexBuilder do
     builder.field :name
     member = XapitMember.new(:greeting => "hello world", :name => "John")
     data = builder.index_data(member)
-    data[:id].should == member.id
-    data[:class].should == "XapitMember"
-    data[:attributes].should == {:greeting => {:value => "hello world", :text => {:weight => 3}}, :name => {:value => "John", :field => {}}}
+    data[:id].should eq(member.id)
+    data[:class].should eq("XapitMember")
+    data[:attributes].should eq(:greeting => {:value => "hello world", :text => {:weight => 3}}, :name => {:value => "John", :field => {}})
   end
 
   it "indexes an object by adding it to the current database" do
     load_xapit_database
-    Xapit.database.xapian_database.doccount.should == 0
+    Xapit.database.xapian_database.doccount.should eq(0)
     builder = Xapit::Client::IndexBuilder.new
     member = XapitMember.new(:greeting => "Hello world")
     builder.index(member)
-    Xapit.database.xapian_database.doccount.should == 1
+    Xapit.database.xapian_database.doccount.should eq(1)
   end
 end

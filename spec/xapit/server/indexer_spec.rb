@@ -10,7 +10,7 @@ describe Xapit::Server::Indexer do
     document = indexer.document
     document.should be_kind_of(Xapian::Document)
     document.terms.map(&:term).should include(*%w[hello world])
-    document.values.map(&:value).should == [Xapit.serialize_value("John")]
+    document.values.map(&:value).should eq([Xapit.serialize_value("John")])
   end
 
   it "generates a xapian document with text weight data" do
@@ -22,14 +22,14 @@ describe Xapit::Server::Indexer do
     time = Time.now
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => time, :sortable => {}}})
     document = indexer.document
-    document.values.map(&:value).should == [Xapit.serialize_value(time)]
+    document.values.map(&:value).should eq([Xapit.serialize_value(time)])
   end
 
   it "adds the id and class to xapian document data" do
     indexer = Xapit::Server::Indexer.new(:class => "Foo", :id => "123")
     document = indexer.document
     document.should be_kind_of(Xapian::Document)
-    document.data.should == "Foo-123"
+    document.data.should eq("Foo-123")
   end
 
   it "includes class/id in terms list" do
@@ -45,7 +45,7 @@ describe Xapit::Server::Indexer do
   it "adds facets to values and terms" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => ["Hello", "Hey"], :facet => {}}})
     document = indexer.document
-    document.values.map(&:value).should == ["Hello\3Hey"]
+    document.values.map(&:value).should eq(["Hello\3Hey"])
     indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "Hello")}", 1])
     indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "Hey")}", 1])
   end
@@ -76,7 +76,7 @@ describe Xapit::Server::Indexer do
 
   it "includes field and sortable values" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "Hello", :field => {}, :sortable => {}}})
-    indexer.values[Xapit.value_index(:field, "greeting")].should == Xapit.serialize_value("Hello")
-    indexer.values[Xapit.value_index(:sortable, "greeting")].should == Xapit.serialize_value("Hello")
+    indexer.values[Xapit.value_index(:field, "greeting")].should eq(Xapit.serialize_value("Hello"))
+    indexer.values[Xapit.value_index(:sortable, "greeting")].should eq(Xapit.serialize_value("Hello"))
   end
 end

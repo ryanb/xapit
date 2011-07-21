@@ -74,15 +74,15 @@ When /^I query "([^\"]*)" with facets "([^\"]*)"$/ do |keywords, facets|
 end
 
 Then /^I should find records? named "([^\"]*)"$/ do |joined_names|
-  @records.map(&:name).join(", ").should == joined_names
+  @records.map(&:name).join(", ").should eq(joined_names)
 end
 
 Then /^I should find ([0-9]+) records?$/ do |num|
-  @records.records.size.should == num.to_i
+  @records.records.size.should eq(num.to_i)
 end
 
 Then /^I should have ([0-9]+) records? total$/ do |num|
-  @records.total_entries.should == num.to_i
+  @records.total_entries.should eq(num.to_i)
 end
 
 When /^I query "([^\"]*)" matching "([^\"]*)"$/ do |field, value|
@@ -139,7 +139,7 @@ Then /^I should have the following facets$/ do |facets_table|
       }
     end
   end
-  result.map(&:inspect).sort.should == facets_table.hashes.map(&:inspect).sort
+  result.map(&:inspect).sort.should eq(facets_table.hashes.map(&:inspect).sort)
 end
 
 Then /^I should have the following applied facets$/ do |facets_table|
@@ -150,10 +150,10 @@ Then /^I should have the following applied facets$/ do |facets_table|
       "option" => option[:value]
     }
   end
-  result.map(&:inspect).sort.should == facets_table.hashes.map(&:inspect).sort
+  result.map(&:inspect).sort.should eq(facets_table.hashes.map(&:inspect).sort)
 end
 
 Then /^I should have "([^\"]*)" as a spelling suggestion$/ do |term|
-  @records.spelling_suggestion.to_s.should == term
+  @records.spelling_suggestion.to_s.should eq(term)
 end
 
