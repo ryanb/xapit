@@ -11,7 +11,7 @@ end
 
 Given /^a remote database$/ do
   Xapit.reset_config
-  Xapit.config[:remote] = "http://localhost:929292"
+  Xapit.config[:server] = "http://localhost:929292"
   XapitMember.delete_all
 end
 

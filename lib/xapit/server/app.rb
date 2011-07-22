@@ -10,7 +10,7 @@ module Xapit
       end
 
       def action(method, json)
-        data = symbolize_keys(JSON.parse(json))
+        data = self.class.symbolize_keys(JSON.parse(json))
         render :content => Xapit.database.send(method, data).to_json
       end
 
@@ -22,7 +22,8 @@ module Xapit
       end
 
       # from http://snippets.dzone.com/posts/show/11121
-      def symbolize_keys(arg)
+      # could use some refactoring
+      def self.symbolize_keys(arg)
         case arg
         when Array
           arg.map { |elem| symbolize_keys(elem) }
