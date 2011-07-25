@@ -10,9 +10,11 @@ Given /^an empty database at "([^\"]*)"$/ do |path|
 end
 
 Given /^a remote database$/ do
+  $server = IO.popen("rackup spec/fixtures/xapit.ru -p 9797") if $server.nil?
   Xapit.reset_config
-  Xapit.config[:server] = "http://localhost:929292"
+  Xapit.config[:server] = "http://localhost:9797"
   XapitMember.delete_all
+  sleep 5
 end
 
 Given /^no stemming$/ do
@@ -156,4 +158,3 @@ end
 Then /^I should have "([^\"]*)" as a spelling suggestion$/ do |term|
   @records.spelling_suggestion.to_s.should eq(term)
 end
-

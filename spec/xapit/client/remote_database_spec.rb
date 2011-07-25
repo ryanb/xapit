@@ -7,7 +7,12 @@ describe Xapit::Client::RemoteDatabase do
 
   %w[query add_document spelling_suggestion].each do |command|
     it "passes #{command} to remote server using Net::HTTP" do
-      Net::HTTP.should_receive(:post_form).with(URI.parse("http://localhost:1234/xapit/#{command}"), {:send => "request"}.to_json).and_return({"receive" => "response"}.to_json)
+      http = Object.new
+      response = Object.new
+      uri = URI.parse("http://localhost:1234/xapit/#{command}")
+      Net::HTTP.should_receive(:start).with(uri.host, uri.port).and_yield(http)
+      http.should_receive(:request_post).with(uri.path, {:send => "request"}.to_json).and_return(response)
+      response.should_receive(:body).and_return({"receive" => "response"}.to_json)
       @database.send(command, :send => "request").should eq(:receive => "response")
     end
   end

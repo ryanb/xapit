@@ -17,7 +17,11 @@ module Xapit
     end
 
     def database
-      @database ||= Xapit::Server::Database.new(config[:database_path], config[:template_path])
+      if config[:server]
+        @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
+      else
+        @database ||= Xapit::Server::Database.new(config[:database_path], config[:template_path])
+      end
     end
 
     def load_config(filename, environment)
