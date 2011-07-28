@@ -30,4 +30,8 @@ describe Xapit::Client::Membership do
     @member_class.xapit { facet :foo }
     @member_class.search.clauses.should eq([{:in_classes => [@member_class]}, {:include_facets => [:foo]}])
   end
+
+  it "includes facets" do
+    @member_class.model_adapter.should be_kind_of(Xapit::Client::DefaultModelAdapter)
+  end
 end
