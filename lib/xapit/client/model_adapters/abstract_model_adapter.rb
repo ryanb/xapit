@@ -14,6 +14,10 @@ module Xapit
         false # override in subclass
       end
 
+      def setup
+        # override in subclass
+      end
+
       def initialize(model_class)
         @model_class = model_class
       end

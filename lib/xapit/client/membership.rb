@@ -10,9 +10,10 @@ module Xapit
           @xapit_index_builder = IndexBuilder.new
           @xapit_index_builder.instance_eval(&block)
           include AdditionalMethods
+          xapit_model_adapter.setup
         end
 
-        def model_adapter
+        def xapit_model_adapter
           @xapit_model_adapter ||= Xapit::Client::AbstractModelAdapter.adapter_class(self).new(self)
         end
       end
@@ -41,5 +42,11 @@ module Xapit
         end
       end
     end
+  end
+end
+
+if defined? ActiveRecord
+  ActiveRecord::Base.class_eval do
+    include Xapit::Client::Membership
   end
 end

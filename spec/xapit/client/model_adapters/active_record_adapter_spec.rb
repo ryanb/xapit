@@ -14,10 +14,21 @@ if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
       end
     end
 
+    before(:each) do
+      load_xapit_database
+    end
+
     it "is only for active record classes" do
       Xapit::Client::ActiveRecordAdapter.should_not be_for_class(Object)
       Xapit::Client::ActiveRecordAdapter.should be_for_class(Article)
       Xapit::Client::AbstractModelAdapter.adapter_class(Article).should == Xapit::Client::ActiveRecordAdapter
+    end
+
+    it "creates document when saved" do
+      Article.xapit { text :name }
+      article = Article.create!(:name => "Foo Bar")
+      Article.all.should eq([article])
+      Article.search("Foo Bar").records.should eq([article])
     end
   end
 end
