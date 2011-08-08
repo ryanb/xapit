@@ -24,11 +24,15 @@ module Xapit
         add_attribute(:facet, name, options, &block)
       end
 
-      def index(member)
-        Xapit.database.add_document(index_data(member))
+      def add_document(member)
+        Xapit.database.add_document(document_data(member))
       end
 
-      def index_data(member)
+      def remove_document(member)
+        Xapit.database.remove_document(document_data(member))
+      end
+
+      def document_data(member)
         data = {:class => member.class.name, :id => member.id, :attributes => {}}
         attributes.each do |name, options|
           value = member.send(name)

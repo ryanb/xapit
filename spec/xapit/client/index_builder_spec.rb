@@ -49,7 +49,7 @@ describe Xapit::Client::IndexBuilder do
     builder.text :greeting, :weight => 3
     builder.field :name
     member = XapitMember.new(:greeting => "hello world", :name => "John")
-    data = builder.index_data(member)
+    data = builder.document_data(member)
     data[:id].should eq(member.id)
     data[:class].should eq("XapitMember")
     data[:attributes].should eq(:greeting => {:value => "hello world", :text => {:weight => 3}}, :name => {:value => "John", :field => {}})
@@ -60,7 +60,7 @@ describe Xapit::Client::IndexBuilder do
     Xapit.database.xapian_database.doccount.should eq(0)
     builder = Xapit::Client::IndexBuilder.new
     member = XapitMember.new(:greeting => "Hello world")
-    builder.index(member)
+    builder.add_document(member)
     Xapit.database.xapian_database.doccount.should eq(1)
   end
 end

@@ -50,7 +50,7 @@ end
 
 When /^I index the database$/ do
   XapitMember.find_each do |member|
-    member.xapit_index
+    member.class.xapit_index_builder.add_document(member)
   end
 end
 
@@ -59,7 +59,7 @@ When /^I index the database splitting name by "([^\"]*)"$/ do |divider|
     index.text(:name) { |name| name.split(divider) }
   end
   XapitMember.find_each do |member|
-    member.xapit_index
+    member.class.xapit_index_builder.add_document(member)
   end
 end
 

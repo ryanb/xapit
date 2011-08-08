@@ -18,7 +18,7 @@ describe Xapit::Client::Collection do
   it "returns indexed records and delegates array methods to it" do
     load_xapit_database
     member = XapitMember.new
-    member.xapit_index
+    member.class.xapit_index_builder.add_document(member)
     collection = Xapit::Client::Collection.new
     collection.records.should eq([member])
     collection.should respond_to(:flatten)

@@ -20,4 +20,12 @@ describe Xapit::Server::Database do
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
     @database.query([{:search => "hello"}])[:records].should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
   end
+
+  it "removes a document from the database" do
+    @database.xapian_database.doccount.should eq(0)
+    @database.add_document(:id => 123, :class => "Greeting")
+    @database.xapian_database.doccount.should eq(1)
+    @database.remove_document(:id => 123, :class => "Greeting")
+    @database.xapian_database.doccount.should eq(0)
+  end
 end

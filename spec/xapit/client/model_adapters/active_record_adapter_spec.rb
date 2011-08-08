@@ -16,6 +16,7 @@ if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
 
     before(:each) do
       load_xapit_database
+      Article.xapit { text :name }
     end
 
     it "is only for active record classes" do
@@ -25,10 +26,14 @@ if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
     end
 
     it "creates document when saved" do
-      Article.xapit { text :name }
       article = Article.create!(:name => "Foo Bar")
-      Article.all.should eq([article])
       Article.search("Foo Bar").records.should eq([article])
+    end
+
+    it "deletes a document when removed" do
+      article = Article.create!(:name => "Foo Bar")
+      article.destroy
+      Article.search("Foo Bar").records.should eq([])
     end
   end
 end

@@ -14,6 +14,10 @@ module Xapit
         xapian_database.add_document(Indexer.new(data).document)
       end
 
+      def remove_document(data)
+        xapian_database.delete_document(Indexer.new(data).id_term)
+      end
+
       def query(data)
         Query.new(data).data
       end

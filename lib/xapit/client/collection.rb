@@ -47,7 +47,7 @@ module Xapit
       end
 
       def similar_to(member)
-        scope(:similar_to, member.class.xapit_index_builder.index_data(member))
+        scope(:similar_to, member.class.xapit_index_builder.document_data(member))
       end
 
       def match_facets(facets)

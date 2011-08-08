@@ -7,7 +7,10 @@ module Xapit
 
       def setup
         @model_class.after_create do |record|
-          record.xapit_index
+          record.class.xapit_index_builder.add_document(record)
+        end
+        @model_class.after_destroy do |record|
+          record.class.xapit_index_builder.remove_document(record)
         end
       end
     end

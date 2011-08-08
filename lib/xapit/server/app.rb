@@ -4,7 +4,7 @@ module Xapit
       def call(env)
         request = Rack::Request.new(env)
         case request.path
-        when %r{/xapit/(add_document|query|spelling_suggestion)} then action($1, request.body.gets)
+        when %r{/xapit/(add_document|remove_document|query|spelling_suggestion)} then action($1, request.body.gets)
         else render :status => 404
         end
       end

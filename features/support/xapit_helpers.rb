@@ -18,7 +18,7 @@ module XapitHelpers
         attributes[key] = value.split(', ') if value.include? ', '
       end
       member = XapitMember.new(attributes)
-      member.xapit_index if perform_index
+      member.class.xapit_index_builder.add_document(member) if perform_index
     end
   end
 end

@@ -12,6 +12,12 @@ describe Xapit::Server::App do
     response.status.should eq(200)
   end
 
+  it "passes remove_document to database" do
+    Xapit.database.stub(:remove_document).with(:foo => "bar")
+    response = @request.post("/xapit/remove_document", :params => {"foo" => "bar"}.to_json)
+    response.status.should eq(200)
+  end
+
   it "passes query to database and returns response in JSON" do
     Xapit.database.stub(:query).with(:foo => "bar") { {:some => "result"} }
     response = @request.post("/xapit/query", :params => {"foo" => "bar"}.to_json)

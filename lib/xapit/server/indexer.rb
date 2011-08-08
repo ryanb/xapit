@@ -11,12 +11,20 @@ module Xapit
 
       def document
         document = Xapian::Document.new
-        document.data = "#{@data[:class]}-#{@data[:id]}"
+        document.data = id
         terms.each { |term, weight| document.add_term(term, weight) }
         text_terms.each { |term, weight| database.add_spelling(term, weight) } if Xapit.config[:spelling]
         values.each { |index, value| document.add_value(index, value) }
         save_facets
         document
+      end
+
+      def id
+        "#{@data[:class]}-#{@data[:id]}"
+      end
+
+      def id_term
+        "Q#{id}"
       end
 
       def terms
@@ -87,7 +95,7 @@ module Xapit
       end
 
       def base_terms
-        [["C#{@data[:class]}", 1], ["Q#{@data[:class]}-#{@data[:id]}", 1]]
+        [["C#{@data[:class]}", 1], [id_term, 1]]
       end
 
       def parse_field(value)

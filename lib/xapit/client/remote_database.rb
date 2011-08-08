@@ -17,6 +17,10 @@ module Xapit
         request("add_document", options)
       end
 
+      def remove_document(options)
+        request("remove_document", options)
+      end
+
       def request(command, options)
         uri = URI.parse("#{@url}/xapit/#{command}")
         response = Net::HTTP.start(uri.host, uri.port) { |http| http.request_post(uri.path, options.to_json) }

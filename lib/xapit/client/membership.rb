@@ -9,8 +9,7 @@ module Xapit
         def xapit(&block)
           @xapit_index_builder = IndexBuilder.new
           @xapit_index_builder.instance_eval(&block)
-          include AdditionalMethods
-          xapit_model_adapter.setup
+          include AdditionalMethods unless include?(AdditionalMethods)
         end
 
         def xapit_model_adapter
@@ -21,6 +20,7 @@ module Xapit
       module AdditionalMethods
         def self.included(base)
           base.extend ClassMethods
+          base.xapit_model_adapter.setup
         end
 
         module ClassMethods
@@ -31,10 +31,6 @@ module Xapit
           def search(*args)
             Collection.new.in_classes(self).include_facets(*xapit_index_builder.facets).search(*args)
           end
-        end
-
-        def xapit_index
-          self.class.xapit_index_builder.index(self)
         end
 
         def search_similar(*args)
