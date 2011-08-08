@@ -1,0 +1,4 @@
+development:
+  database_path: development_database
+production:
+  database_path: production_database
