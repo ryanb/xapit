@@ -3,15 +3,17 @@ module Xapit
     class App
       def call(env)
         request = Rack::Request.new(env)
-        case request.path
-        when %r{/xapit/(add_document|remove_document|query|spelling_suggestion)} then action($1, request.body.gets)
-        else render :status => 404
+        command = request.path[%r</xapit/(.+)>, 1]
+        if Database::COMMANDS.include? command
+          action(command, request.body.gets)
+        else
+          render :status => 404
         end
       end
 
-      def action(method, json)
+      def action(command, json)
         data = self.class.symbolize_keys(JSON.parse(json))
-        render :content => Xapit.database.send(method, data).to_json
+        render :content => Xapit.database.send(command, data).to_json
       end
 
       def render(options = {})

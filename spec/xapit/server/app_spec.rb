@@ -6,30 +6,13 @@ describe Xapit::Server::App do
     @request = Rack::MockRequest.new(@app)
   end
 
-  it "passes add_document to database" do
-    Xapit.database.stub(:add_document).with(:foo => "bar")
-    response = @request.post("/xapit/add_document", :params => {"foo" => "bar"}.to_json)
-    response.status.should eq(200)
-  end
-
-  it "passes remove_document to database" do
-    Xapit.database.stub(:remove_document).with(:foo => "bar")
-    response = @request.post("/xapit/remove_document", :params => {"foo" => "bar"}.to_json)
-    response.status.should eq(200)
-  end
-
-  it "passes query to database and returns response in JSON" do
-    Xapit.database.stub(:query).with(:foo => "bar") { {:some => "result"} }
-    response = @request.post("/xapit/query", :params => {"foo" => "bar"}.to_json)
-    response.status.should eq(200)
-    response.body.should eq({:some => "result"}.to_json)
-  end
-
-  it "passes spelling_suggestion to database and returns response in JSON" do
-    Xapit.database.stub(:spelling_suggestion).with(:foo => "bar") { {:some => "result"} }
-    response = @request.post("/xapit/spelling_suggestion", :params => {"foo" => "bar"}.to_json)
-    response.status.should eq(200)
-    response.body.should eq({:some => "result"}.to_json)
+  Xapit::Server::Database::COMMANDS.each do |command|
+    it "passes #{command} to database and returns response in JSON" do
+      Xapit.database.stub(command.to_sym).with(:foo => "bar") { {:some => "result"} }
+      response = @request.post("/xapit/#{command}", :params => {"foo" => "bar"}.to_json)
+      response.status.should eq(200)
+      response.body.should eq({:some => "result"}.to_json)
+    end
   end
 
   it "responds with 404 when unknown url" do

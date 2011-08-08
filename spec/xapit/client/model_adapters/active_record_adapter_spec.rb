@@ -35,5 +35,12 @@ if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
       article.destroy
       Article.search("Foo Bar").records.should eq([])
     end
+
+    it "update a document when changed" do
+      article = Article.create!(:name => "Foo Bar")
+      article.update_attribute(:name, "Hello World")
+      Article.search("Foo Bar").records.should eq([])
+      Article.search("Hello World").records.should eq([article])
+    end
   end
 end

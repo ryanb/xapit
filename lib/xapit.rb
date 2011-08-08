@@ -56,6 +56,10 @@ module Xapit
   reset_config
 end
 
+require 'xapit/server/database'
+require 'xapit/server/query'
+require 'xapit/server/indexer'
+require 'xapit/server/app'
 require 'xapit/client/membership'
 require 'xapit/client/index_builder'
 require 'xapit/client/collection'
@@ -65,7 +69,3 @@ require 'xapit/client/remote_database'
 require 'xapit/client/model_adapters/abstract_model_adapter'
 require 'xapit/client/model_adapters/default_model_adapter'
 require 'xapit/client/model_adapters/active_record_adapter'
-require 'xapit/server/database'
-require 'xapit/server/query'
-require 'xapit/server/indexer'
-require 'xapit/server/app'

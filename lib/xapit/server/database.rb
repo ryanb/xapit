@@ -1,6 +1,8 @@
 module Xapit
   module Server
     class Database
+      COMMANDS = %w[query add_document remove_document update_document spelling_suggestion]
+
       def initialize(path, template_path)
         @path = path
         @template_path = template_path
@@ -16,6 +18,11 @@ module Xapit
 
       def remove_document(data)
         xapian_database.delete_document(Indexer.new(data).id_term)
+      end
+
+      def update_document(data)
+        indexer = Indexer.new(data)
+        xapian_database.replace_document(indexer.id_term, indexer.document)
       end
 
       def query(data)

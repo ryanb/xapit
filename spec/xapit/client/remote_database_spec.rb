@@ -5,7 +5,7 @@ describe Xapit::Client::RemoteDatabase do
     @database = Xapit::Client::RemoteDatabase.new("http://localhost:1234")
   end
 
-  %w[query add_document remove_document spelling_suggestion].each do |command|
+  Xapit::Server::Database::COMMANDS.each do |command|
     it "passes #{command} to remote server using Net::HTTP" do
       http = Object.new
       response = Object.new

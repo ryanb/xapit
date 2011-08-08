@@ -32,6 +32,10 @@ module Xapit
         Xapit.database.remove_document(document_data(member))
       end
 
+      def update_document(member)
+        Xapit.database.update_document(document_data(member))
+      end
+
       def document_data(member)
         data = {:class => member.class.name, :id => member.id, :attributes => {}}
         attributes.each do |name, options|

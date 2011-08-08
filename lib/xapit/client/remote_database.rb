@@ -5,20 +5,10 @@ module Xapit
         @url = url
       end
 
-      def query(options)
-        request("query", options)
-      end
-
-      def spelling_suggestion(options)
-        request("spelling_suggestion", options)
-      end
-
-      def add_document(options)
-        request("add_document", options)
-      end
-
-      def remove_document(options)
-        request("remove_document", options)
+      Xapit::Server::Database::COMMANDS.each do |command|
+        define_method(command) do |options|
+          request(command, options)
+        end
       end
 
       def request(command, options)
