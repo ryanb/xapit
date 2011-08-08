@@ -28,8 +28,12 @@ module Xapit
             @xapit_index_builder
           end
 
-          def search(*args)
+          def xapit_search(*args)
             Collection.new.in_classes(self).include_facets(*xapit_index_builder.facets).search(*args)
+          end
+
+          def search(*args)
+            xapit_search(*args)
           end
         end
 

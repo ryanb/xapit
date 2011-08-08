@@ -26,6 +26,11 @@ describe Xapit::Client::Membership do
     @member_class.search("").clauses.should eq([{:in_classes => [@member_class]}])
   end
 
+  it "supports xapit_search instead of just search" do
+    @member_class.xapit { text :foo }
+    @member_class.xapit_search.clauses.should eq([{:in_classes => [@member_class]}])
+  end
+
   it "includes facets" do
     @member_class.xapit { facet :foo }
     @member_class.search.clauses.should eq([{:in_classes => [@member_class]}, {:include_facets => [:foo]}])
