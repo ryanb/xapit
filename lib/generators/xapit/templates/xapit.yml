@@ -1,0 +1,14 @@
+development:
+  database_path: "db/xapit"
+  spelling: true
+  stemming: english
+test:
+  database_path: "tmp/xapit"
+  template_path: "test/fixtures/xapit"
+  spelling: true
+  stemming: english
+production:
+  database_path: "db/xapit"
+  server: "http://localhost:9292"
+  spelling: true
+  stemming: english
