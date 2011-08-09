@@ -1,14 +1,12 @@
+# See https://github.com/ryanb/xapit/wiki/Configuration
 development:
   database_path: "db/xapit"
-  spelling: true
-  stemming: english
+
 test:
+  enabled: false
+  template_path: "tmp/xapit_template"
   database_path: "tmp/xapit"
-  template_path: "test/fixtures/xapit"
-  spelling: true
-  stemming: english
+
 production:
   database_path: "db/xapit"
   server: "http://localhost:9292"
-  spelling: true
-  stemming: english

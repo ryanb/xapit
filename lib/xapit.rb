@@ -5,18 +5,26 @@ require 'json'
 require 'net/http'
 
 module Xapit
+  # A general Xapit exception
+  class Error < StandardError; end
+
+  # Raised when accessing the database when Xapit is disabled
+  class Disabled < Error; end
+
   class << self
     attr_reader :config
 
     def reset_config
       @database = nil
       @config = {
+        :enabled => true,
         :spelling => true,
         :stemming => "english"
       }
     end
 
     def database
+      raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
       if config[:server]
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
       else
@@ -50,6 +58,10 @@ module Xapit
       else
         value.to_s.downcase
       end
+    end
+
+    def enable
+      config[:enabled] = true
     end
   end
 
