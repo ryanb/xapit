@@ -7,13 +7,13 @@ module Xapit
 
       def setup
         @model_class.after_create do |member|
-          member.class.xapit_index_builder.add_document(member)
+          member.class.xapit_index_builder.add_document(member) if Xapit.config[:enabled]
         end
         @model_class.after_update do |member|
-          member.class.xapit_index_builder.update_document(member)
+          member.class.xapit_index_builder.update_document(member) if Xapit.config[:enabled]
         end
         @model_class.after_destroy do |member|
-          member.class.xapit_index_builder.remove_document(member)
+          member.class.xapit_index_builder.remove_document(member) if Xapit.config[:enabled]
         end
       end
     end
