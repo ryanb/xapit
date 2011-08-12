@@ -4,8 +4,7 @@ development:
 
 test:
   enabled: false
-  template_path: "tmp/xapit_template"
-  database_path: "tmp/xapit"
+  spelling: false
 
 production:
   database_path: "db/xapit"

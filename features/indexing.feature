@@ -8,14 +8,12 @@ Feature: Indexing
     Then I should find a directory at "tmp/testdb"
 
   Scenario: Fetch all records which are indexed
-    Given an empty database at "tmp/testdb"
     And records named "John, Jane, Joe"
     When I index the database
     And I query for ""
     Then I should find records named "John, Jane, Joe"
 
   Scenario: Index Multiple Field Values Separately
-    Given an empty database at "tmp/testdb"
     And the following indexed records
       | name | age    |
       | John | 17, 16 |
@@ -25,7 +23,6 @@ Feature: Indexing
     Then I should find records named "Jane, John"
 
   Scenario: Index Weighted Attributes
-    Given an empty database at "tmp/testdb"
     And the following indexed records with "name" weighted by "10"
       | name | description |
       | foo  | bar         |
@@ -36,7 +33,6 @@ Feature: Indexing
     Then I should find records named "foo, bar"
 
   Scenario: Split indexed text fields differently
-    Given an empty database at "tmp/testdb"
     And records named "JohnXSmith, JaneXSmith, JoeXBlack"
     When I index the database splitting name by "X"
     And I query for "Smith"

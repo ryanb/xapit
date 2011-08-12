@@ -13,9 +13,12 @@ describe Xapit do
     Xapit.config[:enabled].should eq(true)
   end
 
-  it "loads a simple configuration file via load_config" do
+  it "loads and reloads a configuration file via load_config" do
     Xapit.load_config("spec/fixtures/xapit.yml", "development")
-    Xapit.config[:database_path].should == "development_database"
+    Xapit.config[:database_path].should eq("development_database")
+    Xapit.config[:database_path] = "foo"
+    Xapit.reload
+    Xapit.config[:database_path].should eq("development_database")
   end
 
   it "raises an exception when accessing the database while disabled" do

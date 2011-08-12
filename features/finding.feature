@@ -1,8 +1,5 @@
 Feature: Finding
 
-  Background:
-    Given an empty database at "tmp/testdb"
-
   Scenario: Query Matching No Records
     Given indexed records named "John, Jane"
     When I query for "Sam"

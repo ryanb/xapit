@@ -1,16 +1,14 @@
 Feature: Suggestions
 
-  Background:
-    Given an empty database at "tmp/testdb"
-
   Scenario: Spelling suggestion
-    Given indexed records named "Zebra, Apple, Bike"
+    Given an empty database at "tmp/spellingdb"
+    And spelling is enabled
+    And indexed records named "Zebra, Apple, Bike"
     When I query for "zerba bike aple"
     Then I should have "zebra bike apple" as a spelling suggestion
 
   Scenario: No spelling suggestion
-    Given no spelling
-    And indexed records named "Zebra, Apple, Bike"
+    Given indexed records named "Zebra, Apple, Bike"
     When I query for "zerba bike aple"
     Then I should have "" as a spelling suggestion
 

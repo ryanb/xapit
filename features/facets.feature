@@ -1,8 +1,5 @@
 Feature: Facets
 
-  Background:
-    Given an empty database at "tmp/testdb"
-
   Scenario: List All Facets
     Given the following indexed records
       | name | age |

@@ -12,7 +12,7 @@ module Xapit
       end
 
       def action(command, json)
-        data = self.class.symbolize_keys(JSON.parse(json))
+        data = Xapit.symbolize_keys(JSON.parse(json))
         render :content => Xapit.database.send(command, data).to_json
       end
 
@@ -21,24 +21,6 @@ module Xapit
         options[:content] ||= ""
         options[:content_type] ||= "text/html"
         [options[:status], {"Content-Type" => options[:content_type]}, [options[:content]]]
-      end
-
-      # from http://snippets.dzone.com/posts/show/11121
-      # could use some refactoring
-      def self.symbolize_keys(arg)
-        case arg
-        when Array
-          arg.map { |elem| symbolize_keys(elem) }
-        when Hash
-          Hash[
-            arg.map { |key, value|
-              k = key.is_a?(String) ? key.to_sym : key
-              v = symbolize_keys(value)
-              [k,v]
-            }]
-        else
-          arg
-        end
       end
     end
   end

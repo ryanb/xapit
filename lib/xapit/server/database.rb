@@ -3,9 +3,8 @@ module Xapit
     class Database
       COMMANDS = %w[query add_document remove_document update_document spelling_suggestion]
 
-      def initialize(path, template_path)
+      def initialize(path)
         @path = path
-        @template_path = template_path
       end
 
       def xapian_database
@@ -36,11 +35,12 @@ module Xapit
       private
 
       def load_database
-        FileUtils.mkdir_p(File.dirname(@path)) unless File.exist?(File.dirname(@path))
-        if @template_path && !File.exist?(@path)
-          FileUtils.cp_r(@template_path, @path)
+        if @path
+          FileUtils.mkdir_p(File.dirname(@path)) unless File.exist?(File.dirname(@path))
+          Xapian::WritableDatabase.new(@path, Xapian::DB_CREATE_OR_OPEN)
+        else
+          Xapian.inmemory_open
         end
-        Xapian::WritableDatabase.new(@path, Xapian::DB_CREATE_OR_OPEN)
       end
     end
   end

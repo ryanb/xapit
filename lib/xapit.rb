@@ -23,19 +23,24 @@ module Xapit
       }
     end
 
+    def reload
+      reset_config
+      @config.merge!(@loaded_config) if @loaded_config
+    end
+
     def database
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
       if config[:server]
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
       else
-        @database ||= Xapit::Server::Database.new(config[:database_path], config[:template_path])
+        @database ||= Xapit::Server::Database.new(config[:database_path])
       end
     end
 
     def load_config(filename, environment)
-      yaml = YAML.load_file(filename)[environment.to_s]
-      raise ArgumentError, "The #{environment} environment does not exist in #{filename}" if yaml.nil?
-      yaml.each { |k, v| config[k.to_sym] = v }
+      @loaded_config = symbolize_keys(YAML.load_file(filename)[environment.to_s])
+      raise ArgumentError, "The #{environment} environment does not exist in #{filename}" if @loaded_config.nil?
+      @config.merge!(@loaded_config)
     end
 
     def value_index(type, attribute)
@@ -62,6 +67,24 @@ module Xapit
 
     def enable
       config[:enabled] = true
+    end
+
+    # from http://snippets.dzone.com/posts/show/11121
+    # could use some refactoring
+    def symbolize_keys(arg)
+      case arg
+      when Array
+        arg.map { |elem| symbolize_keys(elem) }
+      when Hash
+        Hash[
+          arg.map { |key, value|
+            k = key.is_a?(String) ? key.to_sym : key
+            v = symbolize_keys(value)
+            [k,v]
+          }]
+      else
+        arg
+      end
     end
   end
 

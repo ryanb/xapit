@@ -1,10 +1,9 @@
 Given /^an empty database at "([^\"]*)"$/ do |path|
   path = File.expand_path("../../../#{path}", __FILE__)
   template = File.expand_path("../../../spec/fixtures/blankdb", __FILE__)
-  FileUtils.rm_rf(path)
-  Xapit.reset_config
+  FileUtils.rm_rf(path) if File.exist? path
+  FileUtils.cp_r(template, path)
   Xapit.config[:database_path] = path
-  Xapit.config[:template_path] = template
   XapitMember.delete_all
   GC.start
 end
@@ -21,8 +20,8 @@ Given /^no stemming$/ do
   Xapit.config[:stemming] = nil
 end
 
-Given /^no spelling$/ do
-  Xapit.config[:spelling] = false
+Given /^spelling is enabled$/ do
+  Xapit.config[:spelling] = true
 end
 
 Given /^(indexed )?records? named "([^\"]*)"$/ do |indexed, joined_names|
