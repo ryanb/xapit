@@ -43,11 +43,19 @@ if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
       Article.search("Hello World").records.should eq([article])
     end
 
-    it "should not index records while disabled" do
+    it "does not index records while disabled" do
       Xapit.config[:enabled] = false
       Article.create!(:name => "Foo Bar")
       Xapit.config[:enabled] = true
       Article.search("Foo Bar").records.should eq([])
+    end
+
+    it "reindexes all records for a model" do
+      Xapit.config[:enabled] = false
+      article = Article.create!(:name => "Foo Bar")
+      Xapit.config[:enabled] = true
+      Xapit.index(Article)
+      Article.search("Foo Bar").records.should eq([article])
     end
   end
 end

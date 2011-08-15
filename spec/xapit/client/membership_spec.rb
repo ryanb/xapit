@@ -37,6 +37,7 @@ describe Xapit::Client::Membership do
   end
 
   it "has a model_adapter" do
+    @member_class.xapit { } # load up the xapit methods
     @member_class.xapit_model_adapter.should be_kind_of(Xapit::Client::DefaultModelAdapter)
   end
 end

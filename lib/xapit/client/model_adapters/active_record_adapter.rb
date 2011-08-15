@@ -16,6 +16,12 @@ module Xapit
           member.class.xapit_index_builder.remove_document(member) if Xapit.config[:enabled]
         end
       end
+
+      def index_all
+        @model_class.find_each do |member|
+          member.class.xapit_index_builder.add_document(member)
+        end
+      end
     end
   end
 end

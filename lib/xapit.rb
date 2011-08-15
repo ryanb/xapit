@@ -69,6 +69,12 @@ module Xapit
       config[:enabled] = true
     end
 
+    def index(*models)
+      models.each do |model|
+        model.xapit_model_adapter.index_all
+      end
+    end
+
     # from http://snippets.dzone.com/posts/show/11121
     # could use some refactoring
     def symbolize_keys(arg)

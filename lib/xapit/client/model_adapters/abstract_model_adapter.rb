@@ -18,6 +18,10 @@ module Xapit
         # override in subclass
       end
 
+      def index_all
+        # override in subclass
+      end
+
       def initialize(model_class)
         @model_class = model_class
       end

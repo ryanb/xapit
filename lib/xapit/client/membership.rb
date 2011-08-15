@@ -11,10 +11,6 @@ module Xapit
           @xapit_index_builder.instance_eval(&block)
           include AdditionalMethods unless include?(AdditionalMethods)
         end
-
-        def xapit_model_adapter
-          @xapit_model_adapter ||= Xapit::Client::AbstractModelAdapter.adapter_class(self).new(self)
-        end
       end
 
       module AdditionalMethods
@@ -24,6 +20,10 @@ module Xapit
         end
 
         module ClassMethods
+          def xapit_model_adapter
+            @xapit_model_adapter ||= Xapit::Client::AbstractModelAdapter.adapter_class(self).new(self)
+          end
+
           def xapit_index_builder
             @xapit_index_builder
           end

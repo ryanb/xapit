@@ -129,9 +129,9 @@ Xapit is also disabled by default in the test environment so you can enable it o
   Xapit.enable
   # create records and test searching functionality
 
-If you have existing records in the database you want to search (maybe loaded by fixtures) you can index all of those.
+If you have existing records in the database you want to search (maybe loaded by fixtures) you can index those.
 
-  Xapit.index
+  Xapit.index(Article, Comment) # or whatever models you need
 
 By default, the test environment keeps the Xapian database in memory which makes it much faster and easier to reset. The problem is that the spelling suggestion feature does not work with in-memory databases, so it is disabled in the test environment by default. All of this can be customized in the {configuration file}[https://github.com/ryanb/xapit/wiki/Configuration].
 
