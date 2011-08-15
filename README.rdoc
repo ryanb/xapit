@@ -1,15 +1,15 @@
 = Xapit
 
-Xapit (pronounced "zap it") is a Ruby gem for doing full text searching through a Xapian database.
+Xapit (pronounced "zap it") is a Ruby gem for doing full text searching through {Xapian}[http://xapian.org/].
 
 
 == Install
 
-First install Xapian with Ruby bindings. The easiest way is through {Homebrew}[http://mxcl.github.com/homebrew/].
+First, install Xapian with the Ruby bindings. The easiest way is through {Homebrew}[http://mxcl.github.com/homebrew/].
 
   brew install xapian --ruby
 
-See {Installing Xapian}[http://wiki.github.com/ryanb/xapit/installing-xapian] for other methods.
+Note: this is tied to the current version of Ruby you have installed. If you use RVM be certain you're in the correct version. See {Installing Xapian}[https://github.com/ryanb/xapit/wiki/Xapian-Installation] for other methods.
 
 Next add Xapit to your Gemfile and run the +bundle+ command.
 
@@ -19,10 +19,12 @@ Then run the install generator.
 
   rails g xapit:install
 
+This creates a {configuration file}[https://github.com/ryanb/xapit/wiki/Configuration] and a rackup file for production use.
+
 
 == Index
 
-To make a model searchable you must define an index through the +xapit+ method. Here is an example.
+To make a model searchable you must define an index through the +xapit+ method. Here is an example of the four methods you can call there:
 
   class Article < ActiveRecord::Base
     xapit do
@@ -33,7 +35,7 @@ To make a model searchable you must define an index through the +xapit+ method. 
     end
   end
 
-This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[http://wiki.github.com/ryanb/xapit/indexing] wiki page for details.
+This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[https://github.com/ryanb/xapit/wiki/Indexing] wiki page for details.
 
 The index will automatically be updated when records are added or removed. You can regenerate the index manually to fill it with any existing records.
 
@@ -74,7 +76,7 @@ Simply iterate through the returned set to display the results.
 
 The "xapit_relevance" holds a percentage (between 0 and 100) determining how relevant the given document is to the user's search query.
 
-See the {Searching}[http://wiki.github.com/ryanb/xapit/searching] wiki page for more details.
+See the {Searching}[https://github.com/ryanb/xapit/wiki/Searching] wiki page for more details.
 
 
 == Spelling
@@ -84,6 +86,8 @@ Spelling suggestions are available when there is a simlarly indexed term.
   <% if @articles.spelling_suggestion %>
     Did you mean <%= link_to @articles.spelling_suggestion, :overwrite_params => { :keywords => @articles.spelling_suggestion } %>?
   <% end %>
+
+Note: the spelling feature is disabled by default in the test environment because it uses an in-memory database.
 
 
 == Facets
@@ -109,62 +113,38 @@ You can also list the applied facets along with a remove link.
     <%= link_to "remove", :overwrite_params => { :facets => option } %>
   <% end %>
 
-See the {Facets}[http://wiki.github.com/ryanb/xapit/facets] wiki page for more details.
+See the {Facets}[https://github.com/ryanb/xapit/wiki/Facets] wiki page for more details.
 
 
-== Config
+== Testing
 
-An initializer file is automatically created to setup. It looks like this.
+To use Xapit in the test environment, you will need to reload the configuration before each test. For example, you can do this in RSpec:
 
-  Xapit.setup(:database => "#{Rails.root}/db/xapiandb")
+  config.before(:each) do
+    Xapit.reload
+  end
 
-There are many other options you can pass into here. This is a more advanced configuration setting which changes the stemming language, disables spelling, and changes the indexer and parser to a classic variation. The classic ones use Xapian's built-in term generator and query parser instead of the ones offered by Xapit.
+Xapit is also disabled by default in the test environment so you can enable it on a per-test basis. This way it doesn't slow down tests which don't need Xapit search.
 
-  Xapit.setup(
-    :database => "#{Rails.root}/db/external/xapiandb",
-    :spelling => false,
-    :stemming => "german",
-    :indexer => ClassicIndexer,
-    :query_parser => ClassicQueryParser
-  )
+  Xapit.enable
+  # create records and test searching functionality
+
+If you have existing records in the database you want to search (maybe loaded by fixtures) you can index all of those.
+
+  Xapit.index
+
+By default, the test environment keeps the Xapian database in memory which makes it much faster and easier to reset. The problem is that the spelling suggestion feature does not work with in-memory databases, so it is disabled in the test environment by default. All of this can be customized in the {configuration file}[https://github.com/ryanb/xapit/wiki/Configuration].
 
 
 == Production
 
-The default Xapit setup works well in development because there is only one instance of the Rails app running. However in production you will need to move Xapit to a separate process so all of the instances can communicate to it. To do this, make a Rackup file that looks like this.
+The default Xapit setup works well in development because there is only one instance of the Rails app running. However in production you will need to move Xapit to a separate process so all of the instances can communicate to it. To do this, start up the rackup file provided. You will likely want to put this behind a server such as Passenger.
 
-  require "rubygems"
-  require "xapit"
-  run Xapit.server(:database => "path/to/xapiandb")
+  rackup xapit.ru
 
-Start up that Rack app and point to it in the <tt>setup_xapit.rb</tt> file.
-
-  if Rails.evn.production?
-    Xapit.setup(:database => "http://localhost:9292")
-  else
-    Xapit.setup(:database => "#{Rails.root}/db/xapiandb")
-  end
-
-Now all Xapit commands will go through that Rack application so the database is no longer embedded into the Rails app.
-
-
-== Adapters
-
-Adapters are used to support multiple ORMs since not everyone uses ActiveRecord. The right adapter is detected automatically so you should not have to do anything for popular ORMs. However if your ORM is not supported then it is very easy to make your own adapter. See AbstractAdapter class for details.
+Now when you start up your Rails app in production it will use this server. You can configure the server URL in the {configuration file}[https://github.com/ryanb/xapit/wiki/Configuration].
 
 
 == Bug Reports
 
-If you have found a bug to report or a feature to request, please add it to the GitHub issue tracker if it is not there already.
-
-http://github.com/ryanb/xapit/issues
-
-
-== Development
-
-This project can be found on github at the following URL.
-
-http://github.com/ryanb/xapit
-
-If you would like to contribute to this project, please fork the
-repository and send me a pull request.
+If you have found a bug to report or a feature to request, please add it to the {GitHub issue tracker}[https://github.com/ryanb/xapit/issues] if it is not there already. Feel free to treat it as a mailing list and discuss new ideas or bring up any confusion you may have.
