@@ -44,9 +44,3 @@ module Xapit
     end
   end
 end
-
-if defined? ActiveRecord
-  ActiveRecord::Base.class_eval do
-    include Xapit::Client::Membership
-  end
-end

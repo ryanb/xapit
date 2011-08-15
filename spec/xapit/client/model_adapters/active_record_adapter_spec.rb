@@ -1,5 +1,6 @@
 if ENV["MODEL_ADAPTER"].nil? || ENV["MODEL_ADAPTER"] == "active_record"
   require "spec_helper"
+  ActiveRecord::Base.send(:include, Xapit::Client::Membership) # normally done in Railtie
 
   RSpec.configure do |config|
     config.extend WithModel
