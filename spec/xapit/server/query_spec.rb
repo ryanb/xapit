@@ -38,6 +38,6 @@ describe Xapit::Server::Query do
   it "fetches results containing applied facets" do
     Xapit.database.add_document(:attributes => {:priority => {:value => "3", :facet => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "3")]}])
-    query.applied_facet_options.should eq([{:name => "priority", :value => "3"}])
+    query.applied_facet_options.should eq([{:id => Xapit.facet_identifier(:priority, "3"), :name => "priority", :value => "3"}])
   end
 end

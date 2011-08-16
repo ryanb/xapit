@@ -2,10 +2,11 @@ module Xapit
   module Client
     class FacetOption
       attr_reader :count
-      def initialize(attribute, option)
+      def initialize(attribute, option, applied_facets = [])
         @attribute = attribute
         @value = option[:value]
         @count = option[:count].to_i
+        @applied_facets = applied_facets
       end
 
       def identifier
@@ -14,6 +15,14 @@ module Xapit
 
       def name
         @value
+      end
+
+      def to_param
+        if @applied_facets.include? identifier
+          (@applied_facets - [identifier]).join('-')
+        else
+          (@applied_facets + [identifier]).join("-")
+        end
       end
     end
   end

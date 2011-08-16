@@ -72,7 +72,7 @@ module Xapit
           raise "Unable to find facet option for #{identifier}."
         else
           name, value = match.document.data.split('|||')
-          {:name => name, :value => value}
+          {:id => identifier, :name => name, :value => value}
         end
       end
 

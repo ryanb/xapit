@@ -87,3 +87,15 @@ Feature: Facets
       | facet | option |
       | Age   | 17     |
       | Name  | Jane   |
+
+  Scenario: Includes applied facets in facet params
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query facets "9f33345"
+    Then I should have the following facets
+      | facet | option | count | param           |
+      | Name  | Jack   | 1     | 9f33345-bff6e04 |
+      | Name  | Jane   | 1     | 9f33345-9a10ff2 |

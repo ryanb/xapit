@@ -133,11 +133,13 @@ Then /^I should have the following facets$/ do |facets_table|
   result = []
   @records.facets.each do |facet|
     facet.options.each do |option|
-      result << {
+      hash = {
         "facet" => facet.name,
         "option" => option.name,
         "count" => option.count.to_s
       }
+      hash["param"] = option.to_param if facets_table.headers.include? "param"
+      result << hash
     end
   end
   result.map(&:inspect).sort.should eq(facets_table.hashes.map(&:inspect).sort)

@@ -94,7 +94,8 @@ module Xapit
       end
 
       def fetch_facets
-        query[:facets].map { |attribute, options| Facet.new(attribute, filter_facet_options(options)) }
+        applied_facets = applied_facet_options.map { |option| option[:id] }
+        query[:facets].map { |attribute, options| Facet.new(attribute, filter_facet_options(options), applied_facets) }
       end
 
       def filter_facet_options(options)
