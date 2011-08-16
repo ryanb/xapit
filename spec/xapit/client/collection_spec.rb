@@ -37,7 +37,7 @@ describe Xapit::Client::Collection do
 
   it "does not raise an exception when passing nil to with_facets" do
     lambda {
-      Xapit::Client::Collection.new([]).with_facets(nil)
+      Xapit::Client::Collection.new([]).with_facets(nil).should be_kind_of(Xapit::Client::Collection)
     }.should_not raise_exception
   end
 end

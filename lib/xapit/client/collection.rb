@@ -51,7 +51,7 @@ module Xapit
       end
 
       def with_facets(facets)
-        scope(:with_facets, facets.split("-")) if facets.to_s.length > 0
+        facets.to_s.length.zero? ? self : scope(:with_facets, facets.split("-"))
       end
 
       def include_facets(*facets)
