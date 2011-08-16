@@ -2,7 +2,7 @@ module Xapit
   module Client
     class Railtie < Rails::Railtie
       initializer "xapit.config" do
-        path = Rails.root.join("config/private_pub.yml")
+        path = Rails.root.join("config/xapit.yml")
         Xapit.load_config(path, Rails.env) if path.exist?
       end
 
