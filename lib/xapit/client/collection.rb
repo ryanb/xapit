@@ -67,7 +67,13 @@ module Xapit
       end
 
       def applied_facet_options
-        query[:applied_facet_options]
+        query[:applied_facet_options].map do |option|
+          FacetOption.new(option[:name], {:value => option[:value]}, applied_facet_identifiers)
+        end
+      end
+
+      def applied_facet_identifiers
+        query[:applied_facet_options].map { |option| option[:id] }
       end
 
       def facets
@@ -94,7 +100,7 @@ module Xapit
       end
 
       def fetch_facets
-        applied_facets = applied_facet_options.map { |option| option[:id] }
+        applied_facets = applied_facet_options.map(&:identifier)
         query[:facets].map { |attribute, options| Facet.new(attribute, filter_facet_options(options), applied_facets) }
       end
 

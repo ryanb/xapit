@@ -1,7 +1,7 @@
 module Xapit
   module Client
     class FacetOption
-      attr_reader :count
+      attr_reader :count, :attribute
       def initialize(attribute, option, applied_facets = [])
         @attribute = attribute
         @value = option[:value]

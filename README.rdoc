@@ -109,7 +109,7 @@ The facet option is passed in through the URL which you can add to the search.
 You can also list the applied facets along with a remove link.
 
   <% for option in @articles.applied_facet_options %>
-    <%=h option.name %>
+    <%= option.name %>
     <%= link_to "remove", :overwrite_params => { :facets => option } %>
   <% end %>
 

@@ -149,8 +149,8 @@ Then /^I should have the following applied facets$/ do |facets_table|
   result = []
   @records.applied_facet_options.each do |option|
     result << {
-      "facet" => option[:name].sub(/^(.)/) { |c| c.upcase },
-      "option" => option[:value]
+      "facet" => option.attribute.sub(/^(.)/) { |c| c.upcase }, # quick hack
+      "option" => option.name
     }
   end
   result.map(&:inspect).sort.should eq(facets_table.hashes.map(&:inspect).sort)
