@@ -50,8 +50,8 @@ module Xapit
         scope(:similar_to, member.class.xapit_index_builder.document_data(member))
       end
 
-      def match_facets(facets)
-        scope(:match_facets, facets.split("-"))
+      def with_facets(facets)
+        scope(:with_facets, facets.split("-")) if facets.to_s.length > 0
       end
 
       def include_facets(*facets)

@@ -104,7 +104,7 @@ Facets allow you to further filter the result set based on certain attributes.
 
 The facet option is passed in through the URL which you can add to the search.
 
-  Article.search("phone").facets(params[:facets])
+  Article.search("phone").with_facets(params[:facets])
 
 You can also list the applied facets along with a remove link.
 

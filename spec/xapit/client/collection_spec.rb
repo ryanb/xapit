@@ -26,12 +26,18 @@ describe Xapit::Client::Collection do
   end
 
   it "splits up matching facets into an array" do
-    collection = Xapit::Client::Collection.new([]).match_facets("foo-bar")
-    collection.clauses.should eq([{:match_facets => %w[foo bar]}])
+    collection = Xapit::Client::Collection.new([]).with_facets("foo-bar")
+    collection.clauses.should eq([{:with_facets => %w[foo bar]}])
   end
 
   it "splits range into from/to hash" do
     collection = Xapit::Client::Collection.new([]).where(:priority => 3..5)
     collection.clauses.should eq([{:where => {:priority => {:from => 3, :to => 5}}}])
+  end
+
+  it "does not raise an exception when passing nil to with_facets" do
+    lambda {
+      Xapit::Client::Collection.new([]).with_facets(nil)
+    }.should_not raise_exception
   end
 end

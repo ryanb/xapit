@@ -57,8 +57,8 @@ module Xapit
       def applied_facet_options
         facet_options = []
         @clauses.each do |clause|
-          if clause[:match_facets]
-            clause[:match_facets].each do |identifier|
+          if clause[:with_facets]
+            clause[:with_facets].each do |identifier|
               facet_options << facet_option(identifier)
             end
           end
@@ -156,7 +156,7 @@ module Xapit
           merge(:not, value.map { |c| "C#{c}" })
         when :similar_to
           similar_to(value)
-        when :match_facets
+        when :with_facets
           merge(:and, facet_terms(value))
         end
       end

@@ -29,15 +29,15 @@ describe Xapit::Server::Query do
 
   it "fetches results matching a given facet" do
     Xapit.database.add_document(:attributes => {:priority => {:value => "3", :field => {}, :facet => {}}}, :id => 123, :class => "Greeting")
-    query = Xapit::Server::Query.new([{:match_facets => [Xapit.facet_identifier(:priority, "3")]}])
+    query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "3")]}])
     query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
-    query = Xapit::Server::Query.new([{:match_facets => [Xapit.facet_identifier(:priority, "4")]}])
+    query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "4")]}])
     query.records.should eq([])
   end
 
   it "fetches results containing applied facets" do
     Xapit.database.add_document(:attributes => {:priority => {:value => "3", :facet => {}}}, :id => 123, :class => "Greeting")
-    query = Xapit::Server::Query.new([{:match_facets => [Xapit.facet_identifier(:priority, "3")]}])
+    query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "3")]}])
     query.applied_facet_options.should eq([{:name => "priority", :value => "3"}])
   end
 end
