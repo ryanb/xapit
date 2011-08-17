@@ -15,7 +15,7 @@ Next add Xapit to your Gemfile and run the +bundle+ command.
 
   gem "xapit", "~> 0.3"
 
-Then run the install generator.
+Then if you are in a Rails application, run the installation generator.
 
   rails g xapit:install
 
@@ -24,7 +24,7 @@ This creates a {configuration file}[https://github.com/ryanb/xapit/wiki/Configur
 
 == Index
 
-To make a model searchable you must define an index through the +xapit+ method. Here is an example of the four methods you can call there:
+To make a model searchable you must define an index through the +xapit+ method. Here is an example of the four methods you can call there.
 
   class Article < ActiveRecord::Base
     xapit do
@@ -36,6 +36,8 @@ To make a model searchable you must define an index through the +xapit+ method. 
   end
 
 This indexes the model to be searched in a variety of ways (shown below). See the {Indexing}[https://github.com/ryanb/xapit/wiki/Indexing] wiki page for details.
+
+Currently only Active Record is supported, but expect support for other libraries soon.
 
 The index will automatically be updated when records are added or removed. You can regenerate the index manually to fill it with any existing records.
 
@@ -113,7 +115,6 @@ You can also list the applied facets along with a remove link.
     <%= link_to "remove", :overwrite_params => { :facets => option } %>
   <% end %>
 
-See the {Facets}[https://github.com/ryanb/xapit/wiki/Facets] wiki page for more details.
 
 
 == Testing
@@ -147,4 +148,4 @@ Now when you start up your Rails app in production it will use this server. You 
 
 == Bug Reports
 
-If you have found a bug to report or a feature to request, please add it to the {GitHub issue tracker}[https://github.com/ryanb/xapit/issues] if it is not there already. Feel free to treat it as a mailing list and discuss new ideas or bring up any confusion you may have.
+First check out the {troubleshooting section}[https://github.com/ryanb/xapit/wiki/Troubleshooting] when you have problems. If you have found a bug or have a feature to request, please add it to the {GitHub issue tracker}[https://github.com/ryanb/xapit/issues] if it is not there already. Feel free to treat it as a mailing list and discuss new ideas or bring up any confusion you may have.
