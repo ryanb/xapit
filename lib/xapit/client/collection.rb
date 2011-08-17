@@ -1,7 +1,10 @@
 module Xapit
   module Client
     class Collection
+      DEFAULT_PER_PAGE = 20
+
       attr_reader :clauses
+
       def initialize(clauses = [])
         @clauses = clauses
       end
@@ -66,6 +69,19 @@ module Xapit
         query[:total].to_i
       end
 
+      def current_page
+        (clause_value(:page) || 1).to_i
+      end
+
+      def limit_value
+        (clause_value(:per_page) || DEFAULT_PER_PAGE).to_i
+      end
+
+      def num_pages
+        (total_entries.to_f / limit_value).ceil
+      end
+      alias_method :total_pages, :num_pages
+
       def applied_facet_options
         query[:applied_facet_options].map do |option|
           FacetOption.new(option[:name], {:value => option[:value]}, applied_facet_identifiers)
@@ -108,6 +124,10 @@ module Xapit
         options.select do |option|
           option[:count].to_i < total_entries
         end
+      end
+
+      def clause_value(key)
+        clauses.map { |clause| clause[key] }.compact.first
       end
 
       def query

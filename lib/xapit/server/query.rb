@@ -93,7 +93,7 @@ module Xapit
       end
 
       def per_page
-        @clauses.map { |clause| clause[:per_page] }.compact.last || 20
+        @clauses.map { |clause| clause[:per_page] }.compact.last || Xapit::Client::Collection::DEFAULT_PER_PAGE
       end
 
       def term_suggestion(term)

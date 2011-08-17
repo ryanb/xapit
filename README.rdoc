@@ -52,7 +52,7 @@ Use the +search+ class method to perform a full text search on the index. This r
   # full text search with basic boolean matching
   @articles = Article.search("phone OR fax NOT email")
 
-  # pagination similar to Kaminari
+  # pagination works with kaminari and will_paginate
   @articles = Article.search("phone").page(10).per(20)
 
   # search based on a specific field
