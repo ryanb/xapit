@@ -1,3 +1,8 @@
+*0.3.0* August 17, 2011
+
+* Complete rewrite
+
+
 *0.2.7* (July 7th, 2009)
 
 * support punctuation in wildcard matching
