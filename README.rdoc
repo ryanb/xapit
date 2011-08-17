@@ -67,7 +67,7 @@ Use the +search+ class method to perform a full text search on the index. This r
   @articles = Article.search.where(:released_at => 2.years.ago..Time.now)
 
   # order based on sortable fields, sorting defaults to most relevant
-  @articles = Article.search("phone").order(:created_at, :descending => true)
+  @articles = Article.search("phone").order(:created_at, :desc)
 
 Simply iterate through the returned set to display the results.
 
