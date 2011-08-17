@@ -73,10 +73,7 @@ Simply iterate through the returned set to display the results.
 
   <% for article in @articles %>
     <%= article.name %>
-    <%= article.xapit_relevance %>
   <% end %>
-
-The "xapit_relevance" holds a percentage (between 0 and 100) determining how relevant the given document is to the user's search query.
 
 See the {Searching}[https://github.com/ryanb/xapit/wiki/Searching] wiki page for more details.
 
