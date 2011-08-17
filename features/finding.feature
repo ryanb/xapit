@@ -166,6 +166,17 @@ Feature: Finding
     When I query for "run"
     Then I should find records named "runs"
 
+  Scenario: Query ignore punctuation in keyword
+    Given the following indexed records
+      | name | sirname    |
+      | Jack | John-son's |
+      | Bill | Johnsons   |
+      | Jane | Johnson    |
+    When I query for "Johnsons"
+    Then I should find records named "Jack, Bill"
+    When I query for "Jo-hn'sons"
+    Then I should find records named "Jack, Bill"
+
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
   #     | name | sirname  |
@@ -183,14 +194,3 @@ Feature: Finding
   #     | Jack | Striker  |
   #   When I query "name" matching " J*"
   #   Then I should find 0 records
-  #
-  # Scenario: Query ignore punctuation in keyword
-  #   Given the following indexed records
-  #     | name | sirname    |
-  #     | Jack | John-son's |
-  #     | Bill | Johnsons   |
-  #     | Jane | Johnson    |
-  #   When I query for "Johnsons"
-  #   Then I should find records named "Jack, Bill"
-  #   When I query for "Jo-hn'sons"
-  #   Then I should find records named "Jack, Bill"
