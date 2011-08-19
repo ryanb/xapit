@@ -60,10 +60,14 @@ Feature: Finding
     Given indexed records named "John, Jane, Jacob"
     When I query for "Jane OR John"
     Then I should find records named "John, Jane"
+    When I query for "Jane" or "John"
+    Then I should find records named "Jane, John"
 
   Scenario: Query Matching Not Query
     Given indexed records named "John Smith, John Johnson"
     When I query for "John NOT Smith"
+    Then I should find records named "John Johnson"
+    When I query for "John" not "Smith"
     Then I should find records named "John Johnson"
 
   Scenario: Unicode characters in search

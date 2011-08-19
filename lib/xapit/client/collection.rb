@@ -18,11 +18,15 @@ module Xapit
       end
 
       def search(phrase = nil)
-        if phrase && !phrase.empty?
-          scope(:search, phrase)
-        else
-          self
-        end
+        phrase && !phrase.empty? ? scope(:search, phrase) : self
+      end
+
+      def or_search(phrase = nil)
+        phrase && !phrase.empty? ? scope(:or_search, phrase) : self
+      end
+
+      def not_search(phrase = nil)
+        phrase && !phrase.empty? ? scope(:not_search, phrase) : self
       end
 
       def where(conditions)

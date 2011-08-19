@@ -66,6 +66,14 @@ When /^I query for "([^\"]*)"$/ do |query|
   @records = XapitMember.search(query)
 end
 
+When /^I query for "([^\"]*)" or "([^\"]*)"$/ do |search1, search2|
+  @records = XapitMember.search(search1).or_search(search2)
+end
+
+When /^I query for "([^\"]*)" not "([^\"]*)"$/ do |search1, search2|
+  @records = XapitMember.search(search1).not_search(search2)
+end
+
 When /^I query for "([^\"]*)" on Xapit$/ do |query|
   @records = Xapit.search(query)
 end

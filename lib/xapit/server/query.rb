@@ -144,6 +144,10 @@ module Xapit
         case type
         when :search
           merge(:and, search_query(value))
+        when :or_search
+          merge(:or, search_query(value))
+        when :not_search
+          merge(:not, search_query(value))
         when :where
           merge(:and, where_query(value))
         when :or_where
