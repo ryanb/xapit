@@ -50,6 +50,12 @@ describe Xapit::Server::Indexer do
     indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "Hey")}", 1])
   end
 
+  it "adds facets for nil value" do
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => nil, :facet => {}}})
+    document = indexer.document
+    indexer.terms.should include(["F#{Xapit.facet_identifier(:greeting, "")}", 1])
+  end
+
   it "indexes array values separately" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => ["Hello", "world"], :field => {}}})
     indexer.terms.should include(["Xgreeting-hello", 1], ["Xgreeting-world", 1])

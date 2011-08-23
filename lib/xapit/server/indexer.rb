@@ -114,7 +114,7 @@ module Xapit
           yield(Xapit.value_index(:sortable, name), Xapit.serialize_value(value))
         end
         each_attribute(:facet) do |name, value, options|
-          yield(Xapit.value_index(:facet, name), value)
+          yield(Xapit.value_index(:facet, name), value.to_s)
         end
       end
 
