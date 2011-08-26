@@ -69,6 +69,19 @@ module Xapit
         @records ||= query[:records].map { |record| Kernel.const_get(record[:class]).find(record[:id]) }
       end
 
+      # TODO use a better delegation technique
+      def ==(other)
+        records == other
+      end
+
+      def eql?(other)
+        records.eql? other
+      end
+
+      def equal?(other)
+        records.equal? other
+      end
+
       def total_entries
         query[:total].to_i
       end

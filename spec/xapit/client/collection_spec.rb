@@ -23,6 +23,7 @@ describe Xapit::Client::Collection do
     collection.records.should eq([member])
     collection.should respond_to(:flatten)
     collection.flatten.should eq([member])
+    collection.should eq([member])
   end
 
   it "splits up matching facets into an array" do
