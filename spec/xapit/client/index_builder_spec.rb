@@ -55,6 +55,14 @@ describe Xapit::Client::IndexBuilder do
     data[:attributes].should eq(:greeting => {:value => "hello world", :text => {:weight => 3}}, :name => {:value => "John", :field => {}})
   end
 
+  it "uses block when given" do
+    builder = Xapit::Client::IndexBuilder.new
+    builder.text(:greeting) { |greet| greet.reverse }
+    member = XapitMember.new(:greeting => "hello")
+    data = builder.document_data(member)
+    data[:attributes].should eq(:greeting => {:value => "olleh", :text => {}})
+  end
+
   it "indexes an object by adding it to the current database" do
     load_xapit_database
     Xapit.database.xapian_database.doccount.should eq(0)

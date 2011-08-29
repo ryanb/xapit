@@ -40,7 +40,7 @@ module Xapit
         data = {:class => member.class.name, :id => member.id, :attributes => {}}
         attributes.each do |name, options|
           value = member.send(name)
-          value = options[:_block].call(value) if options[:_block]
+          value = options.delete(:_block).call(value) if options[:_block]
           data[:attributes][name] = options.merge(:value => value)
         end
         data
