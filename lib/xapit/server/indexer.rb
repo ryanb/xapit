@@ -43,19 +43,23 @@ module Xapit
         values
       end
 
+      # TODO refactor with stemmed_text_terms
       def text_terms
         each_attribute(:text) do |name, value, options|
-          value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") }.map(&:downcase).map do |term|
-            [term, options[:weight] || 1]
+          value = value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") } unless value.kind_of? Array
+          value.map(&:to_s).map(&:downcase).map do |term|
+            [term, options[:weight] || 1] unless term.empty?
           end
         end.flatten(1)
       end
 
+      # TODO refactor with stemmed_text_terms
       def stemmed_text_terms
         if stemmer
           each_attribute(:text) do |name, value, options|
-            value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") }.map(&:downcase).map do |term|
-              ["Z#{stemmer.call(term)}", options[:weight] || 1]
+            value = value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") } unless value.kind_of? Array
+            value.map(&:to_s).map(&:downcase).map do |term|
+              ["Z#{stemmer.call(term)}", options[:weight] || 1] unless term.empty?
             end
           end.flatten(1)
         else
@@ -122,7 +126,7 @@ module Xapit
         if @data[:attributes]
           @data[:attributes].map do |name, options|
             if options.has_key? type
-              if options[:value].kind_of? Array
+              if options[:value].kind_of?(Array) && type != :text
                 options[:value].map { |value| yield(name, value, options[type]) }
               else
                 [yield(name, options[:value], options[type])]

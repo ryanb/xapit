@@ -13,6 +13,11 @@ describe Xapit::Server::Indexer do
     document.values.map(&:value).should eq([Xapit.serialize_value("John")])
   end
 
+  it "stores array of values exactly" do
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => ["hello world"], :text => {}}})
+    indexer.document.terms.map(&:term).should include("hello world")
+  end
+
   it "generates a xapian document with text weight data" do
     indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "hello", :text => {:weight => 3}}})
     indexer.document.terms.map(&:wdf).should include(3)
