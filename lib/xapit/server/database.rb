@@ -25,11 +25,11 @@ module Xapit
       end
 
       def query(data)
-        Query.new(data).data
+        Xapit.query_class.new(data).data
       end
 
       def spelling_suggestion(data)
-        Query.new(data).spelling_suggestion
+        Xapit.query_class.new(data).spelling_suggestion
       end
 
       private

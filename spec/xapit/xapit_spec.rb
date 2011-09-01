@@ -25,4 +25,10 @@ describe Xapit do
     Xapit.config[:enabled] = false
     lambda { Xapit.database }.should raise_exception(Xapit::Disabled)
   end
+
+  it "allows changing the query class" do
+    Xapit.query_class.should eq(Xapit::Server::Query)
+    Xapit.config[:query_class] = "String"
+    Xapit.query_class.should eq(String)
+  end
 end

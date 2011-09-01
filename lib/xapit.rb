@@ -75,6 +75,14 @@ module Xapit
       end
     end
 
+    def query_class
+      if config[:query_class]
+        Kernel.const_get(config[:query_class])
+      else
+        Xapit::Server::Query
+      end
+    end
+
     # from http://snippets.dzone.com/posts/show/11121
     # could use some refactoring
     def symbolize_keys(arg)
