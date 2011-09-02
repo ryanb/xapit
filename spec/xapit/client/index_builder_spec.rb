@@ -61,6 +61,7 @@ describe Xapit::Client::IndexBuilder do
     member = XapitMember.new(:greeting => "hello")
     data = builder.document_data(member)
     data[:attributes].should eq(:greeting => {:value => "olleh", :text => {}})
+    builder.attributes[:greeting][:_block].should_not be_nil
   end
 
   it "indexes an object by adding it to the current database" do

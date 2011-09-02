@@ -39,6 +39,7 @@ module Xapit
       def document_data(member)
         data = {:class => member.class.name, :id => member.id, :attributes => {}}
         attributes.each do |name, options|
+          options = options.dup # so we can remove block without changing original hash
           value = member.send(name)
           value = options.delete(:_block).call(value) if options[:_block]
           data[:attributes][name] = options.merge(:value => value)
