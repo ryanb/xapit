@@ -21,6 +21,12 @@ describe Xapit::Server::Query do
     query.records.should eq([])
   end
 
+  it "fetches results matching a multi where clause" do
+    Xapit.database.add_document(:attributes => {:priority => {:value => "3", :field => {}}}, :id => 123, :class => "Greeting")
+    query = Xapit::Server::Query.new([{:where => {:priority => [3, 4]}}])
+    query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 66}])
+  end
+
   it "fetches facets when told to include them" do
     Xapit.database.add_document(:attributes => {:priority => {:value => "3", :facet => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:include_facets => [:priority]}])

@@ -178,6 +178,8 @@ module Xapit
         conditions.each do |name, value|
           if value.kind_of?(Hash) && value[:from] && value[:to]
             queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+          elsif value.kind_of?(Array)
+            queries << Xapian::Query.new(xapian_operator(:or), value.map { |v| "X#{name}-#{v.to_s.downcase}" })
           else
             terms << "X#{name}-#{value.to_s.downcase}"
           end
@@ -185,12 +187,6 @@ module Xapit
         queries << Xapian::Query.new(xapian_operator(:and), terms) unless terms.empty?
         queries.inject(queries.shift) do |merged_query, query|
           Xapian::Query.new(xapian_operator(:and), merged_query, query)
-        end
-      end
-
-      def where_terms(conditions)
-        conditions.map do |name, value|
-          "X#{name}-#{value.to_s.downcase}"
         end
       end
 
