@@ -50,7 +50,7 @@ module Xapit
           value.map(&:to_s).map(&:downcase).map do |term|
             [term, options[:weight] || 1] unless term.empty?
           end
-        end.flatten(1)
+        end.flatten(1).compact
       end
 
       # TODO refactor with stemmed_text_terms
@@ -61,7 +61,7 @@ module Xapit
             value.map(&:to_s).map(&:downcase).map do |term|
               ["Z#{stemmer.call(term)}", options[:weight] || 1] unless term.empty?
             end
-          end.flatten(1)
+          end.flatten(1).compact
         else
           []
         end

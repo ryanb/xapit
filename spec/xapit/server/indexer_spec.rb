@@ -78,6 +78,11 @@ describe Xapit::Server::Indexer do
     indexer.terms.should_not include([nil, 1])
   end
 
+  it "handles odd punctuation in text attributes" do
+    indexer = Xapit::Server::Indexer.new(:attributes => {:greeting => {:value => "foo & bar", :text => {}}})
+    indexer.terms.should_not include(nil)
+  end
+
   it "handles odd field attributes correctly" do
     # TODO add date handling
     time = Time.now
