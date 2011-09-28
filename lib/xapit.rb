@@ -119,3 +119,4 @@ require 'xapit/client/railtie' if defined? Rails
 require 'xapit/client/model_adapters/abstract_model_adapter'
 require 'xapit/client/model_adapters/default_model_adapter'
 require 'xapit/client/model_adapters/active_record_adapter'
+require 'xapit/client/model_adapters/mongoid_adapter'
