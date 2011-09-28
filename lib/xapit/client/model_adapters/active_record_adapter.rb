@@ -2,7 +2,7 @@ module Xapit
   module Client
     class ActiveRecordAdapter < AbstractModelAdapter
       def self.for_class?(model_class)
-        model_class <= ActiveRecord::Base
+        defined?(ActiveRecord::Base) && model_class <= ActiveRecord::Base
       end
 
       def setup

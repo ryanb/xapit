@@ -2,7 +2,7 @@ module Xapit
   module Client
     class MongoidAdapter < AbstractModelAdapter
       def self.for_class?(model_class)
-        model_class.kind_of?(Mongoid::Document)
+        defined?(Mongoid::Document) && model_class.kind_of?(Mongoid::Document)
       end
 
       def setup
