@@ -25,3 +25,8 @@ module Xapit
     end
   end
 end
+
+if defined?(Mongoid::Document)
+  Mongoid::Document::ClassMethods.send(:include, Xapit::Client::Membership::ClassMethods)
+end
+
