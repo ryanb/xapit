@@ -10,11 +10,11 @@ module Xapit
       end
 
       def in_classes(*classes)
-        scope(:in_classes, classes)
+        scope(:in_classes, classes.map(&:to_s))
       end
 
       def not_in_classes(*classes)
-        scope(:not_in_classes, classes)
+        scope(:not_in_classes, classes.map(&:to_s))
       end
 
       def search(phrase = nil)
