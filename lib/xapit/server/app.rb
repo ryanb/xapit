@@ -13,7 +13,7 @@ module Xapit
 
       def action(command, json)
         data = Xapit.symbolize_keys(JSON.parse(json))
-        render :content => Xapit.database.send(command, data).to_json
+        render :content => Xapit.database(true).send(command, data).to_json
       end
 
       def render(options = {})

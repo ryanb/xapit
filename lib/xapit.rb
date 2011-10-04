@@ -28,9 +28,9 @@ module Xapit
       @config.merge!(@loaded_config) if @loaded_config
     end
 
-    def database
+    def database(force_local = false)
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
-      if config[:server]
+      if config[:server] && !force_local
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
       else
         @database ||= Xapit::Server::Database.new(config[:database_path])
