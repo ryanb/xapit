@@ -43,7 +43,6 @@ module Xapit
         values
       end
 
-      # TODO refactor with stemmed_text_terms
       def text_terms
         terms = []
         each_attribute(:text) do |name, value, options|
@@ -72,7 +71,7 @@ module Xapit
 
       # TODO refactor with stemmed_text_terms
       def stemmed_text_terms
-        if stemmer
+        if stemmer = build_stemmer
           each_attribute(:text) do |name, value, options|
             value = value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") } unless value.kind_of? Array
             value.map(&:to_s).map(&:downcase).map do |term|
@@ -111,17 +110,19 @@ module Xapit
 
       private
 
-      def stemmer
-        @stemmer ||= Xapian::Stem.new(Xapit.config[:stemming]) if Xapit.config[:stemming]
+      def build_stemmer
+        begin
+          Xapian::Stem.new(@data[:language])
+        rescue ArgumentError
+          return nil
+        end
       end
 
       def stemmed_term(word, weight = 1)
         term = [word, weight]
-        if stemmer
+        if stemmer = build_stemmer
           stemmed = stemmer.call(word)
-          if stemmed != word
-            term = ["Z#{word}", weight]
-          end
+          term = ["Z#{word}", weight] if stemmed != word
         end
 
         term
