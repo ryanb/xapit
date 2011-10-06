@@ -27,16 +27,16 @@ module Xapit
         add_attribute(:facet, name, options, &block)
       end
 
-      def add_document(member)
-        Xapit.database.add_document(document_data(member))
+      def add_document(member, force_local = false)
+        Xapit.database(force_local).add_document(document_data(member))
       end
 
-      def remove_document(member)
-        Xapit.database.remove_document(document_data(member))
+      def remove_document(member, force_local = false)
+        Xapit.database(force_local).remove_document(document_data(member))
       end
 
-      def update_document(member)
-        Xapit.database.update_document(document_data(member))
+      def update_document(member, force_local = false)
+        Xapit.database(force_local).update_document(document_data(member))
       end
 
       def document_data(member)

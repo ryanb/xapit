@@ -19,7 +19,7 @@ module Xapit
 
       def index_all
         @model_class.all.each do |member|
-          member.class.xapit_index_builder.add_document(member)
+          member.class.xapit_index_builder.add_document(member, true)
         end
       end
     end
