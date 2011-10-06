@@ -3,6 +3,7 @@ require 'digest/sha1'
 require 'rack'
 require 'json'
 require 'net/http'
+require 'active_support'
 
 module Xapit
   # A general Xapit exception
