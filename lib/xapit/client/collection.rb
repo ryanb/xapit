@@ -85,6 +85,7 @@ module Xapit
       def total_entries
         query[:total].to_i
       end
+      alias :total_count :total_entries
 
       def current_page
         (clause_value(:page) || 1).to_i
