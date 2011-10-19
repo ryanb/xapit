@@ -53,7 +53,7 @@ describe Xapit::Client::Collection do
   end
 
   it "supports kaminari pagination" do
-    collection = Xapit::Client::Collection.new.page("2").per("10")
+    collection = Xapit::Client::Collection.new.page("2").per_page("10")
     collection.stub(:total_entries) { 29 }
     collection.current_page.should eq(2)
     collection.num_pages.should eq(3)
@@ -61,7 +61,7 @@ describe Xapit::Client::Collection do
   end
 
   it "supports will_paginate pagination" do
-    collection = Xapit::Client::Collection.new.page("2").per("10")
+    collection = Xapit::Client::Collection.new.page("2").per_page("10")
     collection.stub(:total_entries) { 29 }
     collection.current_page.should eq(2)
     collection.total_pages.should eq(3)

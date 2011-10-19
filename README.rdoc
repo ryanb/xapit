@@ -55,7 +55,7 @@ Use the +search+ class method to perform a full text search on the index. This r
   @articles = Article.search("phone OR fax NOT email")
 
   # pagination works with kaminari and will_paginate
-  @articles = Article.search("phone").page(10).per(20)
+  @articles = Article.search("phone").page(10).per_page(20)
 
   # search based on a specific field
   @articles = Article.search("phone").where(:category_id => params[:category_id])

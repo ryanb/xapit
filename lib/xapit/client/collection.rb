@@ -49,7 +49,7 @@ module Xapit
         scope(:page, page_num)
       end
 
-      def per(per_page)
+      def per_page(per_page)
         scope(:per_page, per_page)
       end
 
