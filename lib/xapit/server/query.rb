@@ -162,6 +162,10 @@ module Xapit
           similar_to(value)
         when :with_facets
           merge(:and, facet_terms(value))
+        when :all_terms
+          merge(:and, value)
+        when :any_terms
+          merge(:and, Xapian::Query.new(xapian_operator(:or), value))
         end
       end
 

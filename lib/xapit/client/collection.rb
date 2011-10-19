@@ -121,6 +121,10 @@ module Xapit
         Array.method_defined?(method) || super
       end
 
+      def scope(type, args)
+        Collection.new(@clauses + [{type => args}])
+      end
+
       private
 
       def where_conditions(conditions)
@@ -149,10 +153,6 @@ module Xapit
 
       def query
         @query ||= Xapit.database.query(@clauses)
-      end
-
-      def scope(type, args)
-        Collection.new(@clauses + [{type => args}])
       end
 
       def method_missing(method, *args, &block)

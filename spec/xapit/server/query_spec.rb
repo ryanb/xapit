@@ -61,5 +61,10 @@ describe Xapit::Server::Query do
       query = Xapit::Server::Query.new([{:where => {:priority => {:lte => 3}}}])
       query.records.map { |r| r[:id] }.should eq(%w[1 2 3])
     end
+
+    it "fetches results matching exact terms" do
+      query = Xapit::Server::Query.new([{:any_terms => ["Xpriority-1", "Xpriority-2"]}])
+      query.records.map { |r| r[:id] }.should eq(%w[1 2])
+    end
   end
 end

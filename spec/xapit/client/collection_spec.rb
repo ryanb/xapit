@@ -36,6 +36,11 @@ describe Xapit::Client::Collection do
     collection.clauses.should eq([{:where => {:priority => {:from => 3, :to => 5}}}])
   end
 
+  it "supports a custom clause" do
+    collection = Xapit::Client::Collection.new.scope(:foo, "bar")
+    collection.clauses.should eq([{:foo => "bar"}])
+  end
+
   it "does not raise an exception when passing nil to with_facets" do
     lambda {
       Xapit::Client::Collection.new.with_facets(nil).should be_kind_of(Xapit::Client::Collection)
