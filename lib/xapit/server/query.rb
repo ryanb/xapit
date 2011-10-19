@@ -176,8 +176,14 @@ module Xapit
         queries = []
         terms = []
         conditions.each do |name, value|
-          if value.kind_of?(Hash) && value[:from] && value[:to]
-            queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+          if value.kind_of?(Hash)
+            if value[:from] && value[:to]
+              queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+            else
+              value.each do |k, v|
+                queries << Xapian::Query.new(xapian_operator(k), Xapit.value_index(:field, name), Xapit.serialize_value(v))
+              end
+            end
           elsif value.kind_of?(Array)
             queries << Xapian::Query.new(xapian_operator(:or), value.map { |v| "X#{name}-#{v.to_s.downcase}" })
           else
@@ -210,6 +216,8 @@ module Xapit
         when :or then Xapian::Query::OP_OR
         when :not then Xapian::Query::OP_AND_NOT
         when :range then Xapian::Query::OP_VALUE_RANGE
+        when :gte then Xapian::Query::OP_VALUE_GE
+        when :lte then Xapian::Query::OP_VALUE_LE
         else raise "Unknown Xapian operator #{operator}"
         end
       end
