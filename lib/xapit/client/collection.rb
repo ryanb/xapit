@@ -90,6 +90,14 @@ module Xapit
         (clause_value(:page) || 1).to_i
       end
 
+      def previous_page
+        current_page - 1 if current_page > 1
+      end
+
+      def next_page
+        current_page + 1 if current_page < num_pages
+      end
+
       def limit_value
         (clause_value(:per_page) || DEFAULT_PER_PAGE).to_i
       end
@@ -148,7 +156,7 @@ module Xapit
       end
 
       def clause_value(key)
-        clauses.map { |clause| clause[key] }.compact.first
+        clauses.map { |clause| clause[key] }.compact.last
       end
 
       def query

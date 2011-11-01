@@ -64,6 +64,10 @@ describe Xapit::Client::Collection do
     collection = Xapit::Client::Collection.new.page("2").per_page("10")
     collection.stub(:total_entries) { 29 }
     collection.current_page.should eq(2)
+    collection.previous_page.should eq(1)
+    collection.next_page.should eq(3)
     collection.total_pages.should eq(3)
+    collection.page(3).next_page.should be_nil
+    collection.page(1).previous_page.should be_nil
   end
 end
