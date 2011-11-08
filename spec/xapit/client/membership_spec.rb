@@ -40,4 +40,12 @@ describe Xapit::Client::Membership do
     @member_class.xapit { } # load up the xapit methods
     @member_class.xapit_model_adapter.should be_kind_of(Xapit::Client::DefaultModelAdapter)
   end
+
+  it "includes xapit_relevance" do
+    load_xapit_database
+    XapitMember.xapit { text :name }
+    member = XapitMember.new(:name => "foo")
+    XapitMember.xapit_index_builder.add_document(member)
+    XapitMember.search("foo").first.xapit_relevance.should eq(100)
+  end
 end

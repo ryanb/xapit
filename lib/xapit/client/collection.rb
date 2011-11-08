@@ -66,7 +66,11 @@ module Xapit
       end
 
       def records
-        @records ||= query[:records].map { |record| Kernel.const_get(record[:class]).find(record[:id]) }
+        @records ||= query[:records].map do |record|
+          member = Kernel.const_get(record[:class]).find(record[:id])
+          member.xapit_relevance = record[:relevance]
+          member
+        end
       end
 
       # TODO use a better delegation technique

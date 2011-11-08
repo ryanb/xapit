@@ -17,6 +17,7 @@ module Xapit
         def self.included(base)
           base.extend ClassMethods
           base.xapit_model_adapter.setup
+          base.send(:attr_accessor, :xapit_relevance)
         end
 
         module ClassMethods
