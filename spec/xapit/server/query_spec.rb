@@ -63,8 +63,18 @@ describe Xapit::Server::Query do
     end
 
     it "fetches results matching exact terms" do
+      query = Xapit::Server::Query.new([{:all_terms => ["Xpriority-1"]}])
+      query.records.map { |r| r[:id] }.should eq(%w[1])
+    end
+
+    it "fetches results matching exact terms" do
       query = Xapit::Server::Query.new([{:any_terms => ["Xpriority-1", "Xpriority-2"]}])
       query.records.map { |r| r[:id] }.should eq(%w[1 2])
+    end
+
+    it "fetches results not matching exact terms" do
+      query = Xapit::Server::Query.new([{:not_terms => ["Xpriority-1", "Xpriority-2"]}])
+      query.records.map { |r| r[:id] }.should eq(%w[3 4 5])
     end
   end
 end

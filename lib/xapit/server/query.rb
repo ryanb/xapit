@@ -166,6 +166,8 @@ module Xapit
           merge(:and, value)
         when :any_terms
           merge(:and, Xapian::Query.new(xapian_operator(:or), value))
+        when :not_terms
+          merge(:not, Xapian::Query.new(xapian_operator(:or), value))
         end
       end
 
