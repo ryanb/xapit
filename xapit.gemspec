@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files        = Dir["{lib,spec,features,rails_generators,tasks}/**/*", "[A-Z]*", "init.rb", "install.rb", "uninstall.rb"] - ["Gemfile.lock"]
   s.require_path = "lib"
 
-  s.add_dependency 'rack', '~> 1.2.2'
+  s.add_dependency 'rack', '>= 1.2.2'
 
   s.add_development_dependency 'rspec', '~> 2.5.0'
   s.add_development_dependency 'cucumber', '~> 0.10.2'
