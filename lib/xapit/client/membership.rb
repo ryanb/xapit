@@ -30,7 +30,7 @@ module Xapit
           end
 
           def xapit_search(*args)
-            Collection.new.in_classes(self).include_facets(*xapit_index_builder.facets).search(*args)
+            Collection.new.in_classes(self.name).include_facets(*xapit_index_builder.facets).search(*args)
           end
 
           def search(*args)

@@ -2,12 +2,13 @@ require "spec_helper"
 
 describe Xapit::Client::Membership do
   before(:each) do
-    @member_class = Class.new
-    @member_class.send(:include, Xapit::Client::Membership)
+    @member_class = XapitMember
   end
 
   it "does not define search class method when xapit isn't called" do
-    @member_class.should_not respond_to(:search)
+    member_class = Class.new
+    member_class.send(:include, Xapit::Client::Membership)
+    member_class.should_not respond_to(:search)
   end
 
   it "has a xapit method which makes an index builder" do
@@ -17,23 +18,23 @@ describe Xapit::Client::Membership do
 
   it "returns collection with query on search" do
     @member_class.xapit { text :foo }
-    @member_class.search("hello").clauses.should eq([{:in_classes => [@member_class]}, {:search => "hello"}])
+    @member_class.search("hello").clauses.should eq([{:in_classes => [@member_class.name]}, {:search => "hello"}])
   end
 
   it "returns collection with no search query" do
     @member_class.xapit { text :foo }
-    @member_class.search.clauses.should eq([{:in_classes => [@member_class]}])
-    @member_class.search("").clauses.should eq([{:in_classes => [@member_class]}])
+    @member_class.search.clauses.should eq([{:in_classes => [@member_class.name]}])
+    @member_class.search("").clauses.should eq([{:in_classes => [@member_class.name]}])
   end
 
   it "supports xapit_search instead of just search" do
     @member_class.xapit { text :foo }
-    @member_class.xapit_search.clauses.should eq([{:in_classes => [@member_class]}])
+    @member_class.xapit_search.clauses.should eq([{:in_classes => [@member_class.name]}])
   end
 
   it "includes facets" do
     @member_class.xapit { facet :foo }
-    @member_class.search.clauses.should eq([{:in_classes => [@member_class]}, {:include_facets => [:foo]}])
+    @member_class.search.clauses.should eq([{:in_classes => [@member_class.name]}, {:include_facets => [:foo]}])
   end
 
   it "has a model_adapter" do

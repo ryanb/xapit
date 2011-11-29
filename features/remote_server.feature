@@ -3,6 +3,7 @@
 #   Background:
 #     Given a remote database
 #
+#   @focus
 #   Scenario: Basic index and search
 #     Given records named "John Smith, John Doe, Jane, Joe"
 #     When I index the database
