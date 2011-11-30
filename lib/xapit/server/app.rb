@@ -5,9 +5,17 @@ module Xapit
         request = Rack::Request.new(env)
         command = request.path[%r</xapit/(.+)>, 1]
         if Database::COMMANDS.include? command
-          action(command, request.body.gets)
+          authorized_action(command, request.params)
         else
           render :status => 404
+        end
+      end
+
+      def authorized_action(command, params)
+        if Xapit.config[:access_key] && Xapit.config[:access_key] != params["access_key"]
+          render :status => 403
+        else
+          action(command, params["json"])
         end
       end
 

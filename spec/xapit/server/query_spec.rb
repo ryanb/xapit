@@ -35,7 +35,7 @@ describe Xapit::Server::Query do
 
   it "fetches results based on time in string" do
     Xapit.database.add_document(:attributes => {:priority => {:value => 3.days.ago, :field => {}}}, :id => 123, :class => "Greeting")
-    query = Xapit::Server::Query.new([{:where => {:priority => {from: 5.days.ago.to_json, to: 1.day.ago.to_json}}}])
+    query = Xapit::Server::Query.new([{:where => {:priority => {from: 5.days.ago.as_json, to: 1.day.ago.as_json}}}])
     query.records.first[:id].should eq("123")
   end
 

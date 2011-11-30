@@ -58,7 +58,7 @@ module Xapit
     def serialize_value(value)
       if value.kind_of?(Time)
         Xapian.sortable_serialise(value.to_i)
-      elsif value.to_s =~ /^"?\d{4}-\d{2}-\d{2}/
+      elsif value.to_s =~ /^\d{4}-\d{2}-\d{2}/
         Xapian.sortable_serialise(Time.parse(value.to_s).to_i)
       elsif value.kind_of?(Numeric) || value.to_s =~ /^\d+$/
         Xapian.sortable_serialise(value.to_f)

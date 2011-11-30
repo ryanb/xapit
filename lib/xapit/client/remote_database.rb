@@ -14,17 +14,10 @@ module Xapit
       def request(command, options)
         uri = URI.parse("#{@url}/xapit/#{command}")
         response = Net::HTTP.start(uri.host, uri.port) do |http|
-          http.request_post(uri.path, options.to_json)
+          http.request_post(uri.path, :access_key => Xapit.config[:access_key], :json => options.to_json)
         end
         Xapit.symbolize_keys(JSON.parse("[#{response.body}]").first) # terrible hack for handling simple objects
       end
     end
   end
 end
-
-# temporary hack to fix stack level too deep error when calling on HashWithIndifferentAccess
-# class ActiveSupport::HashWithIndifferentAccess
-#   def to_json(*args, &block)
-#     to_hash.to_json(*args, &block)
-#   end
-# end
