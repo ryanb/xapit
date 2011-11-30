@@ -33,6 +33,12 @@ describe Xapit::Server::Query do
     query.applied_facet_options.should eq([{:id => Xapit.facet_identifier(:priority, "3"), :name => "priority", :value => "3"}])
   end
 
+  it "fetches results based on time in string" do
+    Xapit.database.add_document(:attributes => {:priority => {:value => 3.days.ago, :field => {}}}, :id => 123, :class => "Greeting")
+    query = Xapit::Server::Query.new([{:where => {:priority => {from: 5.days.ago.to_json, to: 1.day.ago.to_json}}}])
+    query.records.first[:id].should eq("123")
+  end
+
   describe "with priorities" do
     before(:each) do
       (1..5).each do |number|

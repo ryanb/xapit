@@ -31,4 +31,13 @@ describe Xapit do
     Xapit.config[:query_class] = "String"
     Xapit.query_class.should eq(String)
   end
+
+  it "serialize_value converts time and numbers properly" do
+    time = 2.days.ago
+    Xapit.serialize_value(time).should eq(Xapian.sortable_serialise(time.to_i))
+    Xapit.serialize_value(time.to_json).should eq(Xapian.sortable_serialise(time.to_i))
+    Xapit.serialize_value(123).should eq(Xapian.sortable_serialise(123))
+    Xapit.serialize_value("123").should eq(Xapian.sortable_serialise(123))
+    Xapit.serialize_value("1234-56-78foo").should eq("1234-56-78foo")
+  end
 end
