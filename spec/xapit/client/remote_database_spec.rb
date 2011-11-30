@@ -11,8 +11,7 @@ describe Xapit::Client::RemoteDatabase do
       http = Object.new
       response = Object.new
       uri = URI.parse("http://localhost:1234/xapit/#{command}")
-      Net::HTTP.should_receive(:start).with(uri.host, uri.port).and_yield(http)
-      http.should_receive(:request_post).with(uri.path, {:access_key => "abc123", :json => {:send => "request"}.to_json}).and_return(response)
+      Net::HTTP.should_receive(:post_form).with(uri, :access_key => "abc123", :json => {:send => "request"}.to_json).and_return(response)
       response.should_receive(:body).and_return({"receive" => "response"}.to_json)
       @database.send(command, :send => "request").should eq(:receive => "response")
     end

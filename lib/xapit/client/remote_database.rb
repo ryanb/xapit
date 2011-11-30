@@ -13,9 +13,7 @@ module Xapit
 
       def request(command, options)
         uri = URI.parse("#{@url}/xapit/#{command}")
-        response = Net::HTTP.start(uri.host, uri.port) do |http|
-          http.request_post(uri.path, :access_key => Xapit.config[:access_key], :json => options.to_json)
-        end
+        response = Net::HTTP.post_form(uri, :access_key => Xapit.config[:access_key], :json => options.to_json)
         Xapit.symbolize_keys(JSON.parse("[#{response.body}]").first) # terrible hack for handling simple objects
       end
     end
