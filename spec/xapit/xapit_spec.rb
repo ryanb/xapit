@@ -40,4 +40,9 @@ describe Xapit do
     Xapit.serialize_value("123").should eq(Xapian.sortable_serialise(123))
     Xapit.serialize_value("1234-56-78foo").should eq("1234-56-78foo")
   end
+
+  it "uses a read-only database" do
+    Xapit.config[:read_only] = true
+    Xapit.database.should be_kind_of(Xapit::Server::ReadOnlyDatabase)
+  end
 end

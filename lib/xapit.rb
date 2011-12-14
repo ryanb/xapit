@@ -33,6 +33,8 @@ module Xapit
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
       if config[:server]
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
+      elsif config[:read_only]
+        @database ||= Xapit::Server::ReadOnlyDatabase.new(config[:database_path])
       else
         @database ||= Xapit::Server::Database.new(config[:database_path])
       end
@@ -111,6 +113,7 @@ module Xapit
 end
 
 require 'xapit/server/database'
+require 'xapit/server/read_only_database'
 require 'xapit/server/query'
 require 'xapit/server/indexer'
 require 'xapit/server/app'
