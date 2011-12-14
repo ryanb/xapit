@@ -1,7 +1,7 @@
 module Xapit
   module Server
     class Database
-      COMMANDS = %w[query add_document remove_document update_document spelling_suggestion]
+      COMMANDS = %w[query add_document remove_document update_document spelling_suggestion reopen]
 
       def initialize(path)
         @path = path
@@ -32,7 +32,11 @@ module Xapit
         Xapit.query_class.new(data).spelling_suggestion
       end
 
-      private
+      def reopen(data = nil)
+        xapian_database.reopen
+      end
+
+    private
 
       def load_database
         if @path

@@ -34,4 +34,9 @@ describe Xapit::Server::Database do
     @database.update_document(:attributes => {:greeting => {:value => "aloha", :text => {}}}, :id => 123, :class => "Greeting")
     @database.query([{:search => "aloha"}])[:records].should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
   end
+
+  it "reopens the database" do
+    @database.xapian_database.should_receive(:reopen)
+    @database.reopen
+  end
 end
