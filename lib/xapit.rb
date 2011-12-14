@@ -107,6 +107,19 @@ module Xapit
         arg
       end
     end
+
+    def changes_path
+      "#{config[:database_path]}_changes"
+    end
+
+    def import_changes
+      changes = File.read(changes_path).lines
+      FileUtils.rm(changes_path)
+      changes.each do |json|
+        change = symbolize_keys(JSON.parse(json))
+        database.send(change[:action], change[:data])
+      end
+    end
   end
 
   reset_config

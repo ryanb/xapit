@@ -2,21 +2,21 @@ module Xapit
   module Server
     class ReadOnlyDatabase < Database
       def add_document(data)
-        save_changes("add", data)
+        save_changes("add_document", data)
       end
 
       def remove_document(data)
-        save_changes("remove", data)
+        save_changes("remove_document", data)
       end
 
       def update_document(data)
-        save_changes("update", data)
+        save_changes("update_document", data)
       end
 
     private
 
       def save_changes(action, data)
-        File.open("#{@path}_changes", "a") do |file|
+        File.open(Xapit.changes_path, "a") do |file|
           file.puts({action: action, data: data}.to_json)
         end
       end

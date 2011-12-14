@@ -45,4 +45,13 @@ describe Xapit do
     Xapit.config[:read_only] = true
     Xapit.database.should be_kind_of(Xapit::Server::ReadOnlyDatabase)
   end
+
+  it "imports data from the changes file" do
+    path = File.expand_path("../../tmp/xapitdb", __FILE__)
+    Xapit.config[:database_path] = path
+    File.open("#{path}_changes", "w") { |f| f.puts('{"action":"update_document", "data":{"foo": "bar"}}') }
+    Xapit.stub(:database).and_return(stub)
+    Xapit.database.should_receive(:update_document).with(:foo => "bar")
+    Xapit.import_changes
+  end
 end
