@@ -63,14 +63,12 @@ module Xapit
             end
           end
         end
-        facet_options
+        facet_options.compact
       end
 
       def facet_option(identifier)
         match = self.class.new([{:in_classes => ["FacetOption"]}, {:where => {:id => identifier}}]).matches.first
-        if match.nil?
-          raise "Unable to find facet option for #{identifier}."
-        else
+        if match
           name, value = match.document.data.split('|||')
           {:id => identifier, :name => name, :value => value}
         end
