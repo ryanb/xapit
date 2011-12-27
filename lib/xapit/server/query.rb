@@ -183,6 +183,10 @@ module Xapit
           if value.kind_of?(Hash)
             if value[:from] && value[:to]
               queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+            elsif value[:partial]
+              parser = Xapian::QueryParser.new
+              parser.database = Xapit.database.xapian_database
+              queries << parser.parse_query(value[:partial][-1..-1], Xapian::QueryParser::FLAG_PARTIAL, "X#{name}-#{value[:partial][0..-2]}")
             else
               value.each do |k, v|
                 queries << Xapian::Query.new(xapian_operator(k), Xapit.value_index(:field, name), Xapit.serialize_value(v))
