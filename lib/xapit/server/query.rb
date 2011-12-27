@@ -186,7 +186,7 @@ module Xapit
             elsif value[:partial]
               parser = Xapian::QueryParser.new
               parser.database = Xapit.database.xapian_database
-              queries << parser.parse_query(value[:partial][-1..-1], Xapian::QueryParser::FLAG_PARTIAL, "X#{name}-#{value[:partial][0..-2]}")
+              queries << parser.parse_query(value[:partial].downcase[-1..-1], Xapian::QueryParser::FLAG_PARTIAL, "X#{name}-#{value[:partial].downcase[0..-2]}")
             else
               value.each do |k, v|
                 queries << Xapian::Query.new(xapian_operator(k), Xapit.value_index(:field, name), Xapit.serialize_value(v))

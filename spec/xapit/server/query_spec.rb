@@ -39,11 +39,11 @@ describe Xapit::Server::Query do
     query.records.first[:id].should eq("123")
   end
 
-  it "fetches results matching a partial condition", :focus do
-    Xapit.database.add_document(:attributes => {:greeting => {:value => "hello world", :field => {}}}, :id => 123, :class => "Greeting")
-    query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "hel"}}}])
+  it "fetches results matching a partial condition" do
+    Xapit.database.add_document(:attributes => {:greeting => {:value => "HELLO world", :field => {}}}, :id => 123, :class => "Greeting")
+    query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "HEL"}}}])
     query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 66}])
-    query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "helo"}}}])
+    query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "HELO"}}}])
     query.records.should eq([])
   end
 
