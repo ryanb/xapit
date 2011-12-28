@@ -40,7 +40,7 @@ module Xapit
         spies.values.each do |spy|
           enquire.add_matchspy(spy)
         end
-        enquire.mset(0, 200)
+        enquire.mset(0, 10000)
         spies.each do |attribute, spy|
           values = {}
           spy.values.map do |spy_value|
