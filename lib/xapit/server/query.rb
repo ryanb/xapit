@@ -176,7 +176,7 @@ module Xapit
         merge(:not, ["Q#{data[:class]}-#{data[:id]}"])
       end
 
-      def where_query(conditions)
+      def where_query(conditions, operator = :and)
         queries = []
         terms = []
         conditions.each do |name, value|
@@ -193,14 +193,15 @@ module Xapit
               end
             end
           elsif value.kind_of?(Array)
-            queries << Xapian::Query.new(xapian_operator(:or), value.map { |v| "X#{name}-#{v.to_s.downcase}" })
+            array_conditions = value.map { |v| [name, v] }
+            queries << where_query(array_conditions, :or)
           else
             terms << "X#{name}-#{value.to_s.downcase}"
           end
         end
-        queries << Xapian::Query.new(xapian_operator(:and), terms) unless terms.empty?
+        queries << Xapian::Query.new(xapian_operator(operator), terms) unless terms.empty?
         queries.inject(queries.shift) do |merged_query, query|
-          Xapian::Query.new(xapian_operator(:and), merged_query, query)
+          Xapian::Query.new(xapian_operator(operator), merged_query, query)
         end
       end
 

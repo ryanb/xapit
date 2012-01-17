@@ -76,6 +76,11 @@ describe Xapit::Server::Query do
       query.records.map { |r| r[:id] }.should eq(%w[1 2 3])
     end
 
+    it "fetches results matching multiple :from and :to" do
+      query = Xapit::Server::Query.new([{:where => {:priority => [{:from => 1, :to => 2}, {:from => 4, :to => 5}]}}])
+      query.records.map { |r| r[:id] }.should eq(%w[1 2 4 5])
+    end
+
     it "fetches results matching exact terms" do
       query = Xapit::Server::Query.new([{:all_terms => ["Xpriority-1"]}])
       query.records.map { |r| r[:id] }.should eq(%w[1])
