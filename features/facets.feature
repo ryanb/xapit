@@ -99,3 +99,12 @@ Feature: Facets
       | facet | option | count | param           |
       | Name  | Jack   | 1     | 9f33345-bff6e04 |
       | Name  | Jane   | 1     | 9f33345-9a10ff2 |
+
+  Scenario: Ignore non-matching facets
+    Given the following indexed records
+      | name | age |
+      | John | 23  |
+      | Jane | 17  |
+      | Jack | 17  |
+    When I query facets "bad-facet"
+    Then I should find 0 records

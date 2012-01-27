@@ -119,7 +119,7 @@ When /^I query "([^\"]*)" between (\d+) and (\d+)$/ do |field, beginning, ending
 end
 
 When /^I query page ([0-9]+) at ([0-9]+) per page$/ do |page, per_page|
-  @records = XapitMember.search.page(page).per(per_page)
+  @records = XapitMember.search.page(page).per_page(per_page)
 end
 
 When /^I query facets "([^\"]*)"$/ do |facets|

@@ -49,7 +49,7 @@ module Xapit
         scope(:page, page_num)
       end
 
-      def per(per_page)
+      def per_page(per_page)
         scope(:per_page, per_page)
       end
 
@@ -66,7 +66,11 @@ module Xapit
       end
 
       def records
-        @records ||= query[:records].map { |record| Kernel.const_get(record[:class]).find(record[:id]) }
+        @records ||= query[:records].map do |record|
+          member = Kernel.const_get(record[:class]).find(record[:id])
+          member.xapit_relevance = record[:relevance]
+          member
+        end
       end
 
       # TODO use a better delegation technique
@@ -89,6 +93,14 @@ module Xapit
 
       def current_page
         (clause_value(:page) || 1).to_i
+      end
+
+      def previous_page
+        current_page - 1 if current_page > 1
+      end
+
+      def next_page
+        current_page + 1 if current_page < num_pages
       end
 
       def limit_value
@@ -122,6 +134,10 @@ module Xapit
         Array.method_defined?(method) || super
       end
 
+      def scope(type, args)
+        Collection.new(@clauses + [{type => args}])
+      end
+
       private
 
       def where_conditions(conditions)
@@ -145,15 +161,11 @@ module Xapit
       end
 
       def clause_value(key)
-        clauses.map { |clause| clause[key] }.compact.first
+        clauses.map { |clause| clause[key] }.compact.last
       end
 
       def query
         @query ||= Xapit.database.query(@clauses)
-      end
-
-      def scope(type, args)
-        Collection.new(@clauses + [{type => args}])
       end
 
       def method_missing(method, *args, &block)

@@ -17,6 +17,7 @@ module Xapit
         def self.included(base)
           base.extend ClassMethods
           base.xapit_model_adapter.setup
+          base.send(:attr_accessor, :xapit_relevance)
         end
 
         module ClassMethods
@@ -29,7 +30,7 @@ module Xapit
           end
 
           def xapit_search(*args)
-            Collection.new.in_classes(self).include_facets(*xapit_index_builder.facets).search(*args)
+            Collection.new.in_classes(self.name).include_facets(*xapit_index_builder.facets).search(*args)
           end
 
           def search(*args)

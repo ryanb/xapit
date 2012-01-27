@@ -40,7 +40,7 @@ module Xapit
         spies.values.each do |spy|
           enquire.add_matchspy(spy)
         end
-        enquire.mset(0, 200)
+        enquire.mset(0, 10000)
         spies.each do |attribute, spy|
           values = {}
           spy.values.map do |spy_value|
@@ -63,14 +63,12 @@ module Xapit
             end
           end
         end
-        facet_options
+        facet_options.compact
       end
 
       def facet_option(identifier)
         match = self.class.new([{:in_classes => ["FacetOption"]}, {:where => {:id => identifier}}]).matches.first
-        if match.nil?
-          raise "Unable to find facet option for #{identifier}."
-        else
+        if match
           name, value = match.document.data.split('|||')
           {:id => identifier, :name => name, :value => value}
         end
@@ -162,6 +160,12 @@ module Xapit
           similar_to(value)
         when :with_facets
           merge(:and, facet_terms(value))
+        when :all_terms
+          merge(:and, value)
+        when :any_terms
+          merge(:and, Xapian::Query.new(xapian_operator(:or), value))
+        when :not_terms
+          merge(:not, Xapian::Query.new(xapian_operator(:or), value))
         end
       end
 
@@ -172,21 +176,32 @@ module Xapit
         merge(:not, ["Q#{data[:class]}-#{data[:id]}"])
       end
 
-      def where_query(conditions)
+      def where_query(conditions, operator = :and)
         queries = []
         terms = []
         conditions.each do |name, value|
-          if value.kind_of?(Hash) && value[:from] && value[:to]
-            queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+          if value.kind_of?(Hash)
+            if value[:from] && value[:to]
+              queries << Xapian::Query.new(xapian_operator(:range), Xapit.value_index(:field, name), Xapit.serialize_value(value[:from]), Xapit.serialize_value(value[:to]))
+            elsif value[:partial]
+              parser = Xapian::QueryParser.new
+              parser.database = Xapit.database.xapian_database
+              queries << parser.parse_query(value[:partial].downcase[-1..-1], Xapian::QueryParser::FLAG_PARTIAL, "X#{name}-#{value[:partial].downcase[0..-2]}")
+            else
+              value.each do |k, v|
+                queries << Xapian::Query.new(xapian_operator(k), Xapit.value_index(:field, name), Xapit.serialize_value(v))
+              end
+            end
           elsif value.kind_of?(Array)
-            queries << Xapian::Query.new(xapian_operator(:or), value.map { |v| "X#{name}-#{v.to_s.downcase}" })
+            array_conditions = value.map { |v| [name, v] }
+            queries << where_query(array_conditions, :or)
           else
             terms << "X#{name}-#{value.to_s.downcase}"
           end
         end
-        queries << Xapian::Query.new(xapian_operator(:and), terms) unless terms.empty?
+        queries << Xapian::Query.new(xapian_operator(operator), terms) unless terms.empty?
         queries.inject(queries.shift) do |merged_query, query|
-          Xapian::Query.new(xapian_operator(:and), merged_query, query)
+          Xapian::Query.new(xapian_operator(operator), merged_query, query)
         end
       end
 
@@ -210,6 +225,8 @@ module Xapit
         when :or then Xapian::Query::OP_OR
         when :not then Xapian::Query::OP_AND_NOT
         when :range then Xapian::Query::OP_VALUE_RANGE
+        when :gte then Xapian::Query::OP_VALUE_GE
+        when :lte then Xapian::Query::OP_VALUE_LE
         else raise "Unknown Xapian operator #{operator}"
         end
       end

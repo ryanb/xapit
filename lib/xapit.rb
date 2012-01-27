@@ -4,6 +4,7 @@ require 'rack'
 require 'json'
 require 'net/http'
 require 'active_support'
+require 'time'
 
 module Xapit
   # A general Xapit exception
@@ -33,6 +34,8 @@ module Xapit
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
       if config[:server] && !force_local
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
+      elsif config[:read_only]
+        @database ||= Xapit::Server::ReadOnlyDatabase.new(config[:database_path])
       else
         @database ||= Xapit::Server::Database.new(config[:database_path])
       end
@@ -59,11 +62,15 @@ module Xapit
     def serialize_value(value)
       if value.kind_of?(Time)
         Xapian.sortable_serialise(value.to_i)
-      elsif value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
+      elsif value.to_s =~ /^\d{4}-\d{2}-\d{2}/
+        Xapian.sortable_serialise(Time.parse(value.to_s).to_i)
+      elsif value.kind_of?(Numeric) || value.to_s =~ /^\d+$/
         Xapian.sortable_serialise(value.to_f)
       else
         value.to_s.downcase
       end
+    rescue ArgumentError # in case Time.parse errors out
+      value.to_s.downcase
     end
 
     def enable
@@ -101,12 +108,26 @@ module Xapit
         arg
       end
     end
+
+    def changes_path
+      "#{config[:database_path]}_changes"
+    end
+
+    def import_changes
+      changes = File.read(changes_path).lines
+      FileUtils.rm(changes_path)
+      changes.each do |json|
+        change = symbolize_keys(JSON.parse(json))
+        database.send(change[:action], change[:data])
+      end
+    end
   end
 
   reset_config
 end
 
 require 'xapit/server/database'
+require 'xapit/server/read_only_database'
 require 'xapit/server/query'
 require 'xapit/server/indexer'
 require 'xapit/server/app'

@@ -19,7 +19,11 @@ module Xapit
 
       def to_param
         if @applied_facets.include? identifier
-          (@applied_facets - [identifier]).join('-')
+          if Xapit.config[:breadcrumb_facets]
+            @applied_facets[0..@applied_facets.index(identifier)].join('-')
+          else
+            (@applied_facets - [identifier]).join('-')
+          end
         else
           (@applied_facets + [identifier]).join("-")
         end

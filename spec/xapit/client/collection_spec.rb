@@ -3,9 +3,9 @@ require "spec_helper"
 describe Xapit::Client::Collection do
   it "builds up clauses with in_classes, search, where, order calls" do
     collection1 = Xapit::Client::Collection.new([:initial])
-    collection2 = collection1.in_classes(String).search("hello").where(:foo => "bar").order(:bar)
+    collection2 = collection1.in_classes("String").search("hello").where(:foo => "bar").order(:bar)
     collection1.clauses.should eq([:initial])
-    collection2.clauses.should eq([:initial, {:in_classes => [String]}, {:search => "hello"}, {:where => {:foo => "bar"}}, {:order => [:bar, :asc]}])
+    collection2.clauses.should eq([:initial, {:in_classes => ["String"]}, {:search => "hello"}, {:where => {:foo => "bar"}}, {:order => [:bar, :asc]}])
   end
 
   it "returns same collection when searching nil or empty string" do
@@ -36,6 +36,11 @@ describe Xapit::Client::Collection do
     collection.clauses.should eq([{:where => {:priority => {:from => 3, :to => 5}}}])
   end
 
+  it "supports a custom clause" do
+    collection = Xapit::Client::Collection.new.scope(:foo, "bar")
+    collection.clauses.should eq([{:foo => "bar"}])
+  end
+
   it "does not raise an exception when passing nil to with_facets" do
     lambda {
       Xapit::Client::Collection.new.with_facets(nil).should be_kind_of(Xapit::Client::Collection)
@@ -48,7 +53,7 @@ describe Xapit::Client::Collection do
   end
 
   it "supports kaminari pagination" do
-    collection = Xapit::Client::Collection.new.page("2").per("10")
+    collection = Xapit::Client::Collection.new.page("2").per_page("10")
     collection.stub(:total_entries) { 29 }
     collection.current_page.should eq(2)
     collection.num_pages.should eq(3)
@@ -56,9 +61,13 @@ describe Xapit::Client::Collection do
   end
 
   it "supports will_paginate pagination" do
-    collection = Xapit::Client::Collection.new.page("2").per("10")
+    collection = Xapit::Client::Collection.new.page("2").per_page("10")
     collection.stub(:total_entries) { 29 }
     collection.current_page.should eq(2)
+    collection.previous_page.should eq(1)
+    collection.next_page.should eq(3)
     collection.total_pages.should eq(3)
+    collection.page(3).next_page.should be_nil
+    collection.page(1).previous_page.should be_nil
   end
 end

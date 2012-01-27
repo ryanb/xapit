@@ -23,4 +23,11 @@ describe Xapit::Client::FacetOption do
     option = Xapit::Client::FacetOption.new("greeting", {:value => "Hello"}, %w[abc 123] + [id])
     option.to_param.should == "abc-123"
   end
+
+  it "removes later identifiers when breadcrumb facets" do
+    Xapit.config[:breadcrumb_facets] = true
+    id = Xapit.facet_identifier("greeting", "Hello")
+    option = Xapit::Client::FacetOption.new("greeting", {:value => "Hello"}, ["abc", id, "123"])
+    option.to_param.should == "abc-#{id}"
+  end
 end
