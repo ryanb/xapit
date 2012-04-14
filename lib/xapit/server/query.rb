@@ -210,7 +210,7 @@ module Xapit
       end
 
       def search_query(text)
-        clean_text = text.gsub(/\b([a-z])\*/i, "\\1").gsub(/[^\w\*\s:]/u, "")
+        clean_text = text.gsub(/\b([a-z])\*/i, "\\1").gsub(/[^\w\*\s:\/()]/u, "")
         xapian_parser.parse_query(clean_text, Xapian::QueryParser::FLAG_WILDCARD | Xapian::QueryParser::FLAG_BOOLEAN) # Xapian::QueryParser::FLAG_LOVEHATE
       end
 
