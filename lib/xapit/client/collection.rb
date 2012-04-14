@@ -30,7 +30,7 @@ module Xapit
       end
 
       def where(conditions)
-        scope(:where, where_conditions(conditions))
+        !conditions.empty? ? scope(:where, where_conditions(conditions)) : self
       end
 
       def not_where(conditions)
