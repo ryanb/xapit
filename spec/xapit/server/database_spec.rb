@@ -18,7 +18,7 @@ describe Xapit::Server::Database do
 
   it "queries the database for results" do
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
-    @database.query([{:search => "hello"}])[:records].should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
+    @database.query([{:search => "hello"}])[:records].first[:id].should == "123"
   end
 
   it "removes a document from the database" do
@@ -32,7 +32,7 @@ describe Xapit::Server::Database do
   it "updates a document in the database" do
     @database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
     @database.update_document(:attributes => {:greeting => {:value => "aloha", :text => {}}}, :id => 123, :class => "Greeting")
-    @database.query([{:search => "aloha"}])[:records].should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
+    @database.query([{:search => "aloha"}])[:records].first[:id].should == "123"
   end
 
   it "reopens the database" do

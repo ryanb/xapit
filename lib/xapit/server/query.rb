@@ -10,6 +10,7 @@ module Xapit
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
         enquire.set_sort_by_key_then_relevance(sorter, false) if sorter
+        enquire.cutoff!(min_relevance) if min_relevance
         enquire.mset((page.to_i-1)*per_page.to_i, per_page.to_i).matches
       end
 
@@ -109,6 +110,12 @@ module Xapit
             end
           end
           sorter
+        end
+      end
+
+      def min_relevance
+        if clause = @clauses.select{|c| c[:min_relevance]}.first
+          clause[:min_relevance].to_i
         end
       end
 

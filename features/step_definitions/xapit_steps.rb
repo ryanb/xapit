@@ -66,6 +66,10 @@ When /^I query for "([^\"]*)"$/ do |query|
   @records = XapitMember.search(query)
 end
 
+When /^I query for "([^\"]*)" with minimum relevance of "([^\"]*)"$/ do |query, percent|
+  @records = XapitMember.search(query).with_min_relevance(percent.to_i)
+end
+
 When /^I query for "([^\"]*)" or "([^\"]*)"$/ do |search1, search2|
   @records = XapitMember.search(search1).or_search(search2)
 end

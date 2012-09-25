@@ -65,6 +65,10 @@ module Xapit
         facets.empty? ? self : scope(:include_facets, facets)
       end
 
+      def with_min_relevance(percent)
+        scope(:min_relevance, percent)
+      end
+
       def records
         @records ||= query[:records].map do |record|
           member = Kernel.const_get(record[:class]).find(record[:id])

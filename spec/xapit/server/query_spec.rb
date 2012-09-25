@@ -8,9 +8,17 @@ describe Xapit::Server::Query do
   it "fetches results matching a simple search term" do
     Xapit.database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:search => "hello"}])
-    query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
+    query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 50}])
     query = Xapit::Server::Query.new([{:search => "matchnothing"}])
     query.records.should eq([])
+  end
+
+  it "limits results by relevance" do
+    Xapit.database.add_document(:attributes => {:greeting => {:value => "hello world", :text => {}}}, :id => 1, :class => "Greeting")
+    Xapit.database.add_document(:attributes => {:greeting => {:value => "hello", :text => {}}}, :id => 2, :class => "Greeting")
+    Xapit.database.add_document(:attributes => {:greeting => {:value => "world", :text => {}}}, :id => 3, :class => "Greeting")
+    query = Xapit::Server::Query.new([{:search => "hello"}, {:or_search => "world"}, {:min_relevance => 50}])
+    query.records.map{|r| r[:id]}.should == ["1"]
   end
 
   it "fetches facets when told to include them" do
@@ -22,9 +30,9 @@ describe Xapit::Server::Query do
   it "fetches results matching a given facet" do
     Xapit.database.add_document(:attributes => {:priority => {:value => "3", :field => {}, :facet => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "3")]}])
-    query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 100}])
+    query.records.count.should == 1
     query = Xapit::Server::Query.new([{:with_facets => [Xapit.facet_identifier(:priority, "4")]}])
-    query.records.should eq([])
+    query.records.count.should == 0
   end
 
   it "fetches results containing applied facets" do
@@ -34,17 +42,17 @@ describe Xapit::Server::Query do
   end
 
   it "fetches results based on time in string" do
-    Xapit.database.add_document(:attributes => {:priority => {:value => 3.days.ago, :field => {}}}, :id => 123, :class => "Greeting")
+    Xapit.database.add_document(:attributes => {:priority => {:value => 3.days.ago.as_json, :field => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:where => {:priority => {from: 5.days.ago.as_json, to: 1.day.ago.as_json}}}])
-    query.records.first[:id].should eq("123")
+    query.records.count.should == 1
   end
 
   it "fetches results matching a partial condition" do
     Xapit.database.add_document(:attributes => {:greeting => {:value => "HELLO world", :field => {}}}, :id => 123, :class => "Greeting")
     query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "HEL"}}}])
-    query.records.should eq([{:class => "Greeting", :id => "123", :relevance => 66}])
+    query.records.count.should == 1
     query = Xapit::Server::Query.new([{:where => {:greeting => {:partial => "HELO"}}}])
-    query.records.should eq([])
+    query.records.count.should == 0
   end
 
   describe "with priorities" do

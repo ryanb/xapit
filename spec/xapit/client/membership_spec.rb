@@ -47,6 +47,6 @@ describe Xapit::Client::Membership do
     XapitMember.xapit { text :name }
     member = XapitMember.new(:name => "foo")
     XapitMember.xapit_index_builder.add_document(member)
-    XapitMember.search("foo").first.xapit_relevance.should eq(100)
+    XapitMember.search("foo").first.xapit_relevance.should > 0
   end
 end

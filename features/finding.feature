@@ -181,6 +181,17 @@ Feature: Finding
     When I query for "Jo-hn'sons"
     Then I should find records named "Jack, Bill"
 
+  Scenario: Query with minimum relevance percent
+    Given the following indexed records with "name" weighted by "10"
+      | name | description |
+      | Jim  | foo         |
+      | Bob  | bar         |
+      | Rus  | Bob         |
+    When I query for "Bob" with minimum relevance of "50%"
+    Then I should find records named "Bob"
+    When I query for "Bob" with minimum relevance of "25%"
+    Then I should find records named "Bob, Rus"
+
   # Scenario: Query Partial Match on Condition
   #   Given the following indexed records
   #     | name | sirname  |
