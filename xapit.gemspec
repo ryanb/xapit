@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "xapit"
-  s.version     = "0.3.0"
+  s.version     = "0.3.1"
   s.author      = "Ryan Bates"
   s.email       = "ryan@railscasts.com"
   s.homepage    = "http://github.com/ryanb/xapit"
