@@ -19,6 +19,7 @@ describe Xapit::Server::Query do
     Xapit.database.add_document(:attributes => {:greeting => {:value => "world", :text => {}}}, :id => 3, :class => "Greeting")
     query = Xapit::Server::Query.new([{:search => "hello"}, {:or_search => "world"}, {:min_relevance => 50}])
     query.records.map{|r| r[:id]}.should == ["1"]
+    query.total.should == 1
   end
 
   it "fetches facets when told to include them" do

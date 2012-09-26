@@ -78,6 +78,7 @@ module Xapit
       def total
         enquire = Xapian::Enquire.new(Xapit.database.xapian_database)
         enquire.query = xapian_query
+        enquire.cutoff!(min_relevance) if min_relevance
         enquire.mset(0, Xapit.database.xapian_database.doccount).matches_estimated
       end
 
