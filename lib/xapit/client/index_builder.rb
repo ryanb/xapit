@@ -2,8 +2,11 @@ module Xapit
   module Client
     class IndexBuilder
       attr_reader :attributes
+      attr_reader :language
+
       def initialize
         @attributes = {}
+        @language = Xapit.config[:stemming]
       end
 
       def text(*args, &block)
@@ -24,20 +27,26 @@ module Xapit
         add_attribute(:facet, name, options, &block)
       end
 
-      def add_document(member)
-        Xapit.database.add_document(document_data(member))
+      def add_document(member, force_local = false)
+        Xapit.database(force_local).add_document(document_data(member))
       end
 
-      def remove_document(member)
-        Xapit.database.remove_document(document_data(member))
+      def remove_document(member, force_local = false)
+        Xapit.database(force_local).remove_document(document_data(member))
       end
 
-      def update_document(member)
-        Xapit.database.update_document(document_data(member))
+      def update_document(member, force_local = false)
+        Xapit.database(force_local).update_document(document_data(member))
       end
 
       def document_data(member)
-        data = {:class => member.class.name, :id => member.id, :attributes => {}}
+        data = {
+          :class => member.class.name,
+          :id => member.id,
+          :attributes => {},
+          :language => find_language(member)
+        }
+
         attributes.each do |name, options|
           options = options.dup # so we can remove block without changing original hash
           value = member.send(name)
@@ -53,7 +62,23 @@ module Xapit
         end
       end
 
+      def language(lang)
+        @language = lang
+      end
+
       private
+
+      def find_language(member)
+        lang = if @language.kind_of?(Symbol)
+          member.send(@language)
+        elsif @language.kind_of?(Proc)
+          @language.call(member)
+        else
+          @language
+        end
+
+        lang || 'english'
+      end
 
       def add_attribute(type, *args, &block)
         options = args.last.kind_of?(Hash) ? args.pop : {}

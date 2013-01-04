@@ -3,6 +3,7 @@ require 'digest/sha1'
 require 'rack'
 require 'json'
 require 'net/http'
+require 'active_support'
 require 'time'
 
 module Xapit
@@ -29,9 +30,9 @@ module Xapit
       @config.merge!(@loaded_config) if @loaded_config
     end
 
-    def database
+    def database(force_local = false)
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
-      if config[:server]
+      if config[:server] && !force_local
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
       elsif config[:read_only]
         @database ||= Xapit::Server::ReadOnlyDatabase.new(config[:database_path])
@@ -140,3 +141,4 @@ require 'xapit/client/railtie' if defined? Rails
 require 'xapit/client/model_adapters/abstract_model_adapter'
 require 'xapit/client/model_adapters/default_model_adapter'
 require 'xapit/client/model_adapters/active_record_adapter'
+require 'xapit/client/model_adapters/mongoid_adapter'

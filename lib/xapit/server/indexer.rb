@@ -43,19 +43,35 @@ module Xapit
         values
       end
 
-      # TODO refactor with stemmed_text_terms
       def text_terms
+        terms = []
         each_attribute(:text) do |name, value, options|
-          value = value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") } unless value.kind_of? Array
-          value.map(&:to_s).map(&:downcase).map do |term|
-            [term, options[:weight] || 1] unless term.empty?
+          words = value
+          words = value.to_s.split(/\s+/u) unless value.kind_of? Array
+
+          weight = options[:weight] || 1
+          words.each do |word|
+            next if word.empty? || word.bytesize >= 245
+
+            word.downcase!
+
+            terms << [word, weight]
+            terms << stemmed_term(word, weight)
+
+            clean_word = ActiveSupport::Multibyte::Chars.new(word).normalize(:kd).gsub(/[^\w]/u, "").to_s
+            if !clean_word.empty? && clean_word != word
+              terms << [clean_word, weight]
+              terms << stemmed_term(clean_word, weight)
+            end
           end
-        end.flatten(1).compact
+        end
+
+        terms.uniq
       end
 
       # TODO refactor with stemmed_text_terms
       def stemmed_text_terms
-        if stemmer
+        if stemmer = build_stemmer
           each_attribute(:text) do |name, value, options|
             value = value.to_s.split(/\s+/u).map { |w| w.gsub(/[^\w]/u, "") } unless value.kind_of? Array
             value.map(&:to_s).map(&:downcase).map do |term|
@@ -94,8 +110,22 @@ module Xapit
 
       private
 
-      def stemmer
-        @stemmer ||= Xapian::Stem.new(Xapit.config[:stemming]) if Xapit.config[:stemming]
+      def build_stemmer
+        begin
+          Xapian::Stem.new(@data[:language])
+        rescue ArgumentError
+          return nil
+        end
+      end
+
+      def stemmed_term(word, weight = 1)
+        term = [word, weight]
+        if stemmer = build_stemmer
+          stemmed = stemmer.call(word)
+          term = ["Z#{word}", weight] if stemmed != word
+        end
+
+        term
       end
 
       def base_terms

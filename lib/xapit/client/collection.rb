@@ -10,11 +10,11 @@ module Xapit
       end
 
       def in_classes(*classes)
-        scope(:in_classes, classes)
+        scope(:in_classes, classes.map(&:to_s))
       end
 
       def not_in_classes(*classes)
-        scope(:not_in_classes, classes)
+        scope(:not_in_classes, classes.map(&:to_s))
       end
 
       def search(phrase = nil)
@@ -93,6 +93,7 @@ module Xapit
       def total_entries
         query[:total].to_i
       end
+      alias :total_count :total_entries
 
       def current_page
         (clause_value(:page) || 1).to_i

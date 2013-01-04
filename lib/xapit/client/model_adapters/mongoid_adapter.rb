@@ -1,8 +1,8 @@
 module Xapit
   module Client
-    class ActiveRecordAdapter < AbstractModelAdapter
+    class MongoidAdapter < AbstractModelAdapter
       def self.for_class?(model_class)
-        defined?(ActiveRecord::Base) && model_class <= ActiveRecord::Base
+        defined?(Mongoid::Document) && model_class <= Mongoid::Document
       end
 
       def setup
@@ -18,10 +18,15 @@ module Xapit
       end
 
       def index_all
-        @model_class.find_each do |member|
+        @model_class.all.each do |member|
           member.class.xapit_index_builder.add_document(member, true)
         end
       end
     end
   end
 end
+
+if defined?(Mongoid::Document)
+  Mongoid::Document::ClassMethods.send(:include, Xapit::Client::Membership::ClassMethods)
+end
+
