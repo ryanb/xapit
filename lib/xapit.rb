@@ -31,12 +31,14 @@ module Xapit
 
     def database
       raise Disabled, "Unable to access Xapit database because it is disabled in configuration." unless Xapit.config[:enabled]
-      if config[:server]
+      if config[:server] && defined?(Rails) != nil
         @database ||= Xapit::Client::RemoteDatabase.new(config[:server])
       elsif config[:read_only]
         @database ||= Xapit::Server::ReadOnlyDatabase.new(config[:database_path])
-      else
+      elsif config[:database_path]
         @database ||= Xapit::Server::Database.new(config[:database_path])
+      else
+        raise Disabled, "Unable to access Xapit database" unless Xapit.config[:enabled]
       end
     end
 
