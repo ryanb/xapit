@@ -1,3 +1,8 @@
+= Unmaintained
+
+The Xapit gem is <b>no longer maintained</b>. Feel free to fork this project.
+
+
 = Xapit
 
 Xapit (pronounced "zap it") is a Ruby gem for doing full text searching through {Xapian}[http://xapian.org/]. This project was recently rewritten and is not yet ready for production. Please try it out and let me know if there are any issues.
